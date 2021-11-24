@@ -1,4 +1,9 @@
 통상적으로 웨이트는 랜덤, 바이어스는 0을 잡아줌.
 무한대로 반복할 경우의 효율성-반복vs순차
 Nan : 결측치 # 알수없는 y값
-outlier : 이상치 불순한값
+outlier : 이상치, 불순한값
+MSE(Mean Square Error) : 평균제곱오차  link: https://blog.naver.com/nabilera1/222444823663
+x :  독립변수. y : 종속변수
+열/특성/feature/column
+
+
