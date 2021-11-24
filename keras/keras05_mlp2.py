@@ -34,8 +34,8 @@ model.fit(x, y, epochs=800, batch_size=1)
 #4. 평가,예측
 loss = model.evaluate(x, y)
 print('loss : ', loss)
-y_predict = model.predict([[11, 1.2, 0]])
-print('[11, 1.2, 0]의 예측값 : ', y_predict)
+y_predict = model.predict([[10, 1.3, 1]])
+print('[10, 1.3, 1]의 예측값 : ', y_predict)
 
 '''
 loss :  3.637978807091713e-12
