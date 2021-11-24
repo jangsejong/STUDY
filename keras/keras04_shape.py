@@ -28,5 +28,5 @@ print(a5.shape)
 a6 = np.array([1,2,3,4,5])
 print(a6.shape)
 
-a7 = np.array([[1],[2],[3],[4],[5]])
+a7 = np.array([[[1,2],[3,4]],[[5,6,7],[8,9,10]]])
 print(a7.shape)
