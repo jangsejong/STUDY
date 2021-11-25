@@ -5,6 +5,7 @@ outlier : 이상치, 불순한값
 MSE(Mean Square Error) : 평균제곱오차  link: https://blog.naver.com/nabilera1/222444823663
 x :  독립변수. y : 종속변수
 열/특성/feature/column
+스칼라-벡터-행렬-텐서
 
 1번 (3,2)    #[[1,2],[3,4],[5,6]]
 2번 (2,3)    #[[1,2,3],[4,5,6]]

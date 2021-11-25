@@ -3,19 +3,20 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 #1. 데이터
-x = np.array([1,2,3,4,5,6,7,8,9,10])
-y = np.array([1,2,3,4,5,6,7,8,9,10])
+x = np.array(range(100))
+y = np.array(range(1, 101))
 
-# train과 test 비용을 8:2 로 분리하시오.
+# 랜덤으로
 
-x_train = x[:8]
-x_test = x[8:]
-y_train = y[:8]
-y_test = y[8:]
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.7, shuffle=True, random_state=66) # 랜덤스테이트 고정랜덤추출, 랜덤난수
+#x_test = ramdom.x
+#y_train = ramdom.y
+#y_test = ramdom.y
 
-print(x_train)
+#print(x_train)
 print(x_test)
-print(y_train)
+#print(y_train)
 print(y_test)
 
 #2. 모델구성
@@ -38,10 +39,10 @@ model.fit(x_train, y_train, epochs=2000, batch_size=1)
 #4. 평가,예측
 loss = model.evaluate(x_train, y_train)
 print('loss : ', loss)
-result = model.predict([11])
-print('[11]의 예측값 : ', result)
+result = model.predict([101])
+print('[101]의 예측값 : ', result)
 
 '''
-loss :  0.000674762181006372
-[11]의 예측값 :  [[10.921866]]
+loss :  6.634127913685006e-09
+[101]의 예측값 :  [[102.00014]]
 '''
