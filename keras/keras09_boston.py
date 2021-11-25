@@ -50,4 +50,8 @@ print('loss :', loss) #loss :
 y_predict = model.predict(x_test)
 
 r2 = r2_score(y_test, y_predict)
-print('r2score :', r2) # 
+print('r2score :', r2) 
+'''
+loss : 16.30878257751465
+r2score : 0.8025979786349908
+'''
