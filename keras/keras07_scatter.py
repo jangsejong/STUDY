@@ -34,5 +34,5 @@ print('loss :', loss)
 y_predict = model.predict(x)
 
 plt.scatter(x, y)
-plt.plot(x, y_predict)
+plt.plot(x, y_predict, color='red')
 plt.show()

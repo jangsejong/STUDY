@@ -3,6 +3,7 @@
 Nan : 결측치 # 알수없는 y값
 outlier : 이상치, 불순한값
 MSE(Mean Square Error) : 평균제곱오차  link: https://blog.naver.com/nabilera1/222444823663
+LSM(least squares method) :최소제곱법  link : https://post.naver.com/viewer/postView.naver?volumeNo=29124872&memberNo=21815&vType=VERTICAL
 x :  독립변수. y : 종속변수
 열/특성/feature/column
 스칼라-벡터-행렬-텐서
