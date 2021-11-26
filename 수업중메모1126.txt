@@ -1,0 +1,8 @@
+y의 값도 1개 이상 가능하다.
+R2는 반비례 되는 상황일때 신뢰한다.
+학습율 (영어: learning rate) : optimizer 등등
+경사하강법(Gradient descent) :기본 개념은 함수의 기울기(경사)를 구하고 경사의 절댓값이 
+                            낮은 쪽으로 계속 이동시켜 극값에 이를 때까지 반복시키는 것이다.
+validation(인증 / it 확인,검증) / cross validation(크로스확인) : 한 표본에 대해 성공한 작업을 다른 표본에 적용시켜 정당성을 확인
+
+fit, validation : 머신 / evaluate : 사람
