@@ -54,6 +54,6 @@ y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
 print('r2score :', r2) # 
 '''
-loss : 1977.47021484375
-r2score : 0.6288749323597174
+loss : 1969.4678955078125
+r2score : 0.6303767687340436
 '''
