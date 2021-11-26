@@ -9,7 +9,7 @@ import time
 
 #1. 데이터
 
-datasets = load_boston()
+datasets = load_diabetes()
 x = datasets.data
 y = datasets.target
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=49)
@@ -37,7 +37,7 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=1000, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
 
 start = time.time()
 hist = model.fit(x_train, y_train, epochs=10000, batch_size=10, validation_split=0.2, callbacks=[es])   #통상적으로 효율성이 좋다. 성능이 낮아질 경우 모델이 좋지 않다.
@@ -76,6 +76,5 @@ plt.xlabel('epoch')
 plt.legend(loc='upper right')
 plt.show()
 '''
-loss : 17.694290161132812
-r2score : 0.785827755306673
+
 '''
