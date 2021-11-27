@@ -47,6 +47,7 @@ y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
 print('r2score :', r2) 
 
+
 '''
 print("========================")
 print(hist)
@@ -73,4 +74,6 @@ plt.legend(loc='upper right')
 plt.show()
 
 '''
+loss : 2620.906982421875
+r2score : 0.5318798460632301
 '''
