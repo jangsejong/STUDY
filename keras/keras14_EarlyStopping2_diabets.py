@@ -37,10 +37,10 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=400, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
 
 start = time.time()
-hist = model.fit(x_train, y_train, epochs=10000, batch_size=10, validation_split=0.2, callbacks=[es])   #통상적으로 효율성이 좋다. 성능이 낮아질 경우 모델이 좋지 않다.
+hist = model.fit(x_train, y_train, epochs=800, batch_size=10, validation_split=0.2, callbacks=[es])   #통상적으로 효율성이 좋다. 성능이 낮아질 경우 모델이 좋지 않다.
 
 
 end = time.time() - start
@@ -105,21 +105,31 @@ r2score : 0.5493172963046924
 Epoch 272/10000  loss: 3276.1885 - val_loss: 3411.8374
 ==================================================
 #1 patience=400 일때
-Epoch 723/10000
-loss : 18.624523162841797
-r2score : 0.7745681857837043
-Epoch 623/10000   loss: 29.0952 - val_loss: 30.6227
+Epoch 691/10000
+loss : 2652.735595703125
+r2score : 0.5261949120936278
+Epoch 291/10000   loss: 3106.4209 - val_loss: 3311.7910
 ---------
-Epoch 595/10000
-loss : 18.361373901367188
-r2score : 0.7777533562632721
-Epoch 495/10000   loss: 29.0117 - val_loss: 33.5989
+Epoch 592/10000
+loss : 2540.089599609375
+r2score : 0.5463146344806651
+Epoch 192/10000   loss: 3136.5847 - val_loss: 3320.9036ㅍ
 ---------
-Epoch 486/10000
-loss : 19.056377410888672
-r2score : 0.7693410056538847
-Epoch 386/10000   loss: 31.4629 - val_loss: 34.4500
+Epoch 620/10000
+loss : 2515.3798828125
+r2score : 0.5507280039247142
+Epoch 420/10000   loss: 3042.0508 - val_loss: 3401.4302
 
 #2 patience=100 에 Epoch 800 일때
 
+Epoch 385/800
+loss : 2518.140869140625
+r2score : 0.5502349392445551
+Epoch 285/800     loss: 3233.4338 - val_loss: 3322.7322
+
+
+Epoch 246/800
+loss : 2560.132568359375
+r2score : 0.542734769843649
+Epoch 146/800     loss: 3137.3328 - val_loss: 3318.2231 
 '''
