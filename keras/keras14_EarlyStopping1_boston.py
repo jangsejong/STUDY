@@ -73,8 +73,10 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(loc='upper right')
 plt.show()
+
+
 '''
-#1  Epoch 10000 일때
+#1  Epoch 10000 ,patience= 50 
 Epoch 376/10000     
 loss : 20.66997718811035
 r2score : 0.749809940396891
@@ -101,7 +103,7 @@ loss : 19.313711166381836
 r2score : 0.766226230291853
 Epoch 347/500  loss: 27.8140 - val_loss: 34.9563
 ==================================================
-#1 patience=100 일때
+#1 patience=100 ,patience=100
 Epoch 723/10000
 loss : 18.624523162841797
 r2score : 0.7745681857837043
