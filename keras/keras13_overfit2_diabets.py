@@ -59,8 +59,6 @@ print("========================")
 print(hist.history['val_loss'])
 '''
 
-
-
 import matplotlib.pyplot as plt
 plt.figure(figsize=(9,5))
 

@@ -121,4 +121,5 @@ Epoch 386/10000   loss: 31.4629 - val_loss: 34.4500
 
 #2 patience=100 에 Epoch 800 일때
 
+
 '''
