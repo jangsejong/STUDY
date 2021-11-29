@@ -1,0 +1,12 @@
+11/29
+선형회귀법(Linear Regression) : 
+단순 선형 회귀 _ simple linear regression
+다중 선형 회귀 _ multiple linear regression
+
+시그모이드함수 (sigmoid) : logit과 sigmoid는 역함수 관계
+                         2개의 클래스로 정의하던 logit을 K 개의 클래스로 확장하면 softmax
+                          Sigmoid를 K 개 클래스를 대상으로 일반화하면 softmax, softmax에서 K=2로 두면 sigmoid로 환원
+
+
+
+
