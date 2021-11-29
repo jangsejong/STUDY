@@ -40,7 +40,7 @@ model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping   #@
 es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1) #@
-#     ModelCheckpoint(filepath='best_model.h5', monitor='val_loss', save_best_only=True)
+
 
 start = time.time() #@
 hist = model.fit(x_train, y_train, epochs=800, batch_size=10, validation_split=0.2, callbacks=[es])   #통상적으로 효율성이 좋다. 성능이 낮아질 경우 모델이 좋지 않다.
@@ -55,9 +55,11 @@ print('loss :', loss) #loss :
 y_predict = model.predict(x_test)
 
 r2 = r2_score(y_test, y_predict)
-print('r2score :', r2) 
+print('r2score :', r2) # 단지 보조지표일뿐
 
-#keras_model_best = keras.models.load_model('best_model.h5')
+#checkpoint_path = "my_checkpoint.ckpt"
+#checkpoint = ModelCheckpoint(filepath=checkpoint_path, save_weights_only=True, save_best_only=True, monitor='val_loss', verbose=1)
+#print('checkpoint :', checkpoint)
 
 '''
 print("========================")
@@ -137,4 +139,8 @@ loss : 2560.132568359375
 r2score : 0.542734769843649
 Epoch 146/800     loss: 3137.3328 - val_loss: 3318.2231 
 
+Epoch 206/800
+loss : 2501.80322265625
+r2score : 0.553152975143601
+Epoch 106/800        loss: 3181.5786 - val_loss: 3329.0544
 '''
