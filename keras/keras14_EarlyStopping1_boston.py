@@ -37,7 +37,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
 
 start = time.time()
-hist = model.fit(x_train, y_train, epochs=10000, batch_size=13, validation_split=0.3, callbacks=[es])   #통상적으로 효율성이 좋다. 성능이 낮아질 경우 모델이 좋지 않다.
+hist = model.fit(x_train, y_train, epochs=800, batch_size=13, validation_split=0.3, callbacks=[es])   #통상적으로 효율성이 좋다. 성능이 낮아질 경우 모델이 좋지 않다.
 print(hist)
 
 
@@ -76,7 +76,7 @@ plt.show()
 
 
 '''
-#1  Epoch 10000 ,patience= 50 
+#1  Epoch 10000 ,patience= 50 일때
 Epoch 376/10000     
 loss : 20.66997718811035
 r2score : 0.749809940396891
@@ -103,7 +103,7 @@ loss : 19.313711166381836
 r2score : 0.766226230291853
 Epoch 347/500  loss: 27.8140 - val_loss: 34.9563
 ==================================================
-#1 patience=100 ,patience=100
+#1 patience=100 ,patience=100 일때
 Epoch 723/10000
 loss : 18.624523162841797
 r2score : 0.7745681857837043
@@ -120,6 +120,8 @@ r2score : 0.7693410056538847
 Epoch 386/10000   loss: 31.4629 - val_loss: 34.4500
 
 #2 patience=100 에 Epoch 800 일때
-
-
+Epoch 577/800
+loss : 27.317588806152344
+r2score : 0.6693470551092087
+Epoch 477/800     loss: 26.8472 - val_loss: 32.9728
 '''
