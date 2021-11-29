@@ -32,22 +32,22 @@ binary crossentropy :
 loss = cost = 손실 = 평가지표
 ==================================
 1. categorical_crossentropy
-
 다중 분류 손실 함수
 출력 값이 one-hot encoding된 결과로 나온다. -> label(y)을 one-hot encoding해서 넣어줘야 함
 클래스가 상호 배타적일 경우(e.g. 각 샘플이 정확히 하나의 클래스에 속하는 경우) 사용
  
 
 2. sparse_categorical_crossentropy
-
 다중 분류 손실 함수
 integer type 클래스 -> one-hot encoding하지 않고 정수 형태로 label(y)을 넣어줌
 한 샘플에 여러 클래스가 있거나 label이 soft 확률일 경우 사용
  
 
 3. binary_crossentropy
-
 binary 다중 분류 손실 함수
 label들이 독립적일 때 사용
+-----------
+원-핫 인코딩 (One-Hot Encoding)
+관련 링크 : https://wikidocs.net/22647
 
 

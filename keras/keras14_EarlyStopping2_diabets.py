@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 import time
 
+from tensorflow.python.keras.callbacks import ModelCheckpoint
+
 
 #1. 데이터
 
@@ -36,15 +38,16 @@ model.add(Dense(1))
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 
-from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
+from tensorflow.keras.callbacks import EarlyStopping   #@
+es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1) #@
+#     ModelCheckpoint(filepath='best_model.h5', monitor='val_loss', save_best_only=True)
 
-start = time.time()
+start = time.time() #@
 hist = model.fit(x_train, y_train, epochs=800, batch_size=10, validation_split=0.2, callbacks=[es])   #통상적으로 효율성이 좋다. 성능이 낮아질 경우 모델이 좋지 않다.
 
 
-end = time.time() - start
-print("걸린시간 : ", round(end, 3))
+end = time.time() - start  #@
+print("걸린시간 : ", round(end, 3)) #@
 
 #4. 평가, 예측
 loss = model.evaluate (x_test, y_test)
@@ -53,6 +56,8 @@ y_predict = model.predict(x_test)
 
 r2 = r2_score(y_test, y_predict)
 print('r2score :', r2) 
+
+#keras_model_best = keras.models.load_model('best_model.h5')
 
 '''
 print("========================")
@@ -63,10 +68,9 @@ print("========================")
 print(hist.history['loss'])
 print("========================")
 print(hist.history['val_loss'])
-'''
+
 import matplotlib.pyplot as plt
 plt.figure(figsize=(9,5))
-
 plt.plot(hist.history['loss'], marker='.', c='red', label='loss')
 plt.plot(hist.history['val_loss'], marker='.', c='blue', label='val_loss')
 plt.grid()
@@ -76,7 +80,7 @@ plt.xlabel('epoch')
 plt.legend(loc='upper right')
 plt.show()
 
-'''
+
 #1  EEpoch 10000 ,patience= 50 일때
 Epoch 133/10000 
 loss : 2544.6337890625
