@@ -29,6 +29,25 @@ binary crossentropy :
 만약 이진 분류기를 훈련하려면, binary crossentropy 손실함수를 사용하면 됩니다. 
 이진 분류기라는 것은 True 또는 False, 양성 또는 음성 등 2개의 클래스를 분류할 수 있는 분류기를 의미합니다. 
 
+loss = cost = 손실 = 평가지표
+==================================
+1. categorical_crossentropy
 
+다중 분류 손실 함수
+출력 값이 one-hot encoding된 결과로 나온다. -> label(y)을 one-hot encoding해서 넣어줘야 함
+클래스가 상호 배타적일 경우(e.g. 각 샘플이 정확히 하나의 클래스에 속하는 경우) 사용
+ 
+
+2. sparse_categorical_crossentropy
+
+다중 분류 손실 함수
+integer type 클래스 -> one-hot encoding하지 않고 정수 형태로 label(y)을 넣어줌
+한 샘플에 여러 클래스가 있거나 label이 soft 확률일 경우 사용
+ 
+
+3. binary_crossentropy
+
+binary 다중 분류 손실 함수
+label들이 독립적일 때 사용
 
 

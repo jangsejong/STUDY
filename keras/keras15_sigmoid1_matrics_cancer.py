@@ -47,8 +47,8 @@ hist = model.fit(x_train, y_train, epochs=2000, batch_size=10,verbose=1, validat
 #4. 평가, 예측
 loss = model.evaluate (x_test, y_test)
 print('loss :', loss) #loss :
-#y_predict = model.predict(x_test)
-#print(y_predict)
+y_predict = model.predict(x_test)
+print(y_predict)
 
 
 '''
