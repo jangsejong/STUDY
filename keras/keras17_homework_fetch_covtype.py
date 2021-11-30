@@ -27,11 +27,20 @@ y = datasets.target
 #print(y) 0과 1로 수렴해서 셔플써야됨
 #print(np.unique(y))  # [1 2 3 4 5 6 7]
 
-y = to_categorical(y)
+#y = to_categorical(y)  #output 8
 #print(y.shape) #
+'''
+from sklearn.preprocessing import OneHotEncoder
+k = OneHotEncoder(sparse=False) # sparse=True가 디폴트이면 이는 Matrix를 반환한다. 원핫인코딩에서 필요한 것은 array이므로 sparse 옵션에 False를 넣어준다.
+y = k.fit_transform(y.reshape(-1, 1)) # -1 번째 열을 1 번째 열로 변환
+'''
+import pandas as pd
+y = pd.get_dummies(y)
+
+
 datasets = fetch_covtype()
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True, random_state=66)
-#print(x.shape, y.shape)  #
+#print(x.shape, y.shape)  
 
 #2. 모델구성
 
@@ -42,7 +51,7 @@ model.add(Dense(18, activation='linear'))
 model.add(Dense(6, activation='linear'))
 model.add(Dense(4, activation='linear'))
 model.add(Dense(2, activation='linear'))
-model.add(Dense(8, activation='softmax'))
+model.add(Dense(7, activation='softmax'))
 
 #3. 컴파일, 훈련
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -76,4 +85,14 @@ Epoch 729/2000
 patience=200
 loss : 0.6630104780197144
 accuracy : 0.7179160714149475
+----------------------
+sklearn 
+loss : 0.6655916571617126
+accuracy : 0.7214615941047668
+
+----------------
+pandas
+loss : 0.6671551465988159
+accuracy : 0.7192757725715637
+
 '''
