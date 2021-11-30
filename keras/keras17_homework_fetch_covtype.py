@@ -37,8 +37,6 @@ y = k.fit_transform(y.reshape(-1, 1)) # -1 번째 열을 1 번째 열로 변환
 import pandas as pd
 y = pd.get_dummies(y)
 
-
-datasets = fetch_covtype()
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True, random_state=66)
 #print(x.shape, y.shape)  
 

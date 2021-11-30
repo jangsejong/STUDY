@@ -10,26 +10,21 @@ from tensorflow.python.keras.utils.metrics_utils import result_wrapper
 from pandas import Series, DataFrame
 
 #1. 데이터
-path = "./_data/titanic/"
-train = pd.read_csv(path + "train.csv", index_col=0,  header=0) # 인덱스 조절하여 1열 삭제, 헤드 조절하여 행 선정
-print(train)
-print(train.shape) #(891, 12)  > (891, 11)
-'''
-train["Age"].fillna(train["Age"].mean(), inplace=True) 
-train["Cabin"].fillna("N", inplace=True) 
-train = train.dropna() 
-print() 
-print(train.isnull().sum()) 
-print(train.info())
-'''
-test = pd.read_csv(path + "test.csv", index_col=0,  header=0)
-gender_submission = pd.read_csv(path + "gender_submission.csv", index_col=0,  header=0)
+path = "./_data/bike/"
+train = pd.read_csv(path + "train.csv")# index_col=0,  header=0) # 인덱스 조절하여 1열 삭제, 헤드 조절하여 행 선정
+#print(train)
+#print(train.shape) #(10886, 12)
 
-print(test.shape) #(418, 11)   >  (418, 10)
-print(gender_submission.shape) #(418, 2)  >  (418, 1)
+test = pd.read_csv(path + "test.csv") #index_col=0,  header=0)
+#gender_submission = pd.read_csv(path + "gender_submission.csv", index_col=0,  header=0)
 
+#print(test.shape) #(6493, 9)
+submit = pd.read_csv(path +'sampleSubmission.csv')
+#print(submit.shape) #(6493, 2)
 
-
+print(type(train)) #<class 'pandas.core.frame.DataFrame'>
+#print(train.info())  #object 모든 자료의 최상위형
+#print(train.describe()) #std 표준편차  mean, 중위값과 평균값차이
 
 
 '''
