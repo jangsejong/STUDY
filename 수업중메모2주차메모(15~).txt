@@ -55,6 +55,7 @@ label들이 독립적일 때 사용
 minmax scaler : x값을 0~1 사이로 변환
 과적합을 해결하기 위해서  train 비율 만큼 test 도 변환하여 predict 과적합을 방지한다
 link : https://homeproject.tistory.com/3
+     : https://wooono.tistory.com/96
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
@@ -64,6 +65,53 @@ link : https://homeproject.tistory.com/3
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
+
+#Standardization (표준화)
+특성들의 평균을 0, 분산을 1 로 스케일링하는 것입니다.
+즉, 특성들을 정규분포로 만드는 것입니다
+
+#Normalization (정규화)
+특성들을 특정 범위(주로 [0,1]) 로 스케일링 하는 것입니다.
+가작 작은 값은 0, 가장 큰 값은 1 로 변환되므로, 모든 특성들은 [0, 1] 범위를 갖게됩니다.
+
+scaler 는 fit 과 transform 메서드를 지니고 있습니다.
+fit 메서드는 훈련 데이터에만 적용해, 훈련 데이터의 분포를 먼저 학습하고
+그 이후, transform 메서드를 훈련 데이터와 테스트 데이터에 적용해 스케일을 조정해야합니다.
+따라서, 훈련 데이터에는 fit_transform() 메서드를 적용하고, 테스트 데이터에는 transform() 메서드를 적용해야합니다.
+fit_transform() 은 fit 과 transform 이 결합된 단축 메서드입니다.
+
+#StandardScaler()
+특성들의 평균을 0, 분산을 1 로 스케일링하는 것입니다.
+즉, 특성들을 정규분포로 만드는 것입니다.
+최솟값과 최댓값의 크기를 제한하지 않기 때문에, 어떤 알고리즘에서는 문제가 있을 수 있으며
+이상치에 매우 민감합니다.
+회귀보다 분류에 유용합니다.
+
+#MinMaxScaler()
+Min-Max Normalization 이라고도 불리며,
+특성들을 특정 범위(주로 [0,1]) 로 스케일링 하는 것입니다.
+가작 작은 값은 0, 가장 큰 값은 1 로 변환되므로, 모든 특성들은 [0, 1] 범위를 갖게됩니다.
+이상치에 매우 민감합니다.
+분류보다 회귀에 유용합니다.
+
+#MaxAbsScaler()
+각 특성의 절대값이 0 과 1 사이가 되도록 스케일링합니다.
+즉, 모든 값은 -1 과 1 사이로 표현되며, 데이터가 양수일 경우 MinMaxScaler 와 같습니다.
+이상치에 매우 민감합니다.
+
+#RobustScaler()
+평균과 분산 대신에 중간 값과 사분위 값을 사용합니다.
+중간 값은 정렬시 중간에 있는 값을 의미하고
+사분위값은 1/4, 3/4에 위치한 값을 의미합니다.
+이상치 영향을 최소화할 수 있습니다.
+
+#Normalizer()
+앞의 4가지 스케일러는 각 특성(열)의 통계치를 이용하여 진행됩니다.
+그러나 Normalizer 의 경우 각 샘플(행)마다 적용되는 방식입니다.
+이는 한 행의 모든 특성들 사이의 유클리드 거리(L2 norm)가 1이 되도록 스케일링합니다.
+일반적인 데이터 전처리의 상황에서 사용되는 것이 아니라
+모델(특히나 딥러닝) 내 학습 벡터에 적용하며,
+특히나 피쳐들이 다른 단위(키, 나이, 소득 등)라면 더더욱 사용하지 않습니다.
 
 # summary - model.summary()
 : 연산개수확인  , 바이어스로 인해 각 레이어마다 노드 1개가 더 있는것처럼 연산 갯수가 늘어난다.
