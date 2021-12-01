@@ -26,10 +26,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 #print(x.shape, y.shape)  #(178, 13) (178,)
 
 
-scaler = MinMaxScaler()
+#scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -43,7 +43,7 @@ model = Sequential()
 model.add(Dense(30, activation='linear', input_dim=13))
 model.add(Dense(30, activation='linear'))
 model.add(Dense(18, activation='linear'))
-model.add(Dense(6, activation='linear'))
+model.add(Dense(6, activation='relu'))
 model.add(Dense(4, activation='linear'))
 model.add(Dense(2, activation='linear'))
 model.add(Dense(3, activation='softmax'))
@@ -73,21 +73,12 @@ loss : 0.03596608713269234
 accuracy : 0.9722222089767456
 
 ============================
-
-# MinMaxScaler
-loss : 0.35055699944496155
-accuracy : 0.9722222089767456
-
-# StandardScaler
-loss : 0.3546077311038971
-accuracy : 0.9722222089767456
-
-# RobustScaler
-loss : 0.5228054523468018
-accuracy : 0.9722222089767456
-
 # MaxAbsScaler
 loss : 0.0015572120901197195
+accuracy : 1.0
+
+relu 반영시 값이 더 좋아졌다
+loss : 1.3410724477580516e-06
 accuracy : 1.0
 
 '''

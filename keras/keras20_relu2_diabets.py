@@ -17,8 +17,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
-#scaler = RobustScaler()
-scaler = MaxAbsScaler()
+scaler = RobustScaler()
+#scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -35,7 +35,7 @@ model.add(Dense(26))
 model.add(Dense(20))
 model.add(Dense(15))
 model.add(Dense(11))
-model.add(Dense(8))
+model.add(Dense(8, activation='relu'))
 model.add(Dense(6))
 model.add(Dense(5))
 model.add(Dense(4))
@@ -45,7 +45,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=300, batch_size=20,
+model.fit(x_train, y_train, epochs=400, batch_size=5,
           validation_split=0.3) #validation 사용시 성능이 더 좋아진다.
          # validation_data = (x_val, y_val))
 
@@ -61,18 +61,19 @@ loss : 2046.3428955078125
 r2score : 0.6159491268948538
 
 ============================
-
-# MinMaxScaler
-loss : 2076.62646484375
-r2score : 0.6102656376254028
-# StandardScaler
-loss : 2037.9686279296875
-r2score : 0.6175207836484327
 # RobustScaler
 loss : 2005.270751953125
 r2score : 0.6236574362526468
-# MaxAbsScaler
-loss : 2056.781005859375
-r2score : 0.6139901823422093
+================
+#layer 에 relu 반영시 값이 안좋아진다
+loss : 2300.379638671875
+r2score : 0.5682723557521253
 
+relu 반영을 줄이니 기존 값과 비슷하게 나왔다
+loss : 2036.248779296875
+r2score : 0.6178435238910566
+
+batch_size=5 로 변경시 큰 변화가 없었다
+loss : 2046.72021484375
+r2score : 0.6158783334861431
 '''

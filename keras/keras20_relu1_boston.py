@@ -35,13 +35,13 @@ model = Sequential()
 model.add(Dense(55, input_dim=13))
 model.add(Dense(50))
 model.add(Dense(45))
-model.add(Dense(40))
+model.add(Dense(40, activation='relu'))
 model.add(Dense(35))
 model.add(Dense(30))
-model.add(Dense(25))
+model.add(Dense(25, activation='relu'))
 model.add(Dense(20))
 model.add(Dense(15))
-model.add(Dense(10))
+model.add(Dense(10, activation='relu'))
 model.add(Dense(5))
 model.add(Dense(2))
 model.add(Dense(1))
@@ -61,25 +61,11 @@ r2 = r2_score(y_test, y_predict)
 print('r2score :', r2) 
 
 '''
-loss : 17.25588607788086
-r2score : 0.791134211686602
-
-=============================
-
 # MinMaxScaler
 loss : 16.66873550415039
 r2score : 0.7982411072270883
-
-# StandardScaler
-loss : 18.252599716186523
-r2score : 0.7790699606512423
-
-# RobustScaler
-loss : 17.646638870239258
-r2score : 0.7864045336056296
-
-# MaxAbsScaler
-loss : 16.66651153564453
-r2score : 0.7982680101777346
-
+============================
+#layer 에 relu 반영시
+loss : 8.34216594696045
+r2score : 0.8990261525165145
 '''

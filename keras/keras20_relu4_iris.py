@@ -25,10 +25,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 #print(x.shape, y.shape)  
 
 
-scaler = MinMaxScaler()
+#scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -39,7 +39,7 @@ x_test = scaler.transform(x_test)
 
 model = Sequential()
 model.add(Dense(30, activation='linear', input_dim=4))
-model.add(Dense(30, activation='linear'))
+model.add(Dense(30, activation='relu'))
 model.add(Dense(18, activation='linear'))
 model.add(Dense(6, activation='linear'))
 model.add(Dense(4, activation='linear'))
@@ -70,16 +70,10 @@ accuracy : 1.0
 
 ============================
 
-# MinMaxScaler
-loss: 0.0524 - accuracy: 1.0000
-
-# StandardScaler
-loss: 0.0479 - accuracy: 0.9667
-
-# RobustScaler
-loss: 0.0593 - accuracy: 1.0000
-
 # MaxAbsScaler
 loss: 0.0492 - accuracy: 1.0000
+
+# layer 에 relu 반영시 값이 좋아졌다
+loss: 0.0442 - accuracy: 1.0000
 
 '''

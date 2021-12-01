@@ -66,7 +66,7 @@ test_file = scaler.transform(test_file)
 
 model = Sequential()
 model.add(Dense(250, input_dim=8))
-model.add(Dense(100, activation='linear'))
+model.add(Dense(100, activation='relu'))
 model.add(Dense(14, activation='linear'))
 model.add(Dense(1))
 
@@ -75,7 +75,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam') #rms
-model.fit(x_train, y_train, epochs=9, batch_size=8, validation_split=0.2, verbose=1) # batch_size=default 는 32이다.
+model.fit(x_train, y_train, epochs=10, batch_size=8, validation_split=0.2, verbose=1) # batch_size=default 는 32이다.
 
 #4. 평가, 예측
 loss = model.evaluate (x_test, y_test)
@@ -107,24 +107,14 @@ r2score : 0.24255754427571363
 
 ==============================
 
-# MinMaxScaler
-loss : 1.4626810550689697
-RMSE : 1.2094133980701014
-r2score : 0.2535646213860472
-
-# StandardScaler
-loss : 1.480304479598999
-RMSE : 1.2166776700715956
-r2score : 0.2445708496519564
-
-# RobustScaler
-loss : 1.4949843883514404
-RMSE : 1.2226955556063406
-r2score : 0.23707941768263563
-
 # MaxAbsScaler
 loss : 1.4563162326812744
 RMSE : 1.2067792783898472
 r2score : 0.25681257434900484
+
+layer에 relu 반영시 값이 큰 차이가 없다.
+loss : 1.4526137113571167
+RMSE : 1.2052443360375928
+r2score : 0.2587019411902052
 
 '''

@@ -56,4 +56,14 @@ minmax scaler : x값을 0~1 사이로 변환
 과적합을 해결하기 위해서  train 비율 만큼 test 도 변환하여 predict 과적합을 방지한다
 link : https://homeproject.tistory.com/3
 
+#scaler = MinMaxScaler()
+#scaler = StandardScaler()
+#scaler = RobustScaler()
+#scaler = MaxAbsScaler()
 
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+
+# summary - model.summary()
+: 연산개수확인  , 바이어스로 인해 각 레이어마다 노드 1개가 더 있는것처럼 연산 갯수가 늘어난다.

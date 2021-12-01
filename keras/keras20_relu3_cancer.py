@@ -21,10 +21,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle
 #print(np.unique(y))   #[0, 1]
 
 
-scaler = MinMaxScaler()
+#scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -35,7 +35,7 @@ x_test = scaler.transform(x_test)
 
 model = Sequential()
 model.add(Dense(30, activation='linear', input_dim=30))
-model.add(Dense(30, activation='linear'))
+model.add(Dense(30, activation='relu'))
 model.add(Dense(18, activation='linear'))
 model.add(Dense(6, activation='linear'))
 model.add(Dense(4, activation='linear'))
@@ -46,7 +46,7 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
+es = EarlyStopping(monitor='loss',patience=100, mode='min', verbose=1)
 
 start = time.time()
 hist = model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.2, callbacks=[es])
@@ -59,38 +59,18 @@ y_predict = model.predict(x_test)
 
 
 '''
-epochs=500, patience=100 일때
-
-Epoch 472/500                        # ealry stop spot
-loss : 0.11719817668199539
-Epoch 372/500                        # 최소
-loss: 0.1071 - val_loss: 0.0402  
-
-
-
-============================
-
-# MinMaxScaler
-Epoch 161/1000
-loss : 0.10754457116127014
-Epoch 61/1000
-loss: 0.0662 - val_loss: 0.0291
-
-# StandardScaler
-Epoch 111/1000
-loss: 0.0397 - val_loss: 0.0572
-Epoch 11/1000
-loss: 0.0637 - val_loss: 0.0325
-
-# RobustScaler
-Epoch 120/1000
-loss : 0.1827186942100525
-Epoch 20/1000
-loss: 0.0541 - val_loss: 0.0318
+epochs=1000, patience=100 일때
 
 # MaxAbsScaler
 Epoch 275/1000
 loss : 0.07751503586769104
 Epoch 175/1000
 loss: 0.0658 - val_loss: 0.0272
+
+#layer 에 relu 반영시 값이 안좋아진다
+Epoch 952/1000
+loss : 0.5388984680175781
+Epoch 852/1000
+loss: 3.4874e-10 - val_loss: 0.3796
+
 '''
