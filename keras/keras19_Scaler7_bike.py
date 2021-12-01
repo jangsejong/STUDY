@@ -7,6 +7,8 @@ from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
+
 
 def RMSE(y_test,y_pred):
     return np.sqrt(mean_squared_error(y_test, y_pred))
@@ -18,19 +20,10 @@ train_raw= pd.read_csv(path + "train.csv")
 test_file = pd.read_csv(path + "test.csv")
 submit_file = pd.read_csv(path +'sampleSubmission.csv')
 
-
-
-
-
-
-
-
 x = train_raw.drop(['datetime','casual','registered','count'], axis=1)
 test_file = test_file.drop(['datetime'], axis=1)
 
 print(x.columns)
-
-
 
 train = train_raw.copy()
 train['datetime'] = pd.to_datetime(train['datetime'])
@@ -49,15 +42,8 @@ train_clean = train[(train['count'] >= (count_q1 - (1.5 * count_IQR))) & (train[
 def to_integer(datetime):
   return 10000 * datetime.year + 100 * datetime.month + datetime.day
 
-#train[train.duplicated()] # 중복값 없음 
-#test[test.duplicated()] # 중복값 없음
-#train.isnull().sum() #결측값 없음
-#test.isnull().sum() #결측값 없음
-
-
 
 y = train_raw['count']
-
 
 
 #데이타 로그변환 : y 값이 한쪽으로 몰릴시 통상 사용
@@ -65,14 +51,23 @@ y = np.log1p(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True, random_state=66)
 
+#scaler = MinMaxScaler()
+#scaler = StandardScaler()
+#scaler = RobustScaler()
+scaler = MaxAbsScaler()
+
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+test_file = scaler.transform(test_file)
 
 
 #2. 모델구성
 
 model = Sequential()
 model.add(Dense(250, input_dim=8))
-model.add(Dense(4, activation='linear'))
-model.add(Dense(15, activation='linear'))
+model.add(Dense(100, activation='linear'))
+model.add(Dense(14, activation='linear'))
 model.add(Dense(1))
 
 
@@ -80,7 +75,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam') #rms
-model.fit(x_train, y_train, epochs=10, batch_size=8, validation_split=0.2, verbose=1) # batch_size=default 는 32이다.
+model.fit(x_train, y_train, epochs=40, batch_size=8, validation_split=0.2, verbose=1) # batch_size=default 는 32이다.
 
 #4. 평가, 예측
 loss = model.evaluate (x_test, y_test)
@@ -103,3 +98,33 @@ submit_file['count'] = results
 print(submit_file[:10])
 
 submit_file.to_csv(path + 'submit_test10.csv', index = False)
+
+
+'''
+loss : 1.4842497110366821
+RMSE : 1.2182978840821634
+r2score : 0.24255754427571363
+
+==============================
+
+# MinMaxScaler
+loss : 1.4626810550689697
+RMSE : 1.2094133980701014
+r2score : 0.2535646213860472
+
+# StandardScaler
+loss : 1.480304479598999
+RMSE : 1.2166776700715956
+r2score : 0.2445708496519564
+
+# RobustScaler
+loss : 1.4949843883514404
+RMSE : 1.2226955556063406
+r2score : 0.23707941768263563
+
+# MaxAbsScaler
+loss : 1.4563162326812744
+RMSE : 1.2067792783898472
+r2score : 0.25681257434900484
+
+'''

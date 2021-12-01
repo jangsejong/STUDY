@@ -77,6 +77,9 @@ y = train_raw['count']
 # 데이터를 편리하게 분할해주는 라이브러리 활용
 from sklearn.model_selection import train_test_split
 
+#데이타 로그변환 : y 값이 한쪽으로 몰릴시 통상 사용
+y = np.log1p(y)
+
 # 훈련 데이터의 25%를 검증 데이터로 활용
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True, random_state=66)
 

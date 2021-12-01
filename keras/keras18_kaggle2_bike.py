@@ -36,7 +36,7 @@ submit_file = pd.read_csv(path +'sampleSubmission.csv')
 
 평균값(mean)
 
-N 개의 변량을 모두 더하여
+ N 개의 변량을 모두 더하여
 그 개수로 나누어 놓은 숫자이다. 산술평균이라고도 한다.
 N 개의 값을 크기 순으로 늘어놓았을 때 가장 가운데에 있는 숫자이다.
 위 식에서는 (n+1)/2 = 16/2 = 8번째 있는 값인 5가 중위값이다.
@@ -155,7 +155,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 model = Sequential()
 model.add(Dense(250, input_dim=8))
 model.add(Dense(4, activation='linear'))
-model.add(Dense(15, activation='linear'))
+model.add(Dense(2, activation='linear'))
 model.add(Dense(1))
 
 
@@ -163,7 +163,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam') #rms
-model.fit(x_train, y_train, epochs=10, batch_size=8, validation_split=0.2, verbose=1) # batch_size=default 는 32이다.
+model.fit(x_train, y_train, epochs=12, batch_size=8, validation_split=0.2, verbose=1) # batch_size=default 는 32이다.
 
 #4. 평가, 예측
 loss = model.evaluate (x_test, y_test)
