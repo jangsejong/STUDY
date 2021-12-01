@@ -17,8 +17,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
-scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+#scaler = RobustScaler()
+scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -76,4 +76,24 @@ r2score : 0.6178435238910566
 batch_size=5 로 변경시 큰 변화가 없었다
 loss : 2046.72021484375
 r2score : 0.6158783334861431
+
+
+# MinMaxScaler                       #layer 에 relu 반영시
+
+loss : 2076.62646484375             loss : 2038.6666259765625
+r2score : 0.6102656376254028        r2score : 0.6173897994718265 
+
+# StandardScaler
+loss : 2037.9686279296875           loss : 3738.35400390625    
+r2score : 0.6175207836484327        r2score : 0.2983980678376623 
+
+# RobustScaler
+loss : 2005.270751953125            loss : 2300.379638671875 
+r2score : 0.6236574362526468        r2score : 0.6178435238910566
+
+# MaxAbsScaler
+loss : 2056.781005859375            loss : 2191.87353515625 
+r2score : 0.6139901823422093        r2score : 0.5886364211423891
+
+
 '''

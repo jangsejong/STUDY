@@ -43,9 +43,9 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 #print(x.shape, y.shape)  
 
 
-scaler = MinMaxScaler()
+#scaler = MinMaxScaler()
 #scaler = StandardScaler()
-#scaler = RobustScaler()
+scaler = RobustScaler()
 #scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
@@ -68,7 +68,7 @@ model.add(Dense(7, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=20, mode='min', verbose=1)
+es = EarlyStopping(monitor='loss',patience=20, mode='min', verbose=1)
 
 
 hist = model.fit(x_train, y_train, epochs=2000, batch_size=108, validation_split=0.2, callbacks=[es]) # batch_size=default 는 32이다.
@@ -96,5 +96,25 @@ accuracy : 0.7211604118347168
 layer에 relu 반영시 값이 좋아졌다
 loss : 0.5210703015327454
 accuracy : 0.7869246006011963
+
+'''
+'''
+# MinMaxScaler                       #layer 에 relu 반영시
+
+loss : 0.6607382297515869            loss : 0.5210703015327454  
+accuracy : 0.7211604118347168        accuracy : 0.7869246006011963
+
+# StandardScaler
+loss : 0.6613174676895142           loss : 8.482542037963867       
+accuracy : 0.7198092937469482         r2score : 0.8973270448642088  
+
+# RobustScaler
+loss : 0.6603913903236389            loss : 9.703550338745117   
+accuracy : 0.7201879620552063        r2score : 0.8825479273496296   
+
+# MaxAbsScaler
+loss : 0.6628473401069641             loss : 9.844630241394043   
+accuracy : 0.7198178768157959        r2score : 0.880840280687609   
+
 
 '''

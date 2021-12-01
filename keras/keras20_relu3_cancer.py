@@ -23,8 +23,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
-#scaler = RobustScaler()
-scaler = MaxAbsScaler()
+scaler = RobustScaler()
+#scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -46,7 +46,7 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='loss',patience=100, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
 
 start = time.time()
 hist = model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.2, callbacks=[es])
@@ -67,10 +67,25 @@ loss : 0.07751503586769104
 Epoch 175/1000
 loss: 0.0658 - val_loss: 0.0272
 
-#layer 에 relu 반영시 값이 안좋아진다
+#layer 에 relu 반영시 
 Epoch 952/1000
 loss : 0.5388984680175781
 Epoch 852/1000
 loss: 3.4874e-10 - val_loss: 0.3796
+
+
+# MinMaxScaler                       #layer 에 relu 반영시
+
+loss: 0.0662 - val_loss: 0.0291         loss: 0.0106 - val_loss: 0.0060
+
+# StandardScaler
+loss: 0.0637 - val_loss: 0.0325         loss: 0.0407 - val_loss: 0.0600 
+
+# RobustScaler
+loss: 0.0541 - val_loss: 0.0318         loss: 0.0478 - val_loss: 0.0919
+
+# MaxAbsScaler
+loss: 0.0658 - val_loss: 0.0272         loss: 3.4874e-10 - val_loss: 0.3796
+
 
 '''

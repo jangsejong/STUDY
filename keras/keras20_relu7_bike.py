@@ -51,10 +51,10 @@ y = np.log1p(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True, random_state=66)
 
-#scaler = MinMaxScaler()
+scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-scaler = MaxAbsScaler()
+#scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -116,5 +116,29 @@ layer에 relu 반영시 값이 큰 차이가 없다.
 loss : 1.4526137113571167
 RMSE : 1.2052443360375928
 r2score : 0.2587019411902052
+
+'''
+
+'''
+# MinMaxScaler                       #layer 에 relu 반영시
+
+loss : 1.4626810550689697           loss : 1.3933570384979248
+RMSE : 1.2094133980701014           RMSE : 1.180405454428457
+r2score : 0.2535646213860472        r2score : 0.28894191371109745
+
+# StandardScaler
+loss : 1.480304479598999            loss : 1.437126874923706
+RMSE : 1.2166776700715956           RMSE : 1.198802188629926
+r2score : 0.2445708496519564        r2score : 0.2666053817354287
+
+# RobustScaler
+loss : 1.4949843883514404            loss : 1.3558378219604492
+RMSE : 1.2226955556063406            RMSE : 1.1644046876778524
+r2score : 0.23707941768263563        r2score : 0.3080884907137209
+# MaxAbsScaler
+loss : 1.4563162326812744            loss : 1.4526137113571167
+RMSE : 1.2067792783898472            RMSE : 1.2052443360375928
+r2score : 0.25681257434900484        r2score : 0.2587019411902052
+
 
 '''

@@ -20,10 +20,10 @@ print(np.min(x), np.max(x))  #0.0  711.0
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=66)  #shuffle 은 기본값 True
 #x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1875, shuffle=True, random_state=66)
 
-scaler = MinMaxScaler()
+#scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -61,11 +61,22 @@ r2 = r2_score(y_test, y_predict)
 print('r2score :', r2) 
 
 '''
-# MinMaxScaler
-loss : 16.66873550415039
-r2score : 0.7982411072270883
-============================
-#layer 에 relu 반영시
-loss : 8.34216594696045
-r2score : 0.8990261525165145
+# MinMaxScaler                       #layer 에 relu 반영시
+
+loss : 16.66873550415039             loss : 8.34216594696045   
+r2score : 0.7982411072270883         r2score : 0.8990261525165145   
+
+# StandardScaler
+loss : 18.252599716186523            loss : 8.482542037963867       
+r2score : 0.7790699606512423         r2score : 0.8973270448642088  
+
+# RobustScaler
+loss : 17.646638870239258            loss : 9.703550338745117   
+r2score : 0.7864045336056296         r2score : 0.8825479273496296   
+
+# MaxAbsScaler
+loss : 16.66651153564453             loss : 9.844630241394043   
+r2score : 0.7982680101777346         r2score : 0.880840280687609   
+
+
 '''

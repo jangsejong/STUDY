@@ -26,10 +26,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 #print(x.shape, y.shape)  #(178, 13) (178,)
 
 
-#scaler = MinMaxScaler()
+scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-scaler = MaxAbsScaler()
+#scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -80,5 +80,25 @@ accuracy : 1.0
 relu 반영시 값이 더 좋아졌다
 loss : 1.3410724477580516e-06
 accuracy : 1.0
+
+'''
+'''
+# MinMaxScaler                         #layer 에 relu 반영시
+
+loss : 0.35055699944496155             loss : 7.262266444740817e-05  
+accuracy : 0.9722222089767456          accuracy : 1.0 
+
+# StandardScalers : 
+loss : 0.3546077311038971              loss : 0.32601988315582275     
+accuracy  : 0.9722222089767456         accuracy : 0.9722222089767456
+ 
+# RobustScaler
+loss : 0.5228054523468018              loss : 0.4000712037086487  
+accuracy  : 0.9722222089767456         accuracy : 0.9722222089767456 
+
+# MaxAbsScaler
+loss : 0.0015572120901197195           loss : 1.3410724477580516e-06
+accuracy  : 1.0                        accuracy : 1.0
+
 
 '''
