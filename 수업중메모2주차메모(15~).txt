@@ -50,4 +50,8 @@ label들이 독립적일 때 사용
 원-핫 인코딩 (One-Hot Encoding)
 관련 링크 : https://wikidocs.net/22647
 
+12/01
+1. 데이터 스케일링 (Data scaling)
+minmax scaler : x값을 0~1 사이로 변환
 
+link : https://homeproject.tistory.com/3
