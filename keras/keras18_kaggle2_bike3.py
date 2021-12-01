@@ -1,5 +1,5 @@
-import numpy as np
-import pandas as pd
+import numpy as np #숫자들의모임.
+import pandas as pd  #다들어감
 import matplotlib.pyplot as plt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -49,8 +49,10 @@ train_clean = train[(train['count'] >= (count_q1 - (1.5 * count_IQR))) & (train[
 def to_integer(datetime):
   return 10000 * datetime.year + 100 * datetime.month + datetime.day
 
-
-
+#train[train.duplicated()] # 중복값 없음 
+#test[test.duplicated()] # 중복값 없음
+#train.isnull().sum() #결측값 없음
+#test.isnull().sum() #결측값 없음
 
 
 

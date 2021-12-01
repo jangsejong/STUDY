@@ -30,7 +30,23 @@ submit_file = pd.read_csv(path +'sampleSubmission.csv')
 #print(type(train)) #<class 'pandas.core.frame.DataFrame'>
 '''
 #print(train.info())  #object 모든 자료의 최상위형
-#print(train.describe()) #std 표준편차  mean, 중위값과 평균값차이
+#print(train.describe()) #std 표준편차  mean, 
+# 
+#중위값과 평균값차이 link: https://blog.naver.com/conquer6022/221799258893
+
+평균값(mean)
+
+N 개의 변량을 모두 더하여
+그 개수로 나누어 놓은 숫자이다. 산술평균이라고도 한다.
+N 개의 값을 크기 순으로 늘어놓았을 때 가장 가운데에 있는 숫자이다.
+위 식에서는 (n+1)/2 = 16/2 = 8번째 있는 값인 5가 중위값이다.
+이는 각 표본들의 격차가 워낙 클 때 주로 쓴다.
+예를 들면, 직원이 100명인 회사에서 99명의 연봉 평균은 5천만 원인데 사장은 100억이었다고 해보자.
+그럼 이 회사의 '평균'연봉은 1억 4851만 원이 된다.
+따라서 이처럼 극단적인 값이 있는 경우 평균값보다 중위값이 더 유용하다.
+
+==============================
+
 결측값확인
 #train.info()
 .isna()

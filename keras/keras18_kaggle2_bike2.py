@@ -9,6 +9,11 @@ train_raw= pd.read_csv(path + 'train.csv')                    #(10886, 12)
 test_file = pd.read_csv(path + "test.csv")                 #(6493, 9)    , features (casual,registered,count) 없음 
 submit_file = pd.read_csv(path +'sampleSubmission.csv')    #(6493, 2)
 
+#train[train.duplicated()] # 중복값 없음 
+#test[test.duplicated()] # 중복값 없음
+#train.isnull().sum() #결측값 없음
+#test.isnull().sum() #결측값 없음
+
 #train.info()
 #print(train.info())  #object 모든 자료의 최상위형
 #print(train.describe()) #std 표준편차  mean, 중위값과 평균값차이

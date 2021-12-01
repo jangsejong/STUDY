@@ -11,6 +11,7 @@ import time
 datasets = load_boston()
 x = datasets.data
 y = datasets.target
+
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=66)
 
 #2. 모델구성
