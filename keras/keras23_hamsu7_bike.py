@@ -68,7 +68,7 @@ input1 = Input(shape=(8,))
 dense1 = Dense(250)(input1)
 dense2 = Dense(100, activation='relu')(dense1)
 dense3 = Dense(14)(dense2)
-ouput1 = Dense(1, activation='sigmoid')(dense3)
+ouput1 = Dense(1)(dense3)
 model = Model(inputs=input1, outputs=ouput1)
 
 '''
@@ -148,5 +148,7 @@ r2score : 0.25681257434900484        r2score : 0.2587019411902052
 
 #함수형모델 사용시
 # MinMaxScaler  
-
+loss : 1.3816587924957275
+RMSE : 1.1754398500592953
+r2score : 0.29491173799435955
 '''
