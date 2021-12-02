@@ -131,6 +131,9 @@ accuracy : 0.7198178768157959        accuracy : 0.770694375038147
 
 #함수형모델 사용시
 # StandardScaler
+Epoch 140/2000
+loss: 0.5155 - accuracy: 0.7891 - val_loss: 0.5142 - val_accuracy: 0.7885
+Epoch 00160: early stopping
 loss : 0.518423855304718
 accuracy : 0.7894116044044495
 '''
