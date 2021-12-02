@@ -45,8 +45,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
-scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+#caler = RobustScaler()
+scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -109,12 +109,12 @@ loss : 0.6613174676895142            loss : 0.5180310010910034
 accuracy : 0.7198092937469482        accuracy : 0.7892223000526428 
 
 # RobustScaler
-loss : 0.6603913903236389            loss : 9.703550338745117   
-accuracy : 0.7201879620552063        r2score : 0.8825479273496296   
+loss : 0.6603913903236389            loss : 0.5238112211227417  
+accuracy : 0.7201879620552063        accuracy : 0.7887662053108215  
 
 # MaxAbsScaler
-loss : 0.6628473401069641             loss : 9.844630241394043   
-accuracy : 0.7198178768157959        r2score : 0.880840280687609   
+loss : 0.6628473401069641            loss : 0.5403527617454529 
+accuracy : 0.7198178768157959        accuracy : 0.770694375038147  
 
 
 '''
