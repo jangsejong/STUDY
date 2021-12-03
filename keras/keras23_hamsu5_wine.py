@@ -61,7 +61,7 @@ model.add(Dense(3, activation='softmax'))
 
 
 #3. 컴파일, 훈련
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='loss',patience=30, mode='min', verbose=1)

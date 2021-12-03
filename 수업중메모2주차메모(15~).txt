@@ -115,3 +115,6 @@ Min-Max Normalization 이라고도 불리며,
 
 # summary - model.summary()
 : 연산개수확인  , 바이어스로 인해 각 레이어마다 노드 1개가 더 있는것처럼 연산 갯수가 늘어난다.
+
+#label 인코더
+: 문자를 숫자로 바꿔주는 기능을 한다
