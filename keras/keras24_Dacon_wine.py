@@ -52,11 +52,13 @@ y = to_categorical(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True, random_state=66)
 
-scaler = MaxAbsScaler()
-
+scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = RobustScaler()
+# scaler = MaxAbsScaler()
 scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+scaler.transform(x_train)
+scaler.transform(x_test)
 
 #2. 모델구성
 
@@ -75,7 +77,7 @@ model = Model(inputs=input1, outputs=ouput1)
 model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='loss',patience=15, mode='min', verbose=1)
+es = EarlyStopping(monitor='loss',patience=30, mode='min', verbose=1)
 
 
 hist = model.fit(x_train, y_train, epochs=10000, batch_size=13, validation_split=0.2, callbacks=[es])
@@ -142,6 +144,8 @@ $9
 
 '''
 
-
+result = model.predict(test_file)
+result_recover = np.argmax(y, axis =1).reshape(-1,1)
+submission['quality'] = result_recover
 
 submit_file.to_csv(path + 'submit_test9.csv', index = False)
