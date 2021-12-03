@@ -56,14 +56,13 @@ scaler.transform(x_test)
 
 #2. 모델구성
 
-input1 = Input(shape=(x.shape[1],))
-dense1 = Dense(8)(input1)
-dense2 = Dense(7)(dense1)
-dense3 = Dense(6)(dense2)
-dense4 = Dense(6)(dense3)
-dense5 = Dense(6)(dense4)
-dense6 = Dense(3)(dense5)
-ouput1 = Dense(9, activation='softmax')(dense6)
+input1 = Input(shape=(13,))
+dense1 = Dense(3)(input1)
+dense2 = Dense(3)(dense1)
+dense3 = Dense(3)(dense2)
+dense4 = Dense(3)(dense3)
+dense5 = Dense(3)(dense4)
+ouput1 = Dense(9, activation='softmax')(dense5)
 model = Model(inputs=input1, outputs=ouput1)
 
 
@@ -71,7 +70,7 @@ model = Model(inputs=input1, outputs=ouput1)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=20, mode='min', verbose=1)
+es = EarlyStopping(monitor='loss',patience=20, mode='min', verbose=1)
 
 model.fit(x_train, y_train, epochs=10000, batch_size=9, validation_split=0.2, callbacks=[es])
 

@@ -55,25 +55,27 @@ scaler.transform(x_train)
 scaler.transform(x_test)
 
 #2. 모델구성
-
-input1 = Input(shape=(x.shape[1],))
-dense1 = Dense(8)(input1)
-dense2 = Dense(7)(dense1)
-dense3 = Dense(6)(dense2)
+input1 = Input(shape=(13,))
+dense1 = Dense(30)(input1)
+dense2 = Dense(30, activation='relu')(dense1)
+dense3 = Dense(18)(dense2)
 dense4 = Dense(6)(dense3)
-dense5 = Dense(6)(dense4)
-dense6 = Dense(3)(dense5)
-ouput1 = Dense(9, activation='softmax')(dense6)
+dense5 = Dense(4)(dense4)
+dense6 = Dense(2)(dense5)
+ouput1 = Dense(9, activation='sigmoid')(dense6)
 model = Model(inputs=input1, outputs=ouput1)
 
+
+model.save("./_save/Dacon_wine2.h5")
 
 #3. 컴파일, 훈련
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=30, mode='min', verbose=1)
+es = EarlyStopping(monitor='loss',patience=30, mode='min', verbose=1)
 
 model.fit(x_train, y_train, epochs=10000, batch_size=9, validation_split=0.2, callbacks=[es])
+
 
 #4 평가예측
 loss = model.evaluate(x_test,y_test)
@@ -93,10 +95,10 @@ sample_submission['quality'] = result_recover
 #print(result_recover)
 #print(np.unique(result_recover))
 # # print(submission[:10])
-sample_submission.to_csv(path+"test_02.csv", index = False)
+sample_submission.to_csv(path+"test_01.csv", index = False)
 #print(result_recover)
 '''
-loss :  1.072985053062439
-accuracy :  0.5208655595779419
+loss :  1.0884289741516113
+accuracy :  0.5409582853317261
 
 '''
