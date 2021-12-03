@@ -71,7 +71,7 @@ model = Model(inputs=input1, outputs=ouput1)
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss',patience=30, mode='min', verbose=1)
+es = EarlyStopping(monitor='val_loss',patience=20, mode='min', verbose=1)
 
 model.fit(x_train, y_train, epochs=10000, batch_size=9, validation_split=0.2, callbacks=[es])
 
@@ -93,10 +93,9 @@ sample_submission['quality'] = result_recover
 #print(result_recover)
 #print(np.unique(result_recover))
 # # print(submission[:10])
-sample_submission.to_csv(path+"test_02.csv", index = False)
+sample_submission.to_csv(path+"test_03.csv", index = False)
 #print(result_recover)
 '''
-loss :  1.072985053062439
-accuracy :  0.5208655595779419
-
+loss :  1.0693058967590332
+accuracy :  0.5347759127616882
 '''
