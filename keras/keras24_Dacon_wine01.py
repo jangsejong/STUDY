@@ -1,4 +1,3 @@
-from sklearn.datasets import load_wine
 from tensorflow.keras.models import Sequential, Model,  load_model
 from tensorflow.keras.layers import Dense, Input
 import numpy as np
@@ -15,7 +14,6 @@ test_file = pd.read_csv(path + "test.csv")
 submission = pd.read_csv(path+"sample_Submission.csv") #제출할 값
 y = train['quality']
 x = train.drop(['id', 'quality'], axis =1)
-# x = train #.drop(['casual','registered','count'], axis =1) #
 
 le = LabelEncoder()                 # 라벨 인코딩은 n개의 범주형 데이터를 0부터 n-1까지 연속적 수치 데이터로 표현
 label = x['type']
@@ -33,7 +31,7 @@ y = train['quality']      # [6 7 5 8 4]
 y = get_dummies(y)
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, shuffle = True, random_state = 48)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.95, shuffle = True, random_state = 51)
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
@@ -47,10 +45,9 @@ test_file = scaler.transform(test_file)
 
 #2 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(30)(input1)
-dense2 = Dense(30)(dense1)
-dense3 = Dense(18)(dense2)
-dense4 = Dense(6, activation='relu')(dense3)
+dense2 = Dense(100)(input1)
+dense3 = Dense(15)(dense2)
+dense4 = Dense(6)(dense3)
 dense5 = Dense(4)(dense4)
 dense6 = Dense(2)(dense5)
 ouput1 = Dense(5, activation='softmax')(dense6)
@@ -61,13 +58,11 @@ model = Model(inputs=input1, outputs=ouput1)
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics=['accuracy']) 
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss', patience=10``, mode = 'auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=20, mode = 'auto', verbose=1, restore_best_weights=True)
+#es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
 
-start = time.time()
+model.fit(x_train, y_train, epochs = 5000, batch_size =12, validation_split=0.05, callbacks=[es])
 
-model.fit(x_train, y_train, epochs = 5000, batch_size =12, validation_split=0.2, callbacks=[es])
-end = time.time() - start
-print('시간 : ', round(end,2) ,'초')
 
 #4 평가예측
 loss = model.evaluate(x_test,y_test)
@@ -79,7 +74,7 @@ result = model.predict(test_file)
 result_recover = np.argmax(result, axis=1).reshape(-1,1) + 4
 submission['quality'] = result_recover
 
-submission.to_csv(path + "006.csv", index = False)
+submission.to_csv(path + "007.csv", index = False)
 
 
 '''
@@ -114,6 +109,12 @@ loss :  1.0092556476593018
 accuracy :  0.5919629335403442
 
 006
+loss :  0.9349533915519714
+accuracy :  0.6018518805503845
+
+007
+loss :  0.9498463273048401
+accuracy :  0.6419752836227417
 
 '''
 
