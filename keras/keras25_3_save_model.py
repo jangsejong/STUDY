@@ -59,7 +59,7 @@ model.fit(x_train, y_train, epochs=1100, batch_size=13,
           validation_split=0.1) #validation 사용시 성능이 더 좋아진다.
          # validation_data = (x_val, y_val))
 
-model.save("./_save/keras25_3_save_model.h5")
+c
 
 
 

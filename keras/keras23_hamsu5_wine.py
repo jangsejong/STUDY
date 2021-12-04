@@ -48,16 +48,6 @@ dense5 = Dense(4)(dense4)
 dense6 = Dense(2)(dense5)
 ouput1 = Dense(3, activation='softmax')(dense6)
 model = Model(inputs=input1, outputs=ouput1)
-'''
-model = Sequential()
-model.add(Dense(30, activation='linear', input_dim=13))
-model.add(Dense(30, activation='linear'))
-model.add(Dense(18, activation='linear'))
-model.add(Dense(6, activation='relu'))
-model.add(Dense(4, activation='linear'))
-model.add(Dense(2, activation='linear'))
-model.add(Dense(3, activation='softmax'))
-'''
 
 
 #3. 컴파일, 훈련
