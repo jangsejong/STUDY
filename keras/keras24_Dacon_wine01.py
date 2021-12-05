@@ -31,7 +31,7 @@ y = train['quality']      # [6 7 5 8 4]
 y = get_dummies(y)
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.95, shuffle = True, random_state = 51)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.2, shuffle = True, random_state = 30)
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
@@ -45,9 +45,10 @@ test_file = scaler.transform(test_file)
 
 #2 모델구성
 input1 = Input(shape=(12,))
-dense2 = Dense(100)(input1)
-dense3 = Dense(15)(dense2)
-dense4 = Dense(6)(dense3)
+dense1 = Dense(18)(input1)
+dense2 = Dense(16)(dense1)
+dense3 = Dense(14)(dense2)
+dense4 = Dense(8)(dense3)
 dense5 = Dense(4)(dense4)
 dense6 = Dense(2)(dense5)
 ouput1 = Dense(5, activation='softmax')(dense6)
@@ -61,7 +62,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=20, mode = 'auto', verbose=1, restore_best_weights=True)
 #es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs = 5000, batch_size =12, validation_split=0.05, callbacks=[es])
+model.fit(x_train, y_train, epochs = 5000, batch_size =12, validation_split=0.2, callbacks=[es])
 
 
 #4 평가예측
@@ -74,7 +75,7 @@ result = model.predict(test_file)
 result_recover = np.argmax(result, axis=1).reshape(-1,1) + 4
 submission['quality'] = result_recover
 
-submission.to_csv(path + "007.csv", index = False)
+submission.to_csv(path + "008.csv", index = False)
 
 
 '''

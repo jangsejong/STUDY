@@ -72,7 +72,7 @@ dense3 = Dense(1)(dense2)
 dense4 = Dense(2)(dense3)
 dense5 = Dense(4)(dense4)
 dense6 = Dense(6)(dense5)
-ouput1 = Dense(5, activation='sigmoid')(dense6)
+ouput1 = Dense(5, activation='softmax')(dense6)
 model = Model(inputs=input1, outputs=ouput1)
 
 
