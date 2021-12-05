@@ -44,25 +44,32 @@ x_test = scaler.transform(x_test)
 test_file = scaler.transform(test_file)
 
 #2 모델구성
-input1 = Input(shape=(12,))
-dense1 = Dense(30)(input1)
-dense2 = Dense(30)(dense1)
-dense3 = Dense(18)(dense2)
-dense4 = Dense(6)(dense3)
-dense5 = Dense(4)(dense4)
-dense6 = Dense(2)(dense5)
-ouput1 = Dense(5, activation='softmax')(dense6)
-model = Model(inputs=input1, outputs=ouput1)
+model = Sequential()
+model.add(Dense(12, input_dim=12))
+model.add(Dense(12))
+model.add(Dense(12))
+model.add(Dense(12))
+model.add(Dense(12))
+model.add(Dense(12))
+model.add(Dense(12))
+model.add(Dense(12))
+model.add(Dense(8))
+model.add(Dense(4))
+model.add(Dense(4))
+model.add(Dense(4))
+model.add(Dense(3))
+model.add(Dense(2))
+model.add(Dense(5, activation='softmax'))
 
 
 #3. 컴파일, 훈련
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics=['accuracy']) 
 
 from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='loss', patience=20, mode = 'auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=20, mode = 'auto', verbose=1, restore_best_weights=True)
 #es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs = 5000, batch_size = 30, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs = 1000, batch_size = 12, validation_split=0.2, callbacks=[es])
 
 
 #4 평가예측
