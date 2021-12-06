@@ -22,10 +22,10 @@ print(np.min(x), np.max(x))  #0.0  711.0
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=66)  #shuffle 은 기본값 True
 #x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1875, shuffle=True, random_state=66)
 
-#scaler = MinMaxScaler()
+scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
-scaler = MaxAbsScaler()
+#scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
@@ -54,7 +54,7 @@ model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint # EarlyStopping patience(기다리는 횟수)
 
-es = EarlyStopping(monitor='val_loss', patience=10, mode = 'min', verbose = 1)
+es = EarlyStopping(monitor='val_loss', patience=15, mode = 'min', verbose = 1)
 mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras26_1_MCP.hdf5')
 
 start = time.time()
@@ -85,7 +85,7 @@ plt.show()
 
 #print("걸린시간 : ", round(end, 3), '초')
 
-model.save_weights("./_save/keras25_1_save_weights.h5")
+model.save("./_save/keras26_1_save_MCP.h5")
 
 
 
