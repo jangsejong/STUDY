@@ -72,7 +72,7 @@ dense3 = Dense(1)(dense2)
 dense4 = Dense(2)(dense3)
 dense5 = Dense(4)(dense4)
 dense6 = Dense(6)(dense5)
-ouput1 = Dense(5, activation='softmax')(dense6)
+ouput1 = Dense(1, activation='softmax')(dense6)
 model = Model(inputs=input1, outputs=ouput1)
 
 
@@ -84,7 +84,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 from tensorflow.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='loss',patience=20, mode='min', verbose=1)
 
-model.fit(x_train, y_train, epochs=10000, batch_size=9, validation_split=0.2, callbacks=[es])
+model.fit(x_train, y_train, epochs=10000, batch_size=12, validation_split=0.2, callbacks=[es])
 
 
 #4 평가예측
