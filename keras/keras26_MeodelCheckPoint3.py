@@ -62,7 +62,6 @@ x_test = scaler.transform(x_test)
 
 #model.save_weights("./_save/keras25_1_save_weights.h5")
 #model = load_model('./_save/keras26_1_save_MCP.h5')
-#model=load_model("./_save/keras26_1_save_MCP.h5")
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)

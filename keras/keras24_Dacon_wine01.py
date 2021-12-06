@@ -6,6 +6,14 @@ import time
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler, LabelEncoder, OneHotEncoder
 from pandas import get_dummies
 
+import datetime
+date = datetime.datetime.now()
+datetime = date.strftime("%m%d_%H%M")
+#print(datetime)
+filepath = './_ModelCheckPoint/'
+filename = '{epoch:05d}={val_loss:.5f}.hdf5'
+model_path = "".join([filepath, 'k24', datetime,'_', filename])
+
 #1 데이터
 path = "../../_data/dacon/wine/"  
 train = pd.read_csv(path +"train.csv")
@@ -31,7 +39,7 @@ y = train['quality']      # [6 7 5 8 4]
 y = get_dummies(y)
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.2, shuffle = True, random_state =66)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.1, shuffle = True, random_state =66)
 
 #scaler = MinMaxScaler()
 #scaler = StandardScaler()
@@ -48,7 +56,7 @@ input1 = Input(shape=(12,))
 dense1 = Dense(30)(input1)
 dense2 = Dense(30)(dense1)
 dense3 = Dense(10)(dense2)
-dense4 = Dense(6)(dense3)
+dense4 = Dense(8)(dense3)
 dense5 = Dense(5)(dense4)
 dense6 = Dense(5)(dense5)
 ouput1 = Dense(5, activation='softmax')(dense6)
@@ -58,11 +66,12 @@ model = Model(inputs=input1, outputs=ouput1)
 #3. 컴파일, 훈련
 model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics=['accuracy']) 
 
-from tensorflow.keras.callbacks import EarlyStopping
-es = EarlyStopping(monitor='val_loss', patience= 10 , mode = 'auto', verbose=1, restore_best_weights=True)
-#es = EarlyStopping(monitor='val_loss',patience=100, mode='min', verbose=1)
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
+mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras24_Dacon_MCP.hdf5')
 
-model.fit(x_train, y_train, epochs = 1000, batch_size = 12, validation_split=0.2, callbacks=[es])
+
+model.fit(x_train, y_train, epochs = 1000, batch_size = 12, validation_split=0.1, callbacks=[es,mcp])
 
 
 #4 평가예측

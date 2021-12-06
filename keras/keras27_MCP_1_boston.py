@@ -1,42 +1,23 @@
-# 각각의 Scaler의 특성과 정의 정리해놀것!!!
-from sklearn.datasets import load_boston
-from tensorflow.keras.models import Sequential, Model,  load_model
-from tensorflow.keras.layers import Dense, Input
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
-import matplotlib.pyplot as plt
-import time as time
-from tensorflow.python.keras.callbacks import History
-
-import datetime
-date = datetime.datetime.now()
-datetime = date.strftime("%m%d_%H%M")
-#print(datetime)
-filepath = './_ModelCheckPoint/'
-filename = '{val_loss:.5f}={epoch:05d}.hdf5'
-model_path = "".join([filepath, 'k27_boston','_', filename, datetime])
-
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.datasets import load_boston
 
 datasets = load_boston()
-
-#1. 데이터
-x = datasets.data
+x = datasets.data 
 y = datasets.target
-print(np.min(x), np.max(x))  #0.0  711.0   
 
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=66)  #shuffle 은 기본값 True
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=1004)
 
-scaler = MaxAbsScaler()
-
+scaler = MinMaxScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 
-
-#2. 모델구성
+#2. 모델 구성
 
 model = Sequential()
 model.add(Dense(55, input_dim=13))
@@ -53,48 +34,32 @@ model.add(Dense(5))
 model.add(Dense(2))
 model.add(Dense(1))
 
-
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=1100, batch_size=13,
-          validation_split=0.1) #validation 사용시 성능이 더 좋아진다
-
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-es = EarlyStopping(monitor='val_loss', patience=10, mode = 'min', verbose = 1 , restore_best_weights=True)
-mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras27_1_MCP.hdf5')
+import datetime
+date = datetime.datetime.now()
+datetime = date.strftime("%m%d_%H%M") 
 
-#model = load_model('./_ModelCheckPoint/keras27_1_MCP.hdf5')
+filepath = './_ModelCheckPoint/'
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'      
+model_path = "".join([filepath, '1_boston_', datetime, '_', filename])
 
-#4. 평가, 예측
-loss = model.evaluate (x_test, y_test)
-print('loss :', loss) #loss :
-y_predict = model.predict(x_test)
+es = EarlyStopping(monitor='val_loss', patience=10, mode='min', restore_best_weights=True)
+mcp = ModelCheckpoint(monitor='val_loss', verbose=1, mode='min', save_best_only=True, filepath=model_path)
+model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_split=0.2, callbacks=[es, mcp])
 
-r2 = r2_score(y_test, y_predict)
-print('r2score :', r2) 
+#4. 예측, 결과
+loss = model.evaluate(x_test, y_test)
+print("loss : ", loss)
+y_pred = model.predict(x_test)
+
+from sklearn.metrics import r2_score 
+r2 = r2_score(y_test, y_pred)
+print("r2스코어", r2)
 
 '''
-# MinMaxScaler                       #layer 에 relu 반영시
-
-loss : 16.66873550415039             loss : 8.34216594696045   
-r2score : 0.7982411072270883         r2score : 0.8990261525165145   
-
-# StandardScaler
-loss : 18.252599716186523            loss : 8.482542037963867       
-r2score : 0.7790699606512423         r2score : 0.8973270448642088  
-
-# RobustScaler
-loss : 17.646638870239258            loss : 9.703550338745117   
-r2score : 0.7864045336056296         r2score : 0.8825479273496296   
-
-# MaxAbsScaler
-loss : 16.66651153564453             loss : 9.844630241394043   
-r2score : 0.7982680101777346         r2score : 0.880840280687609   
-
-#함수형모델 사용시
-# MaxAbsScaler
-loss : 9.24857234954834
-r2score : 0.8880549780029223
-
+loss :  21.551227569580078
+r2스코어 0.7619709144301021
 '''
