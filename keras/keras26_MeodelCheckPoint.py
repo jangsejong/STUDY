@@ -54,7 +54,7 @@ model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint # EarlyStopping patience(기다리는 횟수)
 
-es = EarlyStopping(monitor='val_loss', patience=15, mode = 'min', verbose = 1)
+es = EarlyStopping(monitor='val_loss', patience=15, mode = 'min', verbose = 1, restore_best_weights=True)
 mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras26_1_MCP.hdf5')
 
 start = time.time()

@@ -61,8 +61,8 @@ x_test = scaler.transform(x_test)
 #print("걸린시간 : ", round(end, 3), '초')
 
 #model.save_weights("./_save/keras25_1_save_weights.h5")
-model = load_model('./_ModelCheckPoint/keras26_1_MCP.hdf5')
-#model = load_model("./_save/keras26_1_save_MCP.h5")
+#model = load_model('./_save/keras26_1_save_MCP.h5')
+#model=load_model("./_save/keras26_1_save_MCP.h5")
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -72,14 +72,15 @@ y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
 print('r2스코어 : ', r2)
 '''
-loss:  10.300678253173828
-r2스코어 :  0.8753202599168136
+loss:  15.390331268310547
+r2스코어 :  0.813714939604898
 
-load_model
-loss:  10.300678253173828
-r2스코어 :  0.8753202599168136
+loss:  15.390331268310547
+r2스코어 :  0.813714939604898
 
-_ModelCheckPoint
-loss:  10.300678253173828
-r2스코어 :  0.8753202599168136
+loss:  15.390331268310547
+r2스코어 :  0.813714939604898
 '''
+
+model2=load_model("./_save/keras26_3_save_MCP.h5")
+
