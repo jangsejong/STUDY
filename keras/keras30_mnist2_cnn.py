@@ -11,7 +11,7 @@ from tensorflow.python.keras.metrics import accuracy
 
 #print(x_train.shape, y_train.shape)           #(60000, 28, 28) (60000,)
 #print(x_test.shape, y_test.shape)           #(10000, 28, 28) (10000,)
-
+x_train, x_test = x_train/255.0, x_test/255.0
 
 x_train = x_train.reshape(60000, 28, 28, 1)
 x_test = x_test.reshape(10000, 28, 28, 1)
@@ -34,12 +34,10 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 model = Sequential()
 ##model.add(Conv2D(10, (2, 2), padding='valid', input_shape=(10, 10, 1), activation='relu')) # (9, 9, 10)
 model.add(Conv2D(50 ,kernel_size=(2,2), input_shape=(28, 28, 1)))                          # (9, 9, 10)                             # (7, 7, 5)
-model.add(Conv2D(20,kernel_size=(2,2), activation='relu')) 
-model.add(Conv2D(5,kernel_size=(2,2), activation='relu')) 
-model.add(Dropout(0.3))                                 # (6, 6, 7)
-model.add(Flatten())                                                                       # (None, 252) 
-model.add(Dropout(0.3))
-model.add(Dense(20, activation='linear'))
+model.add(Conv2D(40,kernel_size=(2,2))) 
+model.add(Conv2D(30,kernel_size=(2,2), activation='relu')) 
+model.add(Flatten())                              
+model.add(Dense(20, activation='relu'))
 model.add(Dense(10, activation='softmax'))
 
 
@@ -50,8 +48,8 @@ model.compile(optimizer='adam',loss='categorical_crossentropy', metrics=['accura
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-es = EarlyStopping(monitor='val_loss', patience= 10 , mode = 'auto', verbose=1, restore_best_weights=True)
-model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
+es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
+model.fit(x_train, y_train, epochs=200, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
 
 
 #4. 예측, 결과
