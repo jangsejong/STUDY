@@ -18,7 +18,7 @@ y = train['count']
 y = np.log1p(y) 
 test_file = test_file.drop(columns=['datetime'], axis=1)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=1004)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
 
 scaler = StandardScaler()
 scaler.fit(x_train)
