@@ -20,7 +20,7 @@ from tensorflow.keras.layers import Dense
 
 model = Sequential()
 #model.add(Dense(55, input_dim=3))         # 노드 1개 > 55개
-model.add(Dense(55, input_shape=(3,)))         # 2차원은 스칼라형태
+model.add(Dense(55, input_shape=(3,)))         # 2차원 이상은 스칼라형태
 model.add(Dense(77, activation='relu'))          #하이퍼 파라미트 튜닝
 model.add(Dense(100, activation='sigmoid'))
 model.add(Dense(70, activation='linear'))
