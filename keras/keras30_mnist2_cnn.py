@@ -34,6 +34,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 model = Sequential()
 ##model.add(Conv2D(10, (2, 2), padding='valid', input_shape=(10, 10, 1), activation='relu')) # (9, 9, 10)
 model.add(Conv2D(50 ,kernel_size=(2,2), input_shape=(28, 28, 1)))                          # (9, 9, 10)                             # (7, 7, 5)
+model.add(Conv2D(20,kernel_size=(2,2), activation='relu')) 
+model.add(Conv2D(5,kernel_size=(2,2), activation='relu')) 
 model.add(Dropout(0.3))                                 # (6, 6, 7)
 model.add(Flatten())                                                                       # (None, 252) 
 model.add(Dense(50, activation='linear'))
@@ -50,10 +52,7 @@ model.compile(optimizer='adam',loss='categorical_crossentropy', metrics=['accura
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 es = EarlyStopping(monitor='val_loss', patience= 5 , mode = 'auto', verbose=1, restore_best_weights=True)
-model.fit(x_train, y_train, epochs=10, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
-
-
-
+model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
 
 
 #4. 예측, 결과
