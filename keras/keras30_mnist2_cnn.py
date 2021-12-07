@@ -38,7 +38,6 @@ model.add(Conv2D(20,kernel_size=(2,2), activation='relu'))
 model.add(Conv2D(5,kernel_size=(2,2), activation='relu')) 
 model.add(Dropout(0.3))                                 # (6, 6, 7)
 model.add(Flatten())                                                                       # (None, 252) 
-model.add(Dense(50, activation='linear'))
 model.add(Dropout(0.3))
 model.add(Dense(20, activation='linear'))
 model.add(Dense(10, activation='softmax'))
@@ -51,7 +50,7 @@ model.compile(optimizer='adam',loss='categorical_crossentropy', metrics=['accura
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-es = EarlyStopping(monitor='val_loss', patience= 5 , mode = 'auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience= 10 , mode = 'auto', verbose=1, restore_best_weights=True)
 model.fit(x_train, y_train, epochs=20, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
 
 
