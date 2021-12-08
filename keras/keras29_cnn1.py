@@ -1,13 +1,16 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
+from tensorflow.python.keras.layers.core import Dropout
+
+
 
 model = Sequential()
-##model.add(Conv2D(10, (2, 2), padding='valid', input_shape=(10, 10, 1), activation='relu')) # (9, 9, 10)
-model.add(Conv2D(10 ,kernel_size=(2,2), input_shape=(10, 10, 1)))                          # (9, 9, 10)
-model.add(Conv2D(5,kernel_size=(3,3), activation='relu'))                                  # (7, 7, 5)
-model.add(Dropout(0.2))
-model.add(Conv2D(7,kernel_size=(2,2), activation='relu'))                                  # (6, 6, 7)
-model.add(Flatten())                                                                       # (None, 252) 
+##model.add(Conv2D(10, (2, 2), strides=1, padding='valid', input_shape=(10, 10, 1), activation='relu')) 
+model.add(Conv2D(10 ,kernel_size=(2,2), input_shape=(10, 10, 1)))                          
+model.add(MaxPooling2D())
+model.add(Conv2D(5,kernel_size=(3,3), activation='relu'))                                 
+model.add(Conv2D(7,kernel_size=(2,2), activation='relu'))                                 
+model.add(Flatten())                                                                      
 model.add(Dense(30, activation='linear'))
 model.add(Dropout(0.2))
 model.add(Dense(18, activation='linear'))
