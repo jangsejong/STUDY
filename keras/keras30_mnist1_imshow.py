@@ -12,7 +12,9 @@ print(x_test.shape, y_test.shape)           #(10000, 28, 28) (10000,)
 print(x_train[0])
 print('y_train[0]번째 값 :', y_train[0])           #y_train[0]번째 값 : 5
 
-
+import matplotlib.pyplot as plt
+plt.imshow(x_train[1], 'gray')
+plt.show()
 #import.matplotlib.pyplot.as.plt
 #plt.imshow(x_train[0], 'gray')
 
