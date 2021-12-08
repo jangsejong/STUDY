@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.keras.datasets import mnist 
+from tensorflow.keras.datasets import fashion_mnist 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
 from sklearn.model_selection import train_test_split
@@ -7,7 +7,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.python.keras.metrics import accuracy
 
 
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
 
 #print(x_train.shape, y_train.shape)           #(60000, 28, 28) (60000,)
 #print(x_test.shape, y_test.shape)           #(10000, 28, 28) (10000,)
@@ -15,11 +15,7 @@ x_train, x_test = x_train/255.0, x_test/255.0
 
 x_train = x_train.reshape(60000, 28, 28, 1)
 x_test = x_test.reshape(10000, 28, 28, 1)
-#print(x_train.shape)                #(10000, 28, 28, 1)  
-
-#print(np.unique(y_train,return_counts=True))   #라벨갯수파악필요, 성능차이가 있다
-
-#평가지표acc (0.98 이상) 이벨류에이트테스트, 발리데이션테스트,메트릭스에큐러시
+print(x_test.shape)                #(10000, 28, 28, 1)  
 
 x = x_train
 
@@ -51,7 +47,6 @@ model.fit(x_train, y_train, epochs=100, batch_size=100, verbose=1, validation_sp
 #4. 예측, 결과
 test_loss, test_acc = model.evaluate(x_test, y_test)
 print('acc :', test_acc)
-'''
+
 
 cc : 0.9788333177566528
-'''
