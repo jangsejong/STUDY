@@ -15,8 +15,8 @@ x_train, x_test = x_train/255.0, x_test/255.0
 
 x_train = x_train.reshape(60000, 28, 28, 1)
 x_test = x_test.reshape(10000, 28, 28, 1)
-print(x_test.shape)                #(10000, 28, 28, 1)  
-
+#print(x_test.shape)                #(10000, 28, 28, 1)  
+#print(np.unique(y_train,return_counts=True)) 
 x = x_train
 
 from tensorflow.keras.utils import to_categorical
@@ -25,11 +25,10 @@ y = to_categorical(y_train)
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
 
 
-
 #2. 모델 구성
 model = Sequential()
 ##model.add(Conv2D(10, (2, 2), padding='valid', input_shape=(10, 10, 1), activation='relu')) # (9, 9, 10)
-model.add(Conv2D(200 ,kernel_size=(3,3), input_shape=(28, 28, 1)))                          # (9, 9, 10)                             # (7, 7, 5)
+model.add(Conv2D(200 ,kernel_size=(2,2), input_shape=(28, 28, 1)))                          # (9, 9, 10)                             # (7, 7, 5)
 model.add(Conv2D(100,kernel_size=(2,2), activation='relu')) 
 model.add(Flatten())                              
 model.add(Dense(40, activation='relu'))
@@ -49,4 +48,4 @@ test_loss, test_acc = model.evaluate(x_test, y_test)
 print('acc :', test_acc)
 
 
-cc : 0.9788333177566528
+#acc : 0.9788333177566528
