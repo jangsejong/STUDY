@@ -15,7 +15,7 @@ y = datasets.target
 from tensorflow.keras.utils import to_categorical
 y = to_categorical(y)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=1004)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=66)
 
 
 scaler = MaxAbsScaler()

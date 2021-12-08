@@ -19,7 +19,7 @@ y = pd.get_dummies(y)
 print(y)
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=1004)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
 
 scaler = MaxAbsScaler()
 scaler.fit(x_train)
