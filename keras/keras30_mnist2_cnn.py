@@ -33,26 +33,22 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 #2. 모델 구성
 model = Sequential()
 ##model.add(Conv2D(10, (2, 2), padding='valid', input_shape=(10, 10, 1), activation='relu')) # (9, 9, 10)
-model.add(Conv2D(200 ,kernel_size=(2,2), input_shape=(28, 28, 1)))                          # (9, 9, 10)                             # (7, 7, 5)
-model.add(Conv2D(30,kernel_size=(2,2), activation='relu')) 
+model.add(Conv2D(200 ,kernel_size=(3,3), input_shape=(28, 28, 1)))                          # (9, 9, 10)                             # (7, 7, 5)
+model.add(Conv2D(100,kernel_size=(2,2), activation='relu')) 
 model.add(Flatten())                              
-model.add(Dense(20, activation='relu'))
+model.add(Dense(40, activation='relu'))
 model.add(Dense(10, activation='softmax'))
 
 
-
 #3. 컴파일, 훈련
-
 model.compile(optimizer='adam',loss='categorical_crossentropy', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-
-es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
-model.fit(x_train, y_train, epochs=200, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
+es = EarlyStopping(monitor='val_loss', patience= 5 , mode = 'auto', verbose=1, restore_best_weights=True)
+model.fit(x_train, y_train, epochs=100, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
 
 
 #4. 예측, 결과
-
 test_loss, test_acc = model.evaluate(x_test, y_test)
 print('acc :', test_acc)
 '''
