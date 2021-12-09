@@ -6,57 +6,48 @@ import time
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler, LabelEncoder, OneHotEncoder
 from pandas import get_dummies
 
-import datetime
-date = datetime.datetime.now()
-datetime = date.strftime("%m%d_%H%M")
-#print(datetime)
-filepath = './_ModelCheckPoint/'
-filename = '{epoch:05d}={val_loss:.5f}.hdf5'
-model_path = "".join([filepath, 'k24', datetime,'_', filename])
-
 #1 데이터
 path = "../../_data/dacon/wine/"  
 train = pd.read_csv(path +"train.csv")
 test_file = pd.read_csv(path + "test.csv") 
 
 submission = pd.read_csv(path+"sample_Submission.csv") #제출할 값
+
 y = train['quality']
-x = train.drop(['id', 'quality'], axis =1)
+x = train.drop(['id','quality'], axis =1) #
 
-le = LabelEncoder()                 # 라벨 인코딩은 n개의 범주형 데이터를 0부터 n-1까지 연속적 수치 데이터로 표현
-label = x['type']
-le.fit(label)
-x['type'] = le.transform(label)         # type column의 white, red > 0,1로 변환
+le = LabelEncoder()
+le.fit(train['type'])
+x['type'] = le.transform(train['type'])
 
-from tensorflow.keras.utils import to_categorical
 
-test_file = test_file.drop(['id'], axis=1)
-label2 = test_file['type']
-le.fit(label2)
-test_file['type'] = le.transform(label2)
-
-y = train['quality']      # [6 7 5 8 4]             
-y = get_dummies(y)
+# from tensorflow.keras.utils import to_categorical
+# y = to_categorical(y) #<=============== class 개수대로 자동으로 분류 해 준다!!! /// 간단!!
+#--to_categorical은 빈부분을 채우니 주의 [0. 0. 0. 0. 0. 0. 1. 0. 0.]
+#-------------------------
+y = np.array(y).reshape(-1,1)
+enc= OneHotEncoder()   #[0. 0. 1. 0. 0.]
+enc.fit(y)
+y = enc.transform(y).toarray()
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.1, shuffle = True, random_state =66)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.2, shuffle = True, random_state =66)
 
-#scaler = MinMaxScaler()
-#scaler = StandardScaler()
+# #scaler = MinMaxScaler()
+# #scaler = StandardScaler()
 scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+# #scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
-test_file = scaler.transform(test_file)
 
 #2 모델구성
 input1 = Input(shape=(12,))
-dense1 = Dense(30)(input1)
-dense2 = Dense(30)(dense1)
-dense3 = Dense(10)(dense2)
-dense4 = Dense(8)(dense3)
+dense1 = Dense(30, activation='relu')(input1)
+dense2 = Dense(30, activation='relu')(dense1)
+dense3 = Dense(20)(dense2)
+dense4 = Dense(20)(dense3)
 dense5 = Dense(5)(dense4)
 dense6 = Dense(5)(dense5)
 ouput1 = Dense(5, activation='softmax')(dense6)
@@ -71,7 +62,7 @@ es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, 
 mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras24_Dacon_MCP.hdf5')
 
 
-model.fit(x_train, y_train, epochs = 1000, batch_size = 12, validation_split=0.1, callbacks=[es,mcp])
+model.fit(x_train, y_train, epochs = 1000, batch_size = 12, validation_split=0.2, callbacks=[es,mcp])
 
 
 #4 평가예측
@@ -81,10 +72,11 @@ print("accuracy : ",loss[1])
 
 ################################ 제출용 ########################################
 result = model.predict(test_file)
-result_recover = np.argmax(result, axis=1).reshape(-1,1) + 4
+result_recover = np.argmax(result, axis = 1).reshape(-1,1) + 4
+
 submission['quality'] = result_recover
 
-submission.to_csv(path + "011.csv", index = False)
+submission.to_csv(path + "013.csv", index = False)
 
 
 '''

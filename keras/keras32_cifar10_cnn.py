@@ -28,14 +28,14 @@ print(y_train.shape) # (60000, 10)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
 
-scaler = MinMaxScaler()
-#scaler = StandardScaler()
-#scaler = RobustScaler()
-#scaler = MaxAbsScaler()
+# scaler = MinMaxScaler()
+# #scaler = StandardScaler()
+# #scaler = RobustScaler()
+# #scaler = MaxAbsScaler()
 
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+# scaler.fit(x_train)
+# x_train = scaler.transform(x_train)
+# x_test = scaler.transform(x_test)
 
 #2. 모델 구성
 model = Sequential()
@@ -62,4 +62,8 @@ print('acc :', test_acc)
 '''
 loss :  1.1138389110565186
 acc : 0.6204000115394592
+
+after scaling
+
+
 '''
