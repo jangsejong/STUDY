@@ -1,14 +1,46 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout
+import numpy as np
+import time
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler
 from sklearn.datasets import load_diabetes
+from tensorflow.python.keras.callbacks import EarlyStopping
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
+
 
 datasets = load_diabetes()
 x = datasets.data 
 y = datasets.target
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=1004)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.2, random_state=66)
+
+
+
+scaler = MinMaxScaler()
+#scaler = StandardScaler()
+#scaler = RobustScaler()
+#scaler = MaxAbsScaler()
+
+n = x_train.shape[0]# 
+x_train_reshape = x_train.reshape(n,-1) #----> (50000,32,32,3) --> (50000, 32*32*3 ) 0~255
+
+
+'''
+x_train_transe = scaler.fit_transform(x_train) 
+print(x_train_transe.shape) #354,13
+x_train = x_train_transe.reshape(n,2,2,3) 
+
+m = x_test.shape[0]
+x_test = scaler.transform(x_test.reshape(m,-1)).reshape(m,2,2,3)
+
+print(x_train.shape)
+
+
+
+
+
+
 
 scaler = MaxAbsScaler()
 scaler.fit(x_train)
@@ -57,7 +89,7 @@ y_predict = model.predict(x_test)
 from sklearn.metrics import r2_score 
 r2 = r2_score(y_test, y_predict)
 print("r2스코어", r2)
-'''
+
 loss :  3934.139892578125
 r2스코어 0.3656581301098685
 '''
