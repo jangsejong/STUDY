@@ -1,7 +1,7 @@
 import numpy as np
 from tensorflow.keras.datasets import fashion_mnist 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.python.keras.metrics import accuracy
@@ -29,7 +29,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(400 ,kernel_size=(2,2), padding='same' activation='relu', input_shape=(28, 28, 1)))                      
+model.add(Conv2D(200 ,kernel_size=(2,2), padding='same' , activation='relu', input_shape=(28, 28, 1)))                      
 model.add(Flatten())                              
 model.add(Dense(40))
 model.add(Dense(10, activation='softmax'))

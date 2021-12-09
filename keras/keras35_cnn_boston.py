@@ -1,83 +1,104 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
-from tensorflow.python.keras.layers.core import Dropout
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout
+import numpy as np
+import time
 from sklearn.datasets import load_boston
+from tensorflow.python.keras.callbacks import EarlyStopping
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 
+dataset = load_boston()
 
-# train 0.7
-# R2 0.8 이상
-# #cnn 맹그러
-
-
-datasets = load_boston()
-x = datasets.data 
-y = datasets.target
+x = dataset.data
+y = dataset.target
 
 import pandas as pd
-xx = pd.DataFrame(x, columns=datasets.feature_names)
+xx = pd.DataFrame(x, columns=dataset.feature_names)
 
+#상관분석  (공분석)
+# Y를 넣고 상관관계 분서
+'''
 xx['price'] = y
-
 import matplotlib.pyplot as plt
-import seaborn as sns #좀더이쁘게 만들어줌
+import seaborn as sns
 plt.figure(figsize=(10,10))
-sns.heatmap(data=xx.corr(), square=True, annot=True, cbar=True) #컬러바를 만들것이냐
+sns.heatmap(data= xx.corr(), square=True, annot=True, cbar=True)
 plt.show()
+#---12개로 줄이면 506,12,1,1 혹은 506,4,3,1
+#줄여서 작업해라
+'''
+x = xx.drop(['CHAS'],axis=1) #---> Df
+x = x.to_numpy()
+# print(x)
 
+from sklearn.metrics import r2_score
 
+#데이터
 
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, shuffle = True, random_state = 66) 
 
+scaler = MinMaxScaler()
+#scaler = StandardScaler()
+#scaler = RobustScaler()
+#scaler = MaxAbsScaler()
 
+n = x_train.shape[0]# 
+# x_train_reshape = x_train.reshape(n,-1) #----> (50000,32,32,3) --> (50000, 32*32*3 ) 0~255
+x_train_transe = scaler.fit_transform(x_train) 
+print(x_train_transe.shape) #354,13
+x_train = x_train_transe.reshape(n,2,2,3) 
+
+m = x_test.shape[0]
+x_test = scaler.transform(x_test.reshape(m,-1)).reshape(m,2,2,3)
+
+print(x_train.shape)
 
 model = Sequential()
-##model.add(Conv2D(10, (2, 2), strides=1, padding='valid', input_shape=(10, 10, 1), activation='relu')) 
-model.add(Conv2D(10 ,kernel_size=(2,2), input_shape=(10, 10, 1)))                          
+model.add(Conv2D(64, kernel_size=(2,2),padding ='same',strides=1, activation='relu', input_shape = (2,2,3)))#
 model.add(MaxPooling2D())
-model.add(Conv2D(5,kernel_size=(3,3), activation='relu'))                                 
-model.add(Conv2D(7,kernel_size=(2,2), activation='relu'))                                 
-model.add(Flatten())                                                                      
-model.add(Dense(30, activation='linear'))
-model.add(Dropout(0.2))
-model.add(Dense(18, activation='linear'))
-model.add(Dense(6, activation='relu'))
-model.add(Dense(4, activation='linear'))
-model.add(Dense(2, activation='linear'))
-model.add(Dense(1, activation='softmax'))
+model.add(Conv2D(32,(2,2),padding ='same'))
+model.add(Dropout(0.1))
+model.add(Flatten())
+model.add(Dense(16, activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(4, activation='relu'))
+model.add(Dense(2, activation='relu'))
+model.add(Dense(1))
 
-model.summary()
+#model.summary()#3,153
+#3. 컴파일, 훈련
+
+opt="adam"
+model.compile(loss = 'mse', optimizer = opt) # metrics=['accuracy'] 영향을 미치지 않는다
+########################################################################
+# model.compile(loss = 'mse', optimizer = 'adam')
+start = time.time()
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+import datetime
+epoch = 1000
+patience_num = 15
+date = datetime.datetime.now()
+datetime = date.strftime("%m%d_%H%M")
+filepath = "./_ModelCheckPoint/"
+filename = '{epoch:04d}-{val_loss:4f}.hdf5' #filepath + datetime
+model_path = "".join([filepath,'k35_cnn_boston_',datetime,"_",filename])
+es = EarlyStopping(monitor='val_loss', patience=patience_num, mode = 'auto', restore_best_weights=True)
+mcp = ModelCheckpoint(monitor='val_loss', mode = 'auto', verbose=1, save_best_only= True, filepath = model_path)
+hist = model.fit(x_train, y_train, epochs = epoch, validation_split=0.2, callbacks=[es,mcp], batch_size = 12)
+end = time.time() - start
+print('시간 : ', round(end,2) ,'초')
+########################################################################
+#4 평가예측
+loss = model.evaluate(x_test,y_test)
+print("loss : ",loss)
+
+y_predict = model.predict(x_test)
+r2 = r2_score(y_test,y_predict)
+print("R2 : ",r2)
+print("epochs :",epoch)
 '''
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #
-=================================================================
-conv2d (Conv2D)              (None, 9, 9, 10)          50
-_________________________________________________________________
-conv2d_1 (Conv2D)            (None, 7, 7, 5)           455       
-_________________________________________________________________
-conv2d_2 (Conv2D)            (None, 6, 6, 7)           147
-=================================================================
-Total params: 652
-Trainable params: 652
-Non-trainable params: 0
-_________________________________________________________________
-
-param  (2*2*10)*1+10     (3*3*5)*10+5  (2*2*7)*5+7
-       (커널행*커널열*채널수*현노드수)*상단노드수+바이어스  
-
-첫번째 인자 : 컨볼루션 필터의 수 입니다. 
-두번째 인자 : 컨볼루션 커널의 (행, 열) 입니다.
-padding : 경계 처리 방법을 정의합니다.
-‘valid’ : 유효한 영역만 출력이 됩니다. 따라서 출력 이미지 사이즈는 입력 사이즈보다 작습니다.
-‘same’ : 출력 이미지 사이즈가 입력 이미지 사이즈와 동일합니다.
-input_shape : 샘플 수를 제외한 입력 형태를 정의 합니다. 모델에서 첫 레이어일 때만 정의하면 됩니다.
-(행, 열, 채널 수)로 정의합니다. 흑백영상인 경우에는 채널이 1이고, 컬러(RGB)영상인 경우에는 채널을 3으로 설정합니다.
-activation : 활성화 함수 설정합니다.
-‘linear’ : 디폴트 값, 입력뉴런과 가중치로 계산된 결과값이 그대로 출력으로 나옵니다.
-‘relu’ : rectifier 함수, 은익층에 주로 쓰입니다.
-‘sigmoid’ : 시그모이드 함수, 이진 분류 문제에서 출력층에 주로 쓰입니다.
-‘softmax’ : 소프트맥스 함수, 다중 클래스 분류 문제에서 출력층에 주로 쓰입니다.
-
-output_shape : ?
+<<dnn>>
+loss :  5.885488986968994
+R2 :  0.9295850480967974
 '''
-
-
 

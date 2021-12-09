@@ -10,51 +10,24 @@ import pandas as pd
 
 (x_train, y_train), (x_test, y_test) = cifar100.load_data()
 
-#x_train, x_test = x_train/255.0, x_test/255.0
 
-#x_train = x_train.reshape    #(50000, 32, 32, 3) (50000, 1)
-#x_test = x_test.reshape      #(10000, 32, 32, 3) (10000, 1)
-# print(x_train.shape, y_train.shape)          #(50000, 32, 32, 3) (50000, 1)
-# print(x_test.shape, y_test.shape)            #(10000, 32, 32, 3) (10000, 1)
+dim = x_train.shape[1]*x_train.shape[2]*x_train.shape[3]
+out_node = len(np.unique(y_train))
 
+n = x_train.shape[0]
+x_train = x_train.reshape(n,-1)/255.
 
+m = x_test.shape[0]
+x_test = x_test.reshape(m,-1)/255.
 
-# x = x_train
-# y= y_train
 from tensorflow.keras.utils import to_categorical
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
-# y_train = pd.get_dummies(y_train)
-# y_test = pd.get_dummies(y_test)
-#print(y_train.shape) # (60000, 10)
-
-
-#x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
-
-scaler = MinMaxScaler()
-#scaler = StandardScaler()
-#scaler = RobustScaler()
-#scaler = MaxAbsScaler()
-
-n = x_train.shape[0]# 이미지갯수 50000
-x_train_reshape = x_train.reshape(n,-1) #----> (50000,32,32,3) --> (50000, 32*32*3 ) 0~255
-x_train_transe = scaler.fit_transform(x_train_reshape) #0~255 -> 0~1
-x_train = x_train_transe.reshape(x_train.shape) #--->(50000,32,32,3) 0~1
-
-m = x_test.shape[0]
-x_test = scaler.transform(x_test.reshape(m,-1)).reshape(x_test.shape)
-#scaler.fit(x_train) # 비율을 가져옴
-
-#x_train = scaler.transform(x_train)  # 스케일러 비율이 적용되서 0~1.0 사이로 값이 다 바뀜 
-#x_test = scaler.transform(x_test) 
-
-#x_train = x_train.reshape(50000, 32,32,3)
-#x_test = x_test.reshape(10000, 32,32,3)
 
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(300 ,kernel_size=(2,2),strides=2, padding='valid', activation='relu', input_shape=(32, 32, 3))) 
+model.add(Dense(300, activation='relu', input_dim = dim))
 model.add(MaxPooling2D())                   
 model.add(Flatten())                             
 model.add(Dense(100, activation='softmax'))
