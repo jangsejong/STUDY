@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.keras.datasets import cifar10 
+from tensorflow.keras.datasets import cifar100 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
@@ -8,7 +8,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.python.keras.metrics import accuracy
 import pandas as pd
 
-(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+(x_train, y_train), (x_test, y_test) = cifar100.load_data()
 
 #x_train, x_test = x_train/255.0, x_test/255.0
 
@@ -51,36 +51,34 @@ x_test = scaler.transform(x_test.reshape(m,-1)).reshape(x_test.shape)
 #x_train = x_train.reshape(50000, 32,32,3)
 #x_test = x_test.reshape(10000, 32,32,3)
 
+
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(100 ,kernel_size=(2,2),strides=2, padding='valid', activation='relu', input_shape=(32, 32, 3))) 
-model.add(MaxPooling2D())   
-model.add(Conv2D(100,kernel_size=(2,2), activation='relu')) 
-model.add(MaxPooling2D())           
-model.add(Flatten())                              
-model.add(Dense(10))
-model.add(Dense(10, activation='softmax'))
+model.add(Conv2D(300 ,kernel_size=(2,2),strides=2, padding='valid', activation='relu', input_shape=(32, 32, 3))) 
+model.add(MaxPooling2D())                   
+model.add(Flatten())                             
+model.add(Dense(100, activation='softmax'))
 
 
 #3. 컴파일, 훈련
 model.compile(optimizer='adam',loss='categorical_crossentropy', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 10 , mode = 'auto', verbose=1, restore_best_weights=True)
-model.fit(x_train, y_train, epochs=1000, batch_size=30, verbose=1, validation_split=0.2, callbacks=[es])
+es = EarlyStopping(monitor='val_loss', patience= 15 , mode = 'auto', verbose=1, restore_best_weights=True)
+model.fit(x_train, y_train, epochs=1000, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
 
 
 #4. 예측, 결과
+
 test_loss, test_acc = model.evaluate(x_test, y_test)
 print('loss : ', test_loss)
 print('acc :', test_acc)
 
 '''
-loss :  1.1138389110565186
-acc : 0.6204000115394592
+loss :  2.8910043239593506
+acc : 0.31450000405311584
 
 after scaling
-
-loss :  1.0125701427459717
-acc : 0.6586999893188477
+loss :  2.794773578643799
+acc : 0.33820000290870667
 '''
