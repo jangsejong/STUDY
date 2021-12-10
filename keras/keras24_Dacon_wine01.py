@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, Ma
 from pandas import get_dummies
 
 #1 데이터
-path = "../../_data/dacon/wine/"  
+path = "../_data/dacon/wine/"  
 train = pd.read_csv(path +"train.csv")
 test_file = pd.read_csv(path + "test.csv") 
 

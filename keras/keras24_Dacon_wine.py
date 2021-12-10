@@ -9,7 +9,7 @@ import time
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler, LabelEncoder, OneHotEncoder
 import matplotlib.pyplot as plt
 #1 데이터
-path = "D:\\_data\\dacon\\wine\\" 
+path = "../_data/dacon/wine/"  
 train = pd.read_csv(path +"train.csv")
 test_flie = pd.read_csv(path + "test.csv") 
 submission = pd.read_csv(path+"sample_Submission.csv") #제출할 값
@@ -70,7 +70,7 @@ start = time.time()
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import datetime
 epoch = 10000
-patience_num = 50
+patience_num = 20
 date = datetime.datetime.now()
 datetime = date.strftime("%m%d_%H%M")
 filepath = "./_ModelCheckPoint/"
@@ -112,7 +112,7 @@ acc = opt + "_acc_"+str(acc_list[-patience_num]).replace(".", "_")
 print(acc)
 # acc= str(loss[1]).replace(".", "_")
 # model.save(f"./_save/keras24_dacon_save_model_{acc}.h5")
-submission.to_csv(path+f"MCP_sampleHR_{acc}.csv", index = False)
+submission.to_csv(path+f"020.csv", index = False)
 '''
 loss :  0.9937585592269897
 accuracy :  0.5842349529266357

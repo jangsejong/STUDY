@@ -8,7 +8,7 @@ from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.preprocessing import StandardScaler
 
 #1. 데이터 분석
-path = "../_data/kaggle/bike/"
+path = "D:\\Study\\_data\\kaggle\\bike\\"
 train = pd.read_csv(path + "train.csv") # (10886, 12)
 test_file = pd.read_csv(path + "test.csv") # (6493, 9)
 submit_file = pd.read_csv(path + "sampleSubmission.csv") # (6493, 2)

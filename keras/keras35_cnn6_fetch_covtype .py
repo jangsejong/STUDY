@@ -1,62 +1,73 @@
-import numpy as np
-from sklearn.datasets import fetch_covtype
-from sklearn import datasets
-from tensorflow.keras import callbacks
+from sklearn.datasets import fetch_covtype as data_load
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
-from sklearn.preprocessing import MaxAbsScaler
-from tensorflow.python.keras.callbacks import ModelCheckpoint
-from tensorflow.python.keras.metrics import accuracy
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout
+from sklearn.metrics import r2_score
+import numpy as np
 import time
 
-#1. 데이터
-datasets = fetch_covtype()
-x = datasets.data # (581012, 54)
-y = datasets.target # (581012, )
+dataset  = data_load()
 
-import pandas as pd
-y = pd.get_dummies(y)
-print(y)
+x = dataset.data
+y = dataset.target
+
+#print(np.unique(y)) #[1 2 3 4 5 6 7]
+from tensorflow.keras.utils import to_categorical
+y = to_categorical(y)
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=1004)
+x_train, x_test, y_train, y_test = train_test_split(x, y, 
+         train_size = 0.8, shuffle = True, random_state = 66) 
 
-scaler = MaxAbsScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
+scaler = StandardScaler()
 
+n = x_train.shape[0]
+x_train_transe = scaler.fit_transform(x_train) 
+print(x_train_transe.shape) #464809,54
 
-#2. 모델 구성
+x_train = x_train_transe.reshape(n,9,6,1) 
+m = x_test.shape[0]
+x_test = scaler.transform(x_test.reshape(m,-1)).reshape(m,9,6,1)
+
 model = Sequential()
-model.add(Dense(30, activation='linear', input_dim=54))
-model.add(Dense(30, activation='linear'))
-model.add(Dense(18, activation='relu'))
-model.add(Dense(6, activation='linear'))
-model.add(Dense(4, activation='linear'))
+model.add(Conv2D(128, kernel_size=(4,4),padding ='same',strides=1, 
+                 input_shape = (x_train.shape[1],x_train.shape[2],x_train.shape[3])))#
+model.add(MaxPooling2D())
+model.add(Conv2D(64,(2,2),padding ='same', activation='relu'))#<------------
+# model.add(MaxPooling2D())
+# model.add(Dropout(0.2))
+model.add(Conv2D(32,(2,2),padding ='same', activation='relu'))
+# model.add(MaxPooling2D())
+model.add(Flatten())
+model.add(Dense(10))
+# model.add(Dropout(0.2))
+model.add(Dense(5))
+model.add(Dense(2))
 model.add(Dropout(0.5))
-model.add(Dense(7, activation='softmax'))
+model.add(Dense(y.shape[1], activation = 'softmax'))
 
-#3. 컴파일
-from tensorflow.keras.callbacks import EarlyStopping
+#3. 컴파일, 훈련
+model.compile(loss = 'categorical_crossentropy', optimizer = 'adam', metrics=['accuracy']) 
 
+start = time.time()
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import datetime
+epoch = 1000
+patience_num = 20
 date = datetime.datetime.now()
-datetime = date.strftime("%m%d_%H%M") 
+datetime = date.strftime("%m%d_%H%M")
+filepath = "./_ModelCheckPoint/"
+filename = '{epoch:04d}-{val_loss:4f}.hdf5' #filepath + datetime
+model_path = "".join([filepath,'k35_cnn6_fetch_',datetime,"_",filename])
+es = EarlyStopping(monitor='val_loss', patience=patience_num, mode = 'auto', restore_best_weights=True)
+mcp = ModelCheckpoint(monitor='val_loss', mode = 'auto', verbose=1, save_best_only= True, filepath = model_path)
+hist = model.fit(x_train, y_train, epochs = epoch, validation_split=0.2, callbacks=[es,mcp], batch_size = 50)
+end = time.time() - start
+print('시간 : ', round(end,2) ,'초')
+########################################################################
+#4 평가예측
+loss = model.evaluate(x_test,y_test)
+y_predict = model.predict(x_test)
 
-filepath = './_ModelCheckPoint/'
-filename = '{epoch:04d}-{val_loss:.4f}.hdf5'      
-model_path = "".join([filepath, '6_fetch_covtype_', datetime, '_', filename])
-
-es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10, restore_best_weights=True)
-mcp = ModelCheckpoint(monitor='val_loss', mode='min', save_best_only=True, filepath=model_path)
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-
-model.fit(x_train, y_train, epochs=100, batch_size=32, verbose=1, validation_split=0.2, callbacks=[es, mcp])
-
-
-#4. 예측, 결과
-loss = model.evaluate(x_test, y_test)
-print('loss : ', loss[0])
-print('accuracy : ', loss[1])
+print("loss : ",loss[0]) 
+print("accuracy : ",loss[1])

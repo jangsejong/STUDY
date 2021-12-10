@@ -15,7 +15,7 @@ def RMSE(y_test,y_pred):
 
 
 #1. 데이터
-path = "./_data/bike/"
+path = "D:\\Study\\_data\\kaggle\\bike\\"
 train_raw= pd.read_csv(path + "train.csv")
 test_file = pd.read_csv(path + "test.csv")
 submit_file = pd.read_csv(path +'sampleSubmission.csv')
