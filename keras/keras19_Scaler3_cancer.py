@@ -36,10 +36,7 @@ x_test = scaler.transform(x_test)
 model = Sequential()
 model.add(Dense(30, activation='linear', input_dim=30))
 model.add(Dense(30, activation='linear'))
-model.add(Dense(18, activation='linear'))
-model.add(Dense(6, activation='linear'))
-model.add(Dense(4, activation='linear'))
-model.add(Dense(2, activation='linear'))
+c
 model.add(Dense(1, activation='sigmoid'))
 
 #3. 컴파일, 훈련

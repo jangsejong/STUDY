@@ -32,7 +32,10 @@ from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, 
          train_size = 0.8, shuffle = True, random_state = 66) #455.2 /114
 
+#scaler = MinMaxScaler()
+#scaler = StandardScaler()
 scaler = RobustScaler()
+#scaler = MaxAbsScaler()
 
 n = x_train.shape[0]
 # x_train_reshape = x_train.reshape(n,-1) #
@@ -46,17 +49,25 @@ x_test = scaler.transform(x_test.reshape(m,-1)).reshape(m,3,3,1)
 #2 모델
 
 model = Sequential()#6,6 ->2,2 -> 1 -> 4, 3
-model.add(Conv2D(250, kernel_size=(2,2),padding ='valid', activation='relu',strides=1, 
-                 input_shape = (x_train.shape[1],x_train.shape[2],x_train.shape[3])))
-model.add(Dropout(0.1))
+model.add(Conv2D(512, kernel_size=(2,2),padding ='valid',strides=1, activation='relu', 
+                 input_shape = (x_train.shape[1],x_train.shape[2],x_train.shape[3])))#
+
+#model.add(MaxPooling2D())
+
 model.add(Flatten())
+model.add(Dense(64, activation='linear'))
+model.add(Dense(32, activation='linear'))
+model.add(Dense(16, activation='linear'))
+model.add(Dense(8, activation='linear'))
+model.add(Dense(4, activation='linear'))
+model.add(Dense(2, activation='linear'))
 model.add(Dense(y.shape[1], activation = 'softmax')) #이진분류의 마지막 레이어는 무조건 sigmoid!!!!
 # sigmoid는 0 ~ 1 사이의 값을 뱉는다
 
 #3. 컴파일, 훈련
-opt = 'Nadam'# 'Adaelta''adam',#
+opt = 'nadam'# 'Adaelta''adam',#
 epoch = 10000
-patience_num = 50
+patience_num = 20
 
 
 model.compile(loss = 'categorical_crossentropy', optimizer = opt , metrics=['accuracy'])
@@ -100,7 +111,7 @@ print(acc)
 # acc= str(loss[1]).replace(".", "_")
 model.save(f"./_save/_dacon_save_model_{acc}.h5")
 submission.to_csv(f"./_save/{opt}_dacon_{acc}.csv", index = False)
-'''
+
 
 '''
 plt.plot(hist.history['accuracy'])
@@ -118,3 +129,4 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
+'''
