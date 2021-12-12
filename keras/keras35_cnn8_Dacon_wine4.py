@@ -35,11 +35,11 @@ x_test = scaler.transform(x_test)
 
 model1 = RandomForestClassifier(oob_score= True, bootstrap=True, class_weight=None, criterion='gini',
             max_depth=None, max_features='auto', max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None,min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, n_estimators= 8000, n_jobs=None, verbose=0, warm_start=False, random_state=61)
+            min_weight_fraction_leaf=0.0, n_estimators= 15000, n_jobs=None, verbose=0, warm_start=False, random_state=61)
 
-model2 = GradientBoostingClassifier(n_estimators = 750,random_state=61)
+model2 = GradientBoostingClassifier(n_estimators = 15000,random_state=61)
 
-model3 = ExtraTreesClassifier(n_estimators = 750,random_state =61)
+model3 = ExtraTreesClassifier(n_estimators = 15000,random_state =61)
 
 from sklearn.experimental import enable_hist_gradient_boosting
 from sklearn.ensemble import HistGradientBoostingClassifier

@@ -35,7 +35,7 @@ le.fit(label2)
 test_file['type'] = le.transform(label2)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    test_size=0.05, shuffle=True, random_state=61)
+                                                    test_size=0.1, shuffle=True, random_state=61)
 
 scaler = MinMaxScaler()
 #scaler = StandardScaler()
