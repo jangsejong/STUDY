@@ -35,7 +35,7 @@ le.fit(label2)
 test_file['type'] = le.transform(label2)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    test_size=0.1, shuffle=True, random_state=61)
+                                                    test_size=0.05, shuffle=True, random_state=61)
 
 scaler = MinMaxScaler()
 #scaler = StandardScaler()
@@ -54,7 +54,7 @@ print(model2.oob_score_)
 print(y_pred2)
 
 submit_file['quality'] = y_pred2
-submit_file.to_csv(path+'abc006.csv', index=False)
+submit_file.to_csv(path+'abc009.csv', index=False)
 '''
 0.6493808049535603
 
