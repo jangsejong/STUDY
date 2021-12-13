@@ -5,31 +5,59 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score
 
+from sklearn import metrics
+
+def f1_score(answer, submission):
+    true = answer
+    pred = submission
+    score = metrics.f1_score(y_true=true, y_pred=pred)
+    return score
+
 #1 데이터
-path = "D:\\Study\\_data\\dacon\\wine\\"
+path = "D:\\Study\\_data\\dacon\\heart\\"
 train = pd.read_csv(path +"train.csv")
 test_file = pd.read_csv(path + "test.csv") 
 submission = pd.read_csv(path+"sample_Submission.csv")
 
-y = train['quality']
-x = train.drop(['id','quality'], axis =1)
-x = x.drop(['citric acid','pH','sulphates','total sulfur dioxide'],axis =1)
-test_file =test_file.drop(['id','citric acid','pH','sulphates','total sulfur dioxide'],axis =1)
-le = LabelEncoder()
-le.fit(train['type'])
-x['type'] = le.transform(train['type'])
+x = train.drop(['id','target'], axis =1)
+y = train['target']
 
-le.fit(test_file['type'])
-test_file['type'] = le.transform(test_file['type'])
+print(train.shape, test_file.shape)           # (151, 15) (152, 14)
+
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+
+# plt.figure(figsize=(13,13))
+# sns.heatmap(data= x.corr(), square=True, annot=True, cbar=True)
+# plt.show()    
+    
+
+x = x.drop(['trestbps','restecg','sex'],axis =1)
+test_file =test_file.drop(['id','trestbps','restecg','sex'],axis =1)
+# le = LabelEncoder()
+# le.fit(train['sex'])
+# x['sex'] = le.transform(train['sex'])
+
+# le.fit(test_file['sex'])
+# test_file['sex'] = le.transform(test_file['sex'])
 
 y = y.to_numpy()
 x = x.to_numpy()
+test_file = test_file.to_numpy()
+
+print(x.shape, test_file.shape)  
+
+
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, 
-         train_size = 0.8, shuffle = True, random_state = 61) #455.2 /114
+         train_size = 0.8, shuffle = True, random_state = 61) #
 
 scaler = MinMaxScaler()
+#scaler = StandardScaler()
+#scaler = RobustScaler()
+#scaler = MaxAbsScaler()
+
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
@@ -61,20 +89,23 @@ for classifier in classifiers:
     class_name = classifier.__class__.__name__
     print("============== " + class_name + " ==================")
     num = accuracy_score(y_test, pred)
+    num2 = f1_score(y_test, pred)
     print('{0} 정확도: {1}'.format(class_name, num))
+    print('{0} F1_Score : {1}'.format(class_name, num2))
     y_pred_ = classifier.predict(test_file)
-    submission['quality'] = y_pred_
-    submission.to_csv(str(num) +"_" + class_name + "_dacon_wine_vote119.csv", index=False)
-   
-
+    submission['target'] = y_pred_
+    submission.to_csv(path+ str(num) +"_" + class_name + "heart002.csv", index=False)
+    
 voting_model.fit(x_train, y_train)
 pred = voting_model.predict(x_test)
 
-print('===================== 보팅 분류기 ========================')
-num = str(accuracy_score(y_test, pred))
-print('{0} 정확도: {1}'.format(class_name, num))
+# print('===================== 보팅 분류기 ========================')
+# num = str(accuracy_score(y_test, pred))
+# print('{0} 정확도: {1}'.format(class_name, num))
 
-y_pred_ = voting_model.predict(test_file)
+# y_pred_ = voting_model.predict(test_file)
 
-submission['quality'] = y_pred_
-submission.to_csv(num + "_dacon_wine119.csv", index=False)
+# submission['target'] = y_pred_
+# submission.to_csv(num + "heart001.csv", index=False)
+
+

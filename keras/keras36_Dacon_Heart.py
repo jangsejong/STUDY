@@ -1,3 +1,10 @@
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import f1_score
+from sklearn.metrics import plot_confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings(action='ignore')
 import numpy as np, pandas as pd, datetime, matplotlib.pyplot as plt, seaborn as sns  
 from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler, OneHotEncoder
@@ -10,21 +17,23 @@ from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras.layers import Dense, Input, Dropout
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
+path = "D:\\Study\\_data\\dacon\\heart\\"
+train = pd.read_csv(path +"train.csv")
+test_file = pd.read_csv(path + "test.csv") 
+submission = pd.read_csv(path+"sample_Submission.csv")
+print(train.describe,test_file.describe)
 
-path = "D:\\Study\\_data\\dacon\\wine\\"
+'''
+y = train['target']
+x = train.drop(['id','target'], axis =1)
+#print(train.shape, test_file.shape)           # (151, 15) (152, 14)
+#print(np.unique(y))  #[0, 1, 2]
+y = train['target']
+x = train.drop(['id', 'target'], axis=1)  
 
-train = pd.read_csv(path + 'train.csv')
-
-test_file = pd.read_csv(path + 'test.csv')
-
-submit_file = pd.read_csv(path + 'sample_submission.csv')  
-
-y = train['quality']
-x = train.drop(['id', 'quality'], axis=1)  
-
-test_file = test_file.drop(['id','citric acid'], axis=1) # ,  'sulphates' 'citric acid', 'pH',
+test_file = test_file.drop(['id'], axis=1) # 
 y = y.to_numpy()
-#x = x.to_numpy()
+x = x.to_numpy()
 
 le = LabelEncoder()
 label = x['type']
@@ -54,11 +63,6 @@ y_pred2 = model2.predict(test_file)
 print(model2.oob_score_)
 print(y_pred2)
 
-submit_file['quality'] = y_pred2
-submit_file.to_csv(path+'abc009.csv', index=False)
-'''
-0.6493808049535603
-
-
-
+submission['quality'] = y_pred2
+submission.to_csv(path+'heart001.csv', index=False)
 '''
