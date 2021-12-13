@@ -20,13 +20,23 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 path = "D:\\Study\\_data\\dacon\\heart\\"
 train = pd.read_csv(path +"train.csv")
 test_file = pd.read_csv(path + "test.csv") 
-submission = pd.read_csv(path+"sample_Submission.csv")
+submission = pd.read_csv(path+"sample_submission.csv")
 print(train.describe,test_file.describe)
 
-'''
+
 y = train['target']
 x = train.drop(['id','target'], axis =1)
-#print(train.shape, test_file.shape)           # (151, 15) (152, 14)
+print(train.shape, test_file.shape)           # (151, 15) (152, 14)
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.figure(figsize=(13,13))
+sns.heatmap(data= x.corr(), square=True, annot=True, cbar=True)
+plt.show()    
+
+
+'''
 #print(np.unique(y))  #[0, 1, 2]
 y = train['target']
 x = train.drop(['id', 'target'], axis=1)  

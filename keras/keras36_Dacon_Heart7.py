@@ -19,8 +19,8 @@ train = pd.read_csv(path +"train.csv")
 test_file = pd.read_csv(path + "test.csv") 
 submission = pd.read_csv(path+"sample_submission.csv")
 
-x = train.drop(['id','target'], axis =1)
-y = train['target']
+x = train.drop(['id','target'], axis =1).drop(index=131)
+y = train['target'].drop(index=131)
 
 print(train.shape, test_file.shape)           # (151, 15) (152, 14)
 
@@ -31,7 +31,6 @@ print(train.shape, test_file.shape)           # (151, 15) (152, 14)
 # sns.heatmap(data= x.corr(), square=True, annot=True, cbar=True)
 # plt.show()    
     
-
 x = x.drop(['trestbps','restecg','sex'],axis =1)
 test_file =test_file.drop(['id','trestbps','restecg','sex'],axis =1)
 # le = LabelEncoder()
@@ -45,7 +44,7 @@ y = y.to_numpy()
 x = x.to_numpy()
 test_file = test_file.to_numpy()
 
-print(x.shape, test_file.shape)  
+#print(x.shape, test_file.shape)  
 
 
 
@@ -94,7 +93,7 @@ for classifier in classifiers:
     print('{0} F1_Score : {1}'.format(class_name, num2))
     y_pred_ = classifier.predict(test_file)
     submission['target'] = y_pred_
-    submission.to_csv(path+ str(num) +"_" + class_name + "heart001.csv", index=False)
+    submission.to_csv(path+ str(num) +"_" + class_name + "heart015.csv", index=False)
     
 voting_model.fit(x_train, y_train)
 pred = voting_model.predict(x_test)
