@@ -32,11 +32,11 @@ test_file = pd.read_csv(path + "test.csv")
 submit_file = pd.read_csv(path + "sample_submission.csv")
 
 
-print(train.shape)  #(151, 15)
-print(test_file.shape)  #(152, 14)
-print(submit_file.shape) #(152, 2)
+# print(train.shape)  #(151, 15)
+# print(test_file.shape)  #(152, 14)
+# print(submit_file.shape) #(152, 2)
 
-print(train.describe) #(151, 15)
+# print(train.describe) #(151, 15)
 
 #        id  age  sex  cp  trestbps  chol  fbs  restecg  thalach  exang  oldpeak  slope  ca  thal  target
 # 0      1   53    1   2       130   197    1        0      152      0      1.2      0   0     2       1
@@ -51,7 +51,7 @@ print(train.describe) #(151, 15)
 # 149  150   46    1   0       120   249    0        0      144      0      0.8      2   0     3       0
 # 150  151   63    0   1       140   195    0        1      179      0      0.0      2   2     2       1
 
-print(test_file.describe) #(152, 14)
+# print(test_file.describe) #(152, 14)
 #        id  age  sex  cp  trestbps  chol  fbs  restecg  thalach  exang  oldpeak  slope  ca  thal
 # 0      1   57    1   0       150   276    0        0      112      1      0.6      1   1     1
 # 1      2   59    1   3       170   288    0        0      159      0      0.2      1   0     3
@@ -65,7 +65,7 @@ print(test_file.describe) #(152, 14)
 # 150  151   67    0   2       152   277    0        1      172      0      0.0      2   1     2
 # 151  152   43    0   2       122   213    0        1      165      0      0.2      1   0     2
 
-print(submit_file.describe) #(152, 2)
+# print(submit_file.describe) #(152, 2)
 
 # [152 rows x 14 columns]>
 #        id  target
@@ -92,29 +92,26 @@ print(submit_file.describe) #(152, 2)
 # print(submit_file.columns)
 # Index(['id', 'target'], dtype='object')
 
-x = train.drop(['id','target'], axis=1).drop(index=131)  #컬럼 삭제할때는 드랍에 액시스 1 준다   
+x = train.drop(['id','target'], axis=1)#.drop(index=131)  #컬럼 삭제할때는 드랍에 액시스 1 준다   
 #print(x.shape) (151, 13)
 test_file=test_file.drop(['id'], axis=1)
 #print(test_file.shape) (152, 13)
-y = train['target'].drop(index=131)
+y = train['target']#.drop(index=131)
 #print(y.shape) (151,1)
 
 x = x.to_numpy()
 y = y.to_numpy()
 test_file = test_file.to_numpy()
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=66)
 
 model = Sequential()
-model.add(Dense(10, input_dim=13))
-model.add(Dense(100, activation=relu))
-dropout=(Dropout(0.5))
-model.add(Dense(100))
-model.add(Dense(100,activation=relu))
-model.add(Dense(100))
-dropout=(Dropout(0.5))
-model.add(Dense(100))
-model.add(Dense(50))
+model.add(Dense(30, activation='linear', input_dim=13))
+model.add(Dense(30, activation='relu'))
+model.add(Dense(18, activation='linear'))
+model.add(Dense(6, activation='linear'))
+model.add(Dense(4, activation='relu'))
+model.add(Dense(2, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
@@ -134,15 +131,15 @@ model_path = "".join([filepath, 'k26_', datetime, '_', filename])
 
 es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
 
-mcp=ModelCheckpoint(monitor='val_accuracy', mode='max', verbose=1, 
+mcp=ModelCheckpoint(monitor='val_loss', mode='max', verbose=1, 
                     save_best_only=True,
                     filepath=model_path)
 
-model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.3, callbacks=[es, mcp])
+model.fit(x_train, y_train, epochs=1000, batch_size=13, validation_split=0.2, callbacks=[es, mcp])
 
 #scaler = MinMaxScaler()
 scaler=StandardScaler()
-# #scaler=RobustScaler()
+#scaler=RobustScaler()
 #scaler=MaxAbsScaler()
 scaler.fit(x_train)
 x_train=scaler.transform(x_train)
@@ -161,4 +158,36 @@ results=model.predict(test_file)
 results=results.round(0).astype(int)
 
 submit_file['target']=results
-submit_file.to_csv(path + "MARS.csv", index=False)  
+submit_file.to_csv(path + "heart_ann006.csv", index=False)  
+'''
+001
+loss :  0.30531740188598633
+accuracy :   0.875
+f1_score :   0.9
+
+002
+loss :  0.39412742853164673
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+003
+loss :  0.28279146552085876
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+004
+loss :  0.22273194789886475
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+005
+loss :  0.23493283987045288
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+006  0.1/13
+loss :  0.20334351062774658
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+'''
