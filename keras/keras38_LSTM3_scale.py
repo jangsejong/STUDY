@@ -26,7 +26,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 
 
 model = Sequential()
-model.add(LSTM(16, activation='relu', input_shape=(3, 1)))
+model.add(LSTM(16, activation='linear', input_shape=(3, 1)))
 model.add(Dense(8, activation='linear'))
 model.add(Dropout(0.1))
 # model.add(Dense(8, activation='linear'))
@@ -44,7 +44,7 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 200 , mode = 'auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience= 500 , mode = 'auto', verbose=1, restore_best_weights=True)
 model.fit(x_train, y_train, epochs=10000, batch_size=1, verbose=1, validation_split=0.1, callbacks=[es])
 
 
