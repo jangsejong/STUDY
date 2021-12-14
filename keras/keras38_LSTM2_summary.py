@@ -33,6 +33,9 @@ model.add(Dense(10, activation='relu'))
 model.add(Dense(1))
 model.summary()
 '''
+# (노드*노드 + 노드*특성 + b) *4
+
+
 # activation = tanh
 
 
@@ -43,6 +46,8 @@ Gate는 정보가 전달될 수 있는 추가적인 방법으로, sigmoid layer�
 Sigmoid layer는 0과 1 사이의 숫자를 내보내는데, 이 값은 각 컴포넌트가 얼마나 정보를 전달해야 하는지에 대한 척도를 나타낸다. 그 값이 0이라면 "아무 것도 넘기지 말라"가 되고, 값이 1이라면 "모든 것을 넘겨드려라"가 된다.
 LSTM은 3개의 gate를 가지고 있고, 이 문들은 cell state를 보호하고 제어한다.
 LSTM도 똑같이 체인과 같은 구조를 가지고 있지만, 각 반복 모듈은 다른 구조를 갖고 있다. 단순한 neural network layer 한 층 대신에, 4개의 layer가 특별한 방식으로 서로 정보를 주고 받도록 되어 있다.
+RNN은 Hidden state가 방향을 가진 Edge로 연결되어 순환구조를 이루는 인공신경망의 한 종류를 의미합니다. 그리고 이는 문장과 같은 'Sequence Data'를 분석하는데 유용하며, Input과 Output의 길이에 제약받지 않고 유연한
+
 
 
 link : https://dgkim5360.tistory.com/entry/understanding-long-short-term-memory-lstm-kr
