@@ -106,12 +106,12 @@ test_file = test_file.to_numpy()
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=66)
 
 model = Sequential()
-model.add(Dense(30, activation='linear', input_dim=13))
-model.add(Dense(30, activation='relu'))
-model.add(Dense(18, activation='linear'))
-model.add(Dense(6, activation='linear'))
-model.add(Dense(4, activation='relu'))
-model.add(Dense(2, activation='relu'))
+model.add(Dense(32, activation='linear', input_dim=13))
+#model.add(Dense(30, activation='relu'))
+model.add(Dense(16, activation='linear'))
+#model.add(Dense(6, activation='linear'))
+model.add(Dense(4, activation='linear'))
+#model.add(Dense(2, activation='linear'))
 model.add(Dense(1, activation='sigmoid'))
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
@@ -135,7 +135,7 @@ mcp=ModelCheckpoint(monitor='val_loss', mode='max', verbose=1,
                     save_best_only=True,
                     filepath=model_path)
 
-model.fit(x_train, y_train, epochs=1000, batch_size=13, validation_split=0.2, callbacks=[es, mcp])
+model.fit(x_train, y_train, epochs=1000, batch_size=13, validation_split=0.1, callbacks=[es, mcp])
 
 #scaler = MinMaxScaler()
 scaler=StandardScaler()
@@ -158,7 +158,7 @@ results=model.predict(test_file)
 results=results.round(0).astype(int)
 
 submit_file['target']=results
-submit_file.to_csv(path + "heart_ann006.csv", index=False)  
+submit_file.to_csv(path + "heart_ann009.csv", index=False)  
 '''
 001
 loss :  0.30531740188598633
@@ -187,6 +187,21 @@ f1_score :   0.9473684210526316
 
 006  0.1/13
 loss :  0.20334351062774658
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+007
+loss :  0.10557577013969421
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+008
+loss :  0.15957488119602203
+accuracy :   1.0
+f1_score :   1.0
+
+009
+loss :  0.08917468041181564
 accuracy :   0.9375
 f1_score :   0.9473684210526316
 
