@@ -106,12 +106,12 @@ test_file = test_file.to_numpy()
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=66)
 
 model = Sequential()
-model.add(Dense(32, activation='linear', input_dim=13))
-#model.add(Dense(30, activation='relu'))
-model.add(Dense(16, activation='linear'))
-#model.add(Dense(6, activation='linear'))
+model.add(Dense(30, activation='linear', input_dim=13))
+model.add(Dense(30, activation='relu'))
+model.add(Dense(18, activation='linear'))
+model.add(Dense(6, activation='linear'))
 model.add(Dense(4, activation='linear'))
-#model.add(Dense(2, activation='linear'))
+model.add(Dense(2, activation='linear'))
 model.add(Dense(1, activation='sigmoid'))
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
@@ -129,7 +129,7 @@ model_path = "".join([filepath, 'k26_', datetime, '_', filename])
             #./_ModelCheckPoint/k26_1206_0456_2500-0.3724.hdf
 ##############################################################################################################
 
-es = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1, restore_best_weights=True)
 
 mcp=ModelCheckpoint(monitor='val_loss', mode='max', verbose=1, 
                     save_best_only=True,
@@ -137,8 +137,8 @@ mcp=ModelCheckpoint(monitor='val_loss', mode='max', verbose=1,
 
 model.fit(x_train, y_train, epochs=1000, batch_size=13, validation_split=0.1, callbacks=[es, mcp])
 
-#scaler = MinMaxScaler()
-scaler=StandardScaler()
+scaler = MinMaxScaler()
+#scaler=StandardScaler()
 #scaler=RobustScaler()
 #scaler=MaxAbsScaler()
 scaler.fit(x_train)
@@ -158,51 +158,20 @@ results=model.predict(test_file)
 results=results.round(0).astype(int)
 
 submit_file['target']=results
-submit_file.to_csv(path + "heart_ann009.csv", index=False)  
+submit_file.to_csv(path + "heart_1214_6.csv", index=False)  
 '''
-001
-loss :  0.30531740188598633
-accuracy :   0.875
-f1_score :   0.9
-
-002
-loss :  0.39412742853164673
-accuracy :   0.9375
-f1_score :   0.9473684210526316
-
-003
-loss :  0.28279146552085876
-accuracy :   0.9375
-f1_score :   0.9473684210526316
-
-004
-loss :  0.22273194789886475
-accuracy :   0.9375
-f1_score :   0.9473684210526316
-
-005
-loss :  0.23493283987045288
-accuracy :   0.9375
-f1_score :   0.9473684210526316
-
-006  0.1/13
-loss :  0.20334351062774658
-accuracy :   0.9375
-f1_score :   0.9473684210526316
-
-007
-loss :  0.10557577013969421
-accuracy :   0.9375
-f1_score :   0.9473684210526316
-
-008
-loss :  0.15957488119602203
+heart_1214_3.csv
+loss :  0.3951635956764221
 accuracy :   1.0
 f1_score :   1.0
 
-009
-loss :  0.08917468041181564
-accuracy :   0.9375
-f1_score :   0.9473684210526316
+heart_1214_4.csv
+loss :  0.36709922552108765
+accuracy :   1.0
+f1_score :   1.0
 
+heart_1214_5.csv
+loss :  0.28971102833747864
+accuracy :   1.0
+f1_score :   1.0
 '''

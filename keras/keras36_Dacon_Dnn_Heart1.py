@@ -26,7 +26,7 @@ y = y.to_numpy()
 x = x.to_numpy()
 test_file = test_file.to_numpy()
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=66)
 
 
 scaler = MinMaxScaler()
@@ -61,7 +61,7 @@ model_path = "".join([filepath, '_heart_', datetime, '_', filename])
 
 es = EarlyStopping(monitor='val_loss', patience=20, mode='min', restore_best_weights=True)
 mcp = ModelCheckpoint(monitor='val_loss', mode='min', save_best_only=True, filepath=model_path)
-model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_split=0.2, callbacks=[es, mcp])
+model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_split=0.1, callbacks=[es, mcp])
 
 #4. 예측, 결과
 loss = model.evaluate(x_test, y_test)
