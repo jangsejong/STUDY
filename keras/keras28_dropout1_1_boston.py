@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 import numpy as np
 from tensorflow.keras.models import Sequential, Model, load_model
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 import matplotlib.pyplot as plt
 import time as time
 from tensorflow.python.keras.callbacks import History
@@ -25,6 +24,8 @@ print(np.min(x), np.max(x))  #0.0  711.0
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=66)  #shuffle 은 기본값 True
 
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()

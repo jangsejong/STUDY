@@ -53,5 +53,5 @@ test_loss, test_acc = model.evaluate(x_test, y_test)
 print('acc :', test_acc)
 '''
 
-cc : 0.9788333177566528
+acc : 0.9788333177566528
 '''
