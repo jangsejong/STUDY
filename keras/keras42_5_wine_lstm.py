@@ -1,6 +1,6 @@
 import numpy as np
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler
 from sklearn.datasets import load_wine
@@ -12,20 +12,23 @@ datasets = load_wine()
 x = datasets.data 
 y = datasets.target
 
+print(x.shape, y.shape)  #(178, 13) (178,)
+x = x.reshape(178, 13, 1)
+
 from tensorflow.keras.utils import to_categorical
 y = to_categorical(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=1004)
 
 
-scaler = MaxAbsScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test) 
+# scaler = MaxAbsScaler()
+# scaler.fit(x_train)
+# x_train = scaler.transform(x_train)
+# x_test = scaler.transform(x_test) 
 
 #2. 모델 구성
 model = Sequential()
-model.add(Dense(30, activation='linear', input_dim=13))
+model.add(LSTM(30, activation='linear', input_shape=(13,1)))
 model.add(Dropout(0.5))
 model.add(Dense(18, activation='linear'))
 model.add(Dense(6, activation='relu'))
@@ -53,3 +56,10 @@ model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_spli
 loss = model.evaluate(x_test, y_test)
 print("loss : ", loss)
 y_predict = model.predict(x_test)
+
+'''
+loss :  [0.26007527112960815, 0.9440000057220459]
+------------------------
+LSTM 반영시 값이 더 안좋아졌다.
+loss :  [1.0972484350204468, 0.37599998712539673]
+'''

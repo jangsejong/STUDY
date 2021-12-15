@@ -1,5 +1,5 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler
 from sklearn.datasets import load_diabetes
@@ -8,16 +8,20 @@ datasets = load_diabetes()
 x = datasets.data 
 y = datasets.target
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=1004)
+print(x.shape, y.shape)  #(442, 10) (442,)
+x = x.reshape(442, 10, 1)
 
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=1004)
+'''
 scaler = MaxAbsScaler()
 scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test) 
-
+'''
 #2. 모델 구성
 model = Sequential()
-model.add(Dense(60, input_dim=10))
+model.add(LSTM(60, input_shape=(10,1)))
 model.add(Dense(50))
 model.add(Dropout(0.5))
 model.add(Dense(33))
@@ -60,4 +64,8 @@ print("r2스코어", r2)
 '''
 loss :  3934.139892578125
 r2스코어 0.3656581301098685
+
+LSTM 반영시 값이 안좋아졌다
+loss :  5540.20703125
+r2스코어 0.10669558238163235
 '''

@@ -1,5 +1,5 @@
 from sklearn.datasets import load_boston
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 import numpy as np
@@ -22,6 +22,10 @@ x = datasets.data
 y = datasets.target
 print(np.min(x), np.max(x))  #0.0  711.0   
 
+print(x.shape, y.shape)  #(506, 13) (506,)
+
+
+
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, shuffle=True, random_state=66)  #shuffle 은 기본값 True
 
 
@@ -35,11 +39,13 @@ scaler.fit(x_train)
 x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 
+x_train = x_train.reshape(x_train.shape[0], 13, 1)
+x_test = x_test.reshape(x_test.shape[0], 13, 1)
 
 #2. 모델구성
 
 model = Sequential()
-model.add(Dense(55, input_dim=13))
+model.add(LSTM(55, input_shape=(13,1)))
 model.add(Dense(50))
 model.add(Dense(45))
 model.add(Dense(40, activation='relu'))
@@ -77,6 +83,8 @@ print('loss: ', loss)
 y_predict = model.predict(x_test)
 r2 = r2_score(y_test, y_predict)
 print('r2스코어 : ', r2)
+
+
 '''
 loss:  15.390331268310547
 r2스코어 :  0.813714939604898
@@ -86,4 +94,13 @@ r2스코어 :  0.813714939604898
 
 loss:  15.390331268310547
 r2스코어 :  0.813714939604898
+
+
+======================
+lstm 반영시 값이 더 안좋아졌다
+
+loss:  30.157499313354492
+r2스코어 :  0.6349726570180996
+
+
 '''

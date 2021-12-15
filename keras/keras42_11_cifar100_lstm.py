@@ -1,7 +1,7 @@
 import numpy as np
 from tensorflow.keras.datasets import cifar100 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Conv2D, Flatten, MaxPooling2D
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -21,9 +21,11 @@ import pandas as pd
 
 # x = x_train
 # y= y_train
+
 from tensorflow.keras.utils import to_categorical
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
+
 # y_train = pd.get_dummies(y_train)
 # y_test = pd.get_dummies(y_test)
 #print(y_train.shape) # (60000, 10)
@@ -51,11 +53,13 @@ x_test = scaler.transform(x_test.reshape(m,-1)).reshape(x_test.shape)
 #x_train = x_train.reshape(50000, 32,32,3)
 #x_test = x_test.reshape(10000, 32,32,3)
 
+x_train = x_train.reshape(x_train.shape[0], 96, 32)
+x_test = x_test.reshape(x_test.shape[0], 96, 32)
 
 #2. 모델 구성
 model = Sequential()
-model.add(Conv2D(300 ,kernel_size=(2,2),strides=2, padding='valid', activation='relu', input_shape=(32, 32, 3))) 
-model.add(MaxPooling2D())                   
+model.add(LSTM(300 , activation='relu', input_shape=(96, 32))) 
+# model.add(MaxPooling2D())                   
 model.add(Flatten())                             
 model.add(Dense(100, activation='softmax'))
 
@@ -64,7 +68,7 @@ model.add(Dense(100, activation='softmax'))
 model.compile(optimizer='adam',loss='categorical_crossentropy', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 15 , mode = 'auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience= 10 , mode = 'auto', verbose=1, restore_best_weights=True)
 model.fit(x_train, y_train, epochs=1000, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
 
 
@@ -81,4 +85,9 @@ acc : 0.31450000405311584
 after scaling
 loss :  2.794773578643799
 acc : 0.33820000290870667
+
+after LSTM
+loss :  4.537504196166992
+acc : 0.021700000390410423
+
 '''

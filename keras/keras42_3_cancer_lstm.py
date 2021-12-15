@@ -1,6 +1,6 @@
 import numpy as np
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler
 from sklearn.datasets import load_breast_cancer
@@ -10,16 +10,21 @@ datasets = load_breast_cancer()
 x = datasets.data 
 y = datasets.target
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=1004)
+print(x.shape, y.shape)  #(569, 30) (569,)
+x = x.reshape(569, 30, 1)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random_state=66)
 
 
-scaler = MaxAbsScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+# scaler = MaxAbsScaler()
+# scaler.fit(x_train)
+# x_train = scaler.transform(x_train)
+# x_test = scaler.transform(x_test)
+
+
 #2. 모델 구성
 model = Sequential()
-model.add(Dense(30, activation='linear', input_dim=30))
+model.add(LSTM(30, activation='linear', input_shape=(30,1)))
 model.add(Dense(30, activation='relu'))
 model.add(Dense(18, activation='linear'))
 model.add(Dropout(0.5))
@@ -49,3 +54,4 @@ print("loss : ", loss)
 y_predict = model.predict(x_test)
 
 #loss :  [0.3958258330821991, 0.9573934674263]
+#LSTM :  [0.4830673635005951, 0.897243082523346]

@@ -53,3 +53,7 @@ model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_spli
 loss = model.evaluate(x_test, y_test)
 print("loss : ", loss)
 y_predict = model.predict(x_test)
+'''
+
+loss :  [0.26007527112960815, 0.9440000057220459]
+'''
