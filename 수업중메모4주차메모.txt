@@ -1,0 +1,23 @@
+GRU란?
+- GRU의 핵심은 아래 두가지 입니다.
+  (1) LSTM의 forget gate와 input gate를 통합하여 하나의 'update gate'를 만든다.
+  (2) Cell State와 Hidden State를 통합한다.
+- GRU는 LSTM에 비하여 파라미터수가 적기 때문에 연산 비용이 적게 들고, 구조도 더 간단하지만, 성능에서도 LSTM과 비슷한 결과를 냅니다. 
+
+1. LSTM의 Cell State(C(t))와 Hidden state(h(t))가 GRU에서는 하나의 벡터 (h(t))로 합쳐졌다.
+2. LSTM의 forget, input gate는 update gate로 통합, output gate는 없어지고, reset gate로 대체(이후 자세히 설명)
+3. LSTM에서는 forget과 input이 서로 독립적이었으나, GRU에서는 전체 양이 정해져있어(=1), forget한 만큼 input하는 방식으로 제어한다. 이는 gate controller인 z(t)에 의해서 조절된다.  
+
+   => z(t)가 1이면 forget gate가 열리고, 0이면 input gate가 열린다.
+ 
+   4. Summary
+   - Reset gate는 short-term dependency를 의미
+   - Update gate는 long-term dependency를 의미
+   
+   <LSTM과 다른점>   
+   1. LSTM의 Cell State(C(t))와 Hidden state(h(t))가 GRU에서는 하나의 벡터 (h(t))로 합쳐졌다.
+   2. LSTM의 forget, input gate는 update gate로 통합, output gate는 없어지고, reset gate로 대체(이후 자세히 설명)
+   3. LSTM에서는 forget과 input이 서로 독립적이었으나, GRU에서는 전체 양이 정해져있어(=1), forget한 만큼 input하는 방식으로 제어한다. 이는 gate controller인 z(t)에 의해서 조절된다.  
+         => z(t)가 1이면 forget gate가 열리고, 0이면 input gate가 열린다.
+   
+   
