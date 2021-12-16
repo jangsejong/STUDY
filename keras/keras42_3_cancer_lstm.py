@@ -36,17 +36,15 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-import datetime
-date = datetime.datetime.now()
-datetime = date.strftime("%m%d_%H%M") 
+es = EarlyStopping(monitor='val_loss', patience=100, mode = 'min', verbose = 1) # restore_best_weights=True)
+#mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras26_1_MCP.hdf5')
 
-filepath = './_ModelCheckPoint/'
-filename = '{epoch:04d}-{val_loss:.4f}.hdf5'      
-model_path = "".join([filepath, '3_cancer_', datetime, '_', filename])
+start = time.time()
+hist = model.fit(x_train, y_train, epochs=100, batch_size = 13, 
+                 validation_split = 0.2 , callbacks = [es])#, mcp])
+end = time.time()- start
 
-es = EarlyStopping(monitor='val_loss', patience=20, mode='min', restore_best_weights=True)
-mcp = ModelCheckpoint(monitor='val_loss', mode='min', save_best_only=True, filepath=model_path)
-model.fit(x_train, y_train, epochs=100, batch_size=1, verbose=1, validation_split=0.2, callbacks=[es, mcp])
+print("걸린시간 : ", round(end, 3), '초')
 
 #4. 예측, 결과
 loss = model.evaluate(x_test, y_test)
@@ -54,4 +52,5 @@ print("loss : ", loss)
 y_predict = model.predict(x_test)
 
 #loss :  [0.3958258330821991, 0.9573934674263]
+#걸린시간 :  7.667 초
 #LSTM :  [0.4830673635005951, 0.897243082523346]

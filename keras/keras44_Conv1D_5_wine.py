@@ -1,10 +1,10 @@
 import numpy as np
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Flatten, Conv1D
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler
 from sklearn.datasets import load_wine
-import time
+import time 
 
 from tensorflow.python.keras.callbacks import ModelCheckpoint
 
@@ -28,7 +28,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.3, random
 
 #2. 모델 구성
 model = Sequential()
-model.add(LSTM(30, activation='linear', input_shape=(13,1)))
+model.add(Conv1D(30, 2,activation='linear', input_shape=(13,1)))
+model.add(Flatten()) ##
 model.add(Dropout(0.5))
 model.add(Dense(18, activation='linear'))
 model.add(Dense(6, activation='relu'))
@@ -69,4 +70,8 @@ loss :  [0.26007527112960815, 0.9440000057220459]
 LSTM 반영시 값이 더 안좋아졌다.
 걸린시간 :  3.572 초
 loss :  [1.0972484350204468, 0.37599998712539673]
+===========================
+Conv1D
+걸린시간 :  2.372 초
+loss :  [1.099203109741211, 0.37599998712539673]
 '''

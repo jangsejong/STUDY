@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Flatten, Conv1D
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler, LabelEncoder, OneHotEncoder
-import time
+import time 
 
 #1. 데이터 분석
 path = "D:\\Study\\_data\\kaggle\\bike\\"
@@ -40,7 +40,8 @@ x_test = x_test.reshape(x_test.shape[0], 8, 1)
 
 #2. 모델구성
 model = Sequential()
-model.add(LSTM(250, input_shape=(8,1)))
+model.add(Conv1D(250,2, input_shape=(8,1)))
+model.add(Flatten()) ##
 model.add(Dense(100, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(1))
@@ -82,6 +83,9 @@ LSTM 반영시 값이 좋아졌다
 걸린시간 :  17.283 초
 loss :  1.4496670961380005
 =====================
+Conv1D
+걸린시간 :  2.724 초
+loss :  1.4772008657455444
 
 
 

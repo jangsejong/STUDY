@@ -5,6 +5,7 @@ from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropo
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.python.keras.metrics import accuracy
+import time
 
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -45,9 +46,13 @@ model.add(Dense(10, activation='softmax'))
 model.compile(optimizer='adam',loss='categorical_crossentropy', metrics=['accuracy'])
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 5 , mode = 'auto', verbose=1, restore_best_weights=True)
-model.fit(x_train, y_train, epochs=100, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
+es = EarlyStopping(monitor='val_loss', patience= 10 , mode = 'auto', verbose=1, restore_best_weights=True)
 
+start = time.time()
+
+model.fit(x_train, y_train, epochs=10, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])
+end = time.time()- start
+print("걸린시간 : ", round(end, 3), '초')
 
 #4. 예측, 결과
 test_loss, test_acc = model.evaluate(x_test, y_test)
@@ -56,6 +61,8 @@ print('acc :', test_acc)
 acc : 0.9788333177566528
 ----------------------
 LSTM 반영시
-acc : 0.9854166507720947
+걸린시간 :  126.511 초
+acc : 0.9825000166893005
+========================
 
 '''

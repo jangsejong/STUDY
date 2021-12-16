@@ -1,7 +1,7 @@
 import numpy as np
 from tensorflow.keras.datasets import cifar100 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Conv2D, Flatten, MaxPooling2D
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Conv1D, Flatten
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -59,7 +59,7 @@ x_test = x_test.reshape(x_test.shape[0], 96, 32)
 
 #2. 모델 구성
 model = Sequential()
-model.add(LSTM(300 , activation='relu', input_shape=(96, 32))) 
+model.add(Conv1D(300 ,2, activation='relu', input_shape=(96, 32))) 
 # model.add(MaxPooling2D())                   
 model.add(Flatten())                             
 model.add(Dense(100, activation='softmax'))
@@ -95,5 +95,9 @@ after LSTM
 걸린시간 :  1416.76 초
 loss :  nan
 acc : 0.009999999776482582
-
+============================
+Conv2D
+걸린시간 :  98.129 초
+loss :  4.3490800857543945
+acc : 0.2542000114917755
 '''

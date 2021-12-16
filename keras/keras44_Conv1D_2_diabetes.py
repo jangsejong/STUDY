@@ -1,5 +1,5 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Conv1D, Flatten, Dropout
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler
 from sklearn.datasets import load_diabetes
@@ -23,7 +23,8 @@ x_test = scaler.transform(x_test)
 '''
 #2. 모델 구성
 model = Sequential()
-model.add(LSTM(60, input_shape=(10,1)))
+model.add(Conv1D(60,2, input_shape=(10,1)))
+model.add(Flatten()) ##
 model.add(Dense(50))
 model.add(Dropout(0.5))
 model.add(Dense(33))
@@ -42,6 +43,14 @@ model.add(Dense(1))
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
+import datetime
+date = datetime.datetime.now()
+datetime = date.strftime("%m%d_%H%M") 
+
+filepath = './_ModelCheckPoint/'
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'      
+model_path = "".join([filepath, '2_diabetes_', datetime, '_', filename])
 
 es = EarlyStopping(monitor='val_loss', patience=100, mode = 'min', verbose = 1) # restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras26_1_MCP.hdf5')
@@ -69,4 +78,8 @@ LSTM 반영시 값이 안좋아졌다
 걸린시간 :  5.625 초
 loss :  7012.57275390625
 r2스코어 -0.13070911280986341
+======================
+걸린시간 :  2.984 초
+loss :  11659.830078125
+r2스코어 -0.8800341758826651
 '''

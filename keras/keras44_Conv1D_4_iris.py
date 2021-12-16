@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.datasets import load_iris
 from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Flatten, Conv1D
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.python.keras.callbacks import ModelCheckpoint
 import time
@@ -30,7 +30,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 
 #2. 모델구성
 model = Sequential()
-model.add(LSTM(30, activation='linear', input_shape=(4,1)))
+model.add(Conv1D(30, 2,activation='linear', input_shape=(4,1)))
+model.add(Flatten()) ##
 model.add(Dense(30, activation='relu'))
 model.add(Dense(18, activation='linear'))
 model.add(Dense(6, activation='linear'))
@@ -68,5 +69,9 @@ LSTM
 걸린시간 :  25.968 초
 loss :  0.09477469325065613
 accuracy :  0.9333333373069763
-
+===========================
+Conv1D
+걸린시간 :  19.741 초
+loss :  0.06014015153050423
+accuracy :  0.9666666388511658
 '''

@@ -4,12 +4,11 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential,load_model
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Conv2D, Flatten, MaxPooling2D
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Conv2D, Flatten, MaxPooling2D, Conv1D
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import EarlyStopping,ModelCheckpoint 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler 
 import time
-
 
 #시작
 
@@ -41,7 +40,8 @@ x_test = x_test.reshape(x_test.shape[0], 96, 32)
 
 
 model=Sequential()
-model.add(LSTM(64, input_shape=(96,32)))
+model.add(Conv1D(64,2, input_shape=(96,32)))
+model.add(Flatten()) ##
 model.add(Dense(64, activation='relu'))
 model.add(Dense(50))
 model.add(Dropout(0.2))
@@ -62,6 +62,10 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 # model_path = "".join([filepath, 'k26_', datetime, '_', filename])
 #             #./_ModelCheckPoint/k26_1206_0456_2500-0.3724.hdf
 ##############################################################################################################
+
+es=EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1, restore_best_weights=True)
+# mcp=ModelCheckpoint(monitor='val_accuracy', mode='max', verbose=1, 
+#                     save_best_only=True,filepath=model_path)
 
 start = time.time()
 
@@ -92,5 +96,8 @@ accuracy :  0.40049999952316284
 걸린시간 :  255.381 초
 loss :  2.0039901733398438
 accuracy :  0.27090001106262207
-
+<Conv1D>
+걸린시간 :  30.221 초
+loss :  2.305962085723877
+accuracy :  0.10000000149011612
 '''

@@ -3,7 +3,7 @@ from sklearn.datasets import fetch_covtype
 from sklearn import datasets
 from tensorflow.keras import callbacks
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout
+from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Flatten, Conv1D
 from sklearn.preprocessing import MaxAbsScaler
 from tensorflow.python.keras.callbacks import ModelCheckpoint
 from tensorflow.python.keras.metrics import accuracy
@@ -14,12 +14,12 @@ datasets = fetch_covtype()
 x = datasets.data # (581012, 54)
 y = datasets.target # (581012, )
 
-#print(x.shape, y.shape)  #(581012, 54) (581012,)
+# print(x.shape, y.shape)  #(581012, 54) (581012,)
 x = x.reshape(581012, 9, 6)
 
 import pandas as pd
 y = pd.get_dummies(y)
-#print(y)
+# print(y)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
@@ -32,7 +32,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 
 #2. 모델 구성
 model = Sequential()
-model.add(LSTM(30, activation='linear', input_shape=(9, 6)))
+model.add(Conv1D(30,2, activation='linear', input_shape=(9, 6)))
+model.add(Flatten()) ##
 model.add(Dense(30, activation='linear'))
 model.add(Dense(18, activation='relu'))
 model.add(Dense(6, activation='linear'))
@@ -60,7 +61,6 @@ model.fit(x_train, y_train, epochs=5, batch_size=32, verbose=1, validation_split
 end = time.time()- start
 print("걸린시간 : ", round(end, 3), '초')
 
-
 #4. 예측, 결과
 loss = model.evaluate(x_test, y_test)
 print('loss : ', loss[0])
@@ -74,5 +74,8 @@ LSTM 반영시 값이 더 안좋아졌다
 loss :  0.7971971035003662
 accuracy :  0.6591654419898987
 =================================
-
+Conv1D
+걸린시간 :  50.612 초
+loss :  0.7778472900390625
+accuracy :  0.6833730340003967
 '''
