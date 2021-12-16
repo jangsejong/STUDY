@@ -25,3 +25,5 @@ GRU란?
          # SimpleRNN     3         units                 batch      timesteps     feature             2                 2                                 
          # Conv1D        3         filter                batch       steps        input_dim           2                 3          
          # Conv2D        4         filter       batch     row        colum        chanel              3                 4  
+
+         ( ( 2 * 2 ) *  input + bias )  * output
