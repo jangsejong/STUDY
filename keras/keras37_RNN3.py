@@ -15,10 +15,11 @@ y = np.array([4,5,6,7])
 
 #input_shape = (batch_size, timesteps, feature) /  
 
-#              output          4          3          2              1        output_shape                                                                                                
-# Dense        units                               batch        input_dim         2                        
-# SimpleRNN    units                    batch      timesteps    feature           2                                 
-# Conv2d       filter         batch     row        colum        chanel            4  
+#              Data       output          4        3          2             1           input_shape      output_shape                                                                                                
+# Dense         2         units                             batch        input_dim           1                 2                        
+# SimpleRNN     3         units                 batch      timesteps     feature             2                 2                                 
+# Conv1D        3         filter                batch       steps        input_dim           2                 3          
+# Conv2D        4         filter       batch     row        colum        chanel              3                 4  
 
 x = x.reshape(4, 3, 1)
 #y = y.reshape(4, 1)

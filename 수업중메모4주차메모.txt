@@ -20,4 +20,8 @@ GRU란?
    3. LSTM에서는 forget과 input이 서로 독립적이었으나, GRU에서는 전체 양이 정해져있어(=1), forget한 만큼 input하는 방식으로 제어한다. 이는 gate controller인 z(t)에 의해서 조절된다.  
          => z(t)가 1이면 forget gate가 열리고, 0이면 input gate가 열린다.
    
-   
+         #              Data       output          4        3          2             1           input_shape      output_shape                                                                                                
+         # Dense         2         units                             batch        input_dim           1                 2                        
+         # SimpleRNN     3         units                 batch      timesteps     feature             2                 2                                 
+         # Conv1D        3         filter                batch       steps        input_dim           2                 3          
+         # Conv2D        4         filter       batch     row        colum        chanel              3                 4  
