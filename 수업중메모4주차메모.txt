@@ -27,3 +27,12 @@ GRU란?
          # Conv2D        4         filter       batch     row        colum        chanel              3                 4  
 
          ( ( 2 * 2 ) *  input + bias )  * output
+
+MSE.RMSE.RMSLE
+
+exponential (지수(指數)의’라는 뜻. 리니어(직선적)와 반대의 의미로 사용한다. 결과적으로 리니어에 비해 적은 값의 움직임(입력)으로 큰 작용(출력)을 얻는다.)
+
+exp() : exponential 값을 구해준다
+exp2() : 배열값으로 2를 거듭제곱해준다
+expm1() : exp(배열값) - 1
+link : https://pybasall.tistory.com/127

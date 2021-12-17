@@ -5,7 +5,6 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential,load_model
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Dropout, Conv2D, Flatten, MaxPooling2D, Conv1D
-from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import EarlyStopping,ModelCheckpoint 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler 
 import time
