@@ -34,25 +34,23 @@ output2 = Dense(5, activation='relu', name='output2')(dense14)
 
 from tensorflow.keras.layers import concatenate, Concatenate
 
-merge1 = concatenate([output1, output2],axis=1)
-merge2 = Dense(10, activation='relu')(merge1)
-merge3 = Dense(7)(merge2)
-last_output = Dense(1)(merge3)
-
-model = Model(inputs=[input1, input2], outputs= last_output)
-
-# model.summary()
-
-# merge1 = Concatenate()([output1, output2])#,axis=1)
+# merge1 = concatenate([output1, output2],axis=1)  # axis=0 y축방향 병합 (200,3)
 # merge2 = Dense(10, activation='relu')(merge1)
 # merge3 = Dense(7)(merge2)
 # last_output = Dense(1)(merge3)
-
 # model = Model(inputs=[input1, input2], outputs= last_output)
+
+# model.summary()
+
+merge1 = Concatenate()([output1, output2])#,axis=1)
+merge2 = Dense(10, activation='relu')(merge1)
+merge3 = Dense(7)(merge2)
+last_output = Dense(1)(merge3)
+model = Model(inputs=[input1, input2], outputs= last_output)
 
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['mse']) #rms
+model.compile(loss='mse', optimizer='adam', metrics=['mae']) #rms
 model.fit([x1_train, x2_train], [y_train], epochs=100, batch_size=1, validation_split=0.2, verbose=1) 
 
 #4. 평가, 예측
@@ -60,3 +58,7 @@ loss = model.evaluate ([x1_test, x2_test], [y_test])
 print('loss :', loss) #loss :
 y_pred = model.predict([x1_test, x2_test])
 
+'''
+mae
+loss : [0.008354820311069489, 0.08890075981616974]
+'''
