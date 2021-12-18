@@ -5,9 +5,13 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score
 from sklearn import metrics
+from keras.layers import LSTM, Dense
 import matplotlib.pyplot as plt
+import tensorflow as tf
+import pickle
+import platform
 import seaborn as sns
-
+import os
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -119,30 +123,15 @@ kiwoom = kiwoom.loc[::-1].reset_index(drop=True).loc[::-1].head(10)
 # print(samsung.info())
 # print(kiwoom.info())  
 
-from statsmodels.stats.outliers_influence import variance_inflation_factor
-
-vif = pd.DataFrame()
-vif['features'] = samsung.columns
-vif["VIF Factor"] = [variance_inflation_factor(samsung.values, i) for i in range(samsung.shape[1])]
-vif.round(1)
-
-
-
-
-'''
-x1 = samsung.drop(columns=['외국계','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '기관'], axis=1) 
-x2 = kiwoom.drop(columns=['외국계','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '기관'], axis=1) 
+x1 = samsung.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비'], axis=1) 
+x2 = kiwoom.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비'], axis=1) 
 
 #print(x1.shape, x2.shape) #(893, 5) (893, 5)
-print(x1.describe, x2.describe)
-
-
 
 y1 = samsung['종가']
 y2 = kiwoom['종가']
 
 #print(x1.shape, x2.shape, y1.shape, y2.shape)
-
 
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
@@ -209,4 +198,3 @@ loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
 print('loss :', loss) #loss :
 y1_pred, y2_pred = model.predict([x1_test, x2_test])
 print(y1_pred[0], y2_pred[0])
-'''
