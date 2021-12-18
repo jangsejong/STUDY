@@ -5,7 +5,12 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score
 from sklearn import metrics
+from tensorflow.keras.layers import Dropout, Dense, SimpleRNN, LSTM
+from tensorflow.keras.models import Sequential
 import matplotlib.pyplot as plt
+import tensorflow as tf
+import pickle
+import platform
 import seaborn as sns
 import os
 import warnings
@@ -31,7 +36,7 @@ kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",")#, encoding='cp949'
 
 
 
-#print(samsung.head())
+print(samsung.head())
 '''
       일자      시가      고가      저가      종가 전일비    Unnamed: 6   등락률          거래량      금액(백만)  신용비       개인       기관     외인(수량)    외국계     프로그램 외인비
 0  2021/12/17  76,800   77,700    76,800   77,500   ▼       -300        -0.39         6,871,456    531,146    0.00           0           0          0      17,465   -184,248  51.78
@@ -50,7 +55,7 @@ EPS : Earning Per Share 주식 1주당 이익이 얼마나 창출되었는지
 하지만 보조 지표로 참고한다면 리스크 대비가 가능하다.
 '''
 
-sns.set_style('darkgrid')
+#sns.set_style('darkgrid')
 #print(samsung.shape, kiwoom.shape)  #(1060, 17) (1160, 17)
 
 # #결측치
@@ -100,14 +105,15 @@ Trading_volume_ki = kiwoom['거래량'].unique()
 
 print(type(closing_price_sam))
 print(type(closing_price_ki))
+
 '''
 # 삼성주식의 액면 분할 전시점을 날려주며 행을 맞춰준다.
-samsung = samsung.drop(range(893,1060), axis=0)
+samsung = samsung.drop(range(893,1120), axis=0)
 kiwoom = kiwoom.drop(range(893,1060), axis=0)
 
 #과거순으로 행을 역순 시켜 준다.
-samsung = samsung.loc[::-1].reset_index(drop=True).head(10)
-kiwoom = kiwoom.loc[::-1].reset_index(drop=True).loc[::-1].head(10)
+samsung = samsung.loc[::-1].reset_index(drop=True)
+kiwoom = kiwoom.loc[::-1].reset_index(drop=True)
 
 #print(samsung.describe)
 
@@ -119,15 +125,39 @@ kiwoom = kiwoom.loc[::-1].reset_index(drop=True).loc[::-1].head(10)
 # print(samsung.info())
 # print(kiwoom.info())  
 
-x1 = samsung.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비'], axis=1) 
-x2 = kiwoom.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비'], axis=1) 
+x1 = samsung.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량'], axis=1) 
+x2 = kiwoom.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량'], axis=1) 
+x1 = np.array(x1)
+x2 = np.array(x2)
+print(x1.shape, x2.shape) #(893, 4) (893, 4)
 
-#print(x1.shape, x2.shape) #(893, 5) (893, 5)
 
-y1 = samsung['종가']
-y2 = kiwoom['종가']
+y1 = samsung['시가']
+y2 = kiwoom['시가']
 
 #print(x1.shape, x2.shape, y1.shape, y2.shape)
+def split_xy3(dataset, time_steps, y_column):                 
+    x, y = list(), list()
+    for i in range(len(dataset)):
+        x_end_number = i + time_steps
+        y_end_number = x_end_number + y_column - 1
+        
+        if y_end_number > len(dataset):
+            break
+        tmp_x = dataset[i:x_end_number, :-1]
+        tmp_y = dataset[x_end_number-1:y_end_number, -1]
+        x.append(tmp_x)
+        y.append(tmp_y)
+    return np.array(x), np.array(y)
+
+
+x1_ss, y1_ss = split_xy3(x1, 4, 2)
+x2_ki, y2_ki = split_xy3(x2, 4, 2)
+
+# print(x1_ss.shape, y1_ss.shape) (889, 4, 3) (889, 2)
+# print(x2_ki.shape, y2_ki.shape) (889, 4, 3) (889, 2)
+
+
 
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
@@ -142,7 +172,7 @@ x2 = scaler.transform(x2)
 
 from sklearn.model_selection import train_test_split
 
-x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1, x2, y1, y2 ,train_size=0.9, random_state=66)
+x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1, x2, y1, y2 ,train_size=0.8, random_state=66)
 
 
 
@@ -152,23 +182,39 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
 
 #2-1. 모델
-input1 = Input(shape=(5,))
-dense1 = Dense(8, activation='relu', name='dense1')(input1)
-dense2 = Dense(4, activation='relu', name='dense2')(dense1)
-dense3 = Dense(2, activation='relu', name='dense3')(dense2)
-output1 = Dense(1, activation='relu', name='output1')(dense3)
+# input1 = Input(shape=(4,))
+# dense1 = Dense(8, activation='relu', name='dense1')(input1)
+# dense2 = Dense(4, activation='relu', name='dense2')(dense1)
+# dense3 = Dense(2, activation='relu', name='dense3')(dense2)
+# output1 = Dense(1, activation='relu', name='output1')(dense3)
+model = Sequential()
+model.add(LSTM(8, input_length=x1.shape[1], input_dim=4))
+model.add(Dense(16, activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(4, activation='relu'))
+model.add(Dense(2, activation='relu'))
+output1 = model.add(Dense(1, name='output1'))
+
 
 #2-2. 모델
-input2 = Input(shape=(5,))
-dense11 = Dense(8, activation='relu', name='dense11')(input2)
-dense12 = Dense(6, activation='relu', name='dense12')(dense11)
-dense14 = Dense(2, activation='relu', name='dense14')(dense12)
-output2 = Dense(1, activation='relu', name='output2')(dense14)
+model = Sequential()
+model.add(LSTM(8, input_length=x2.shape[1], input_dim=4))
+model.add(Dense(16, activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(4, activation='relu'))
+model.add(Dense(2, activation='relu'))
+output2 = model.add(Dense(1, name='output2'))
 
 from tensorflow.keras.layers import concatenate, Concatenate
 
-merge1 = concatenate([output1, output2],axis=1)  # axis=0 y축방향 병합 (200,3)
+merge1 = concatenate([output1, output2], axis=1)  # axis=0 y축방향 병합 (200,3)
 # model.summary()
+
+# merge1 = Concatenate()([output1, output2])#,axis=1)
+# merge2 = Dense(10, activation='relu')(merge1)
+# merge3 = Dense(7)(merge2)
+# last_output = Dense(1)(merge3)
+# model = Model(inputs=[input1, input2], outputs= last_output)
 
 #2-3 output모델1
 output21 = Dense(16)(merge1)
@@ -186,10 +232,13 @@ model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mae']) #rms
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=100, batch_size=1, validation_split=0.2, verbose=1) 
+model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=150, batch_size=4, validation_split=0.2, verbose=1) 
 
 #4. 평가, 예측
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
 print('loss :', loss) #loss :
 y1_pred, y2_pred = model.predict([x1_test, x2_test])
-print(y1_pred[0], y2_pred[0])
+print('삼성예측값 : ', y1_pred[-1])
+print('키움예측값 : ', y2_pred[-1])
+
+
