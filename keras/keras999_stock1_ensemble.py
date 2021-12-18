@@ -28,8 +28,8 @@ warnings.filterwarnings('ignore')
 
 #1 데이터
 path = "D:\\Study\\_data\\bit\\stock\\"
-samsung = pd.read_csv(path +"삼성전자.csv", thousands=",")#, encoding='cp949')
-kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",")#, encoding='cp949')
+samsung = pd.read_csv(path +"삼성전자.csv", thousands=",", encoding='cp949')
+kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",", encoding='cp949')
 
 #submission = pd.read_csv(path+"sample_submission.csv")
 
@@ -107,8 +107,8 @@ print(type(closing_price_ki))
 
 '''
 # 삼성주식의 액면 분할 전시점을 날려주며 행을 맞춰준다.
-samsung = samsung.drop(range(893,1120), axis=0)
-kiwoom = kiwoom.drop(range(893,1060), axis=0)
+samsung = samsung.drop(range(10,1120), axis=0)
+kiwoom = kiwoom.drop(range(10,1060), axis=0)
 
 #과거순으로 행을 역순 시켜 준다.
 samsung = samsung.loc[::-1].reset_index(drop=True)
@@ -131,27 +131,27 @@ x2 = np.array(x2)
 print(x1.shape, x2.shape) #(893, 5) (893, 5)
 
 
-y1 = samsung['시가']
-y2 = kiwoom['시가']
+y1 = samsung['종가']
+y2 = kiwoom['종가']
 
-#print(x1.shape, x2.shape, y1.shape, y2.shape)
-def split_xy3(dataset, time_steps, y_column):                 
-    x, y = list(), list()
-    for i in range(len(dataset)):
-        x_end_number = i + time_steps
-        y_end_number = x_end_number + y_column - 1
+# #print(x1.shape, x2.shape, y1.shape, y2.shape)
+# def split_xy3(dataset, time_steps, y_column):                 
+#     x, y = list(), list()
+#     for i in range(len(dataset)):
+#         x_end_number = i + time_steps
+#         y_end_number = x_end_number + y_column - 1
         
-        if y_end_number > len(dataset):
-            break
-        tmp_x = dataset[i:x_end_number, :-1]
-        tmp_y = dataset[x_end_number-1:y_end_number, -1]
-        x.append(tmp_x)
-        y.append(tmp_y)
-    return np.array(x), np.array(y)
+#         if y_end_number > len(dataset):
+#             break
+#         tmp_x = dataset[i:x_end_number, :-1]
+#         tmp_y = dataset[x_end_number-1:y_end_number, -1]
+#         x.append(tmp_x)
+#         y.append(tmp_y)
+#     return np.array(x), np.array(y)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
-scaler = MinMaxScaler()
-#scaler = StandardScaler()
+#scaler = MinMaxScaler()
+scaler = StandardScaler()
 #scaler = RobustScaler()
 #scaler = MaxAbsScaler()
 
@@ -204,11 +204,11 @@ last_output2 = Dense(1)(output33)
 model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['mae']) #rms
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=150, batch_size=4, validation_split=0.2, verbose=1) 
+model.compile(loss='mse', optimizer='adam')#, metrics=['mae']) #rms
+model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=100, batch_size=4, validation_split=0.2, verbose=1) 
 
 #4. 평가, 예측
-loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
+loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test])#, batch_size=1)
 print('loss :', loss) #loss :
 y1_pred, y2_pred = model.predict([x1_test, x2_test])
 print('삼성예측값 : ', y1_pred[-1])
