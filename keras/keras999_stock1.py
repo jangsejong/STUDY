@@ -28,14 +28,14 @@ warnings.filterwarnings('ignore')
 
 #1 데이터
 path = "D:\\Study\\_data\\bit\\stock\\"
-samsung = pd.read_csv(path +"삼성전자.csv", thousands=",", encoding='cp949')
-kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",", encoding='cp949')
+samsung = pd.read_csv(path +"삼성전자.csv", thousands=",")#, encoding='cp949')
+kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",")#, encoding='cp949')
 
 #submission = pd.read_csv(path+"sample_submission.csv")
 
 
 
-#print(samsung.head())
+print(samsung.head())
 '''
       일자      시가      고가      저가      종가 전일비    Unnamed: 6   등락률          거래량      금액(백만)  신용비       개인       기관     외인(수량)    외국계     프로그램 외인비
 0  2021/12/17  76,800   77,700    76,800   77,500   ▼       -300        -0.39         6,871,456    531,146    0.00           0           0          0      17,465   -184,248  51.78
@@ -104,10 +104,11 @@ Trading_volume_ki = kiwoom['거래량'].unique()
 
 print(type(closing_price_sam))
 print(type(closing_price_ki))
+
 '''
 # 삼성주식의 액면 분할 전시점을 날려주며 행을 맞춰준다.
 samsung = samsung.drop(range(893,1060), axis=0)
-kiwoom = kiwoom.drop(range(893,1160), axis=0)
+kiwoom = kiwoom.drop(range(893,1060), axis=0)
 
 #과거순으로 행을 역순 시켜 준다.
 samsung = samsung.loc[::-1].reset_index(drop=True).head(10)
@@ -129,7 +130,7 @@ x1 = np.array(x1)
 x2 = np.array(x2)
 print(x1.shape, x2.shape) #(893, 5) (893, 5)
 
-'''
+
 y1 = samsung['종가']
 y2 = kiwoom['종가']
 
@@ -211,5 +212,7 @@ model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=100, batch_size=1, v
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
 print('loss :', loss) #loss :
 y1_pred, y2_pred = model.predict([x1_test, x2_test])
-print(y1_pred[0], y2_pred[0])
-'''
+print('삼성예측값 : ', y1_pred[-1])
+print('키움예측값 : ', y2_pred[-1])
+
+
