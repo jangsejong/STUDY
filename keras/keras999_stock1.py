@@ -5,7 +5,7 @@ from sklearn.ensemble import VotingClassifier
 from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, GradientBoostingClassifier
 from sklearn.metrics import accuracy_score
 from sklearn import metrics
-from keras.layers import LSTM, Dense
+from tensorflow.keras.layers import Dropout, Dense, SimpleRNN, LSTM
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import pickle
@@ -28,8 +28,8 @@ warnings.filterwarnings('ignore')
 
 #1 데이터
 path = "D:\\Study\\_data\\bit\\stock\\"
-samsung = pd.read_csv(path +"삼성전자.csv", thousands=",")#, encoding='cp949')
-kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",")#, encoding='cp949')
+samsung = pd.read_csv(path +"삼성전자.csv", thousands=",", encoding='cp949')
+kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",", encoding='cp949')
 
 #submission = pd.read_csv(path+"sample_submission.csv")
 
@@ -54,7 +54,7 @@ EPS : Earning Per Share 주식 1주당 이익이 얼마나 창출되었는지
 하지만 보조 지표로 참고한다면 리스크 대비가 가능하다.
 '''
 
-sns.set_style('darkgrid')
+#sns.set_style('darkgrid')
 #print(samsung.shape, kiwoom.shape)  #(1060, 17) (1160, 17)
 
 # #결측치
@@ -125,14 +125,28 @@ kiwoom = kiwoom.loc[::-1].reset_index(drop=True).loc[::-1].head(10)
 
 x1 = samsung.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비'], axis=1) 
 x2 = kiwoom.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비'], axis=1) 
+x1 = np.array(x1)
+x2 = np.array(x2)
+print(x1.shape, x2.shape) #(893, 5) (893, 5)
 
-#print(x1.shape, x2.shape) #(893, 5) (893, 5)
-
+'''
 y1 = samsung['종가']
 y2 = kiwoom['종가']
 
 #print(x1.shape, x2.shape, y1.shape, y2.shape)
-
+def split_xy3(dataset, time_steps, y_column):                     # size : 몇개로 나눌 것인가
+    x, y = list(), list()
+    for i in range(len(dataset)):
+        x_end_number = i + time_steps
+        y_end_number = x_end_number + y_column - 1
+        
+        if y_end_number > len(dataset):
+            break
+        tmp_x = dataset[i:x_end_number, :-1]
+        tmp_y = dataset[x_end_number-1:y_end_number, -1]
+        x.append(tmp_x)
+        y.append(tmp_y)
+    return np.array(x), np.array(y)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 #scaler = MinMaxScaler()
@@ -198,3 +212,4 @@ loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
 print('loss :', loss) #loss :
 y1_pred, y2_pred = model.predict([x1_test, x2_test])
 print(y1_pred[0], y2_pred[0])
+'''
