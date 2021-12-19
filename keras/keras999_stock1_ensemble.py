@@ -107,8 +107,8 @@ print(type(closing_price_ki))
 
 '''
 # 삼성주식의 액면 분할 전시점을 날려주며 행을 맞춰준다.
-samsung = samsung.drop(range(10,1120), axis=0)
-kiwoom = kiwoom.drop(range(10,1060), axis=0)
+samsung = samsung.drop(range(30,1120), axis=0)
+kiwoom = kiwoom.drop(range(30,1060), axis=0)
 
 #과거순으로 행을 역순 시켜 준다.
 samsung = samsung.loc[::-1].reset_index(drop=True)
@@ -124,8 +124,8 @@ kiwoom = kiwoom.loc[::-1].reset_index(drop=True)
 # print(samsung.info())
 # print(kiwoom.info())  
 
-x1 = samsung.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량'], axis=1) 
-x2 = kiwoom.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량'], axis=1) 
+x1 = samsung.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량', '기관', '외국계'], axis=1) 
+x2 = kiwoom.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량', '기관', '외국계'], axis=1) 
 x1 = np.array(x1)
 x2 = np.array(x2)
 print(x1.shape, x2.shape) #(893, 5) (893, 5)
@@ -134,20 +134,20 @@ print(x1.shape, x2.shape) #(893, 5) (893, 5)
 y1 = samsung['종가']
 y2 = kiwoom['종가']
 
-# #print(x1.shape, x2.shape, y1.shape, y2.shape)
-# def split_xy3(dataset, time_steps, y_column):                 
-#     x, y = list(), list()
-#     for i in range(len(dataset)):
-#         x_end_number = i + time_steps
-#         y_end_number = x_end_number + y_column - 1
+#print(x1.shape, x2.shape, y1.shape, y2.shape)
+def split_xy3(dataset, time_steps, y_column):                 
+    x, y = list(), list()
+    for i in range(len(dataset)):
+        x_end_number = i + time_steps
+        y_end_number = x_end_number + y_column - 1
         
-#         if y_end_number > len(dataset):
-#             break
-#         tmp_x = dataset[i:x_end_number, :-1]
-#         tmp_y = dataset[x_end_number-1:y_end_number, -1]
-#         x.append(tmp_x)
-#         y.append(tmp_y)
-#     return np.array(x), np.array(y)
+        if y_end_number > len(dataset):
+            break
+        tmp_x = dataset[i:x_end_number, :-1]
+        tmp_y = dataset[x_end_number-1:y_end_number, -1]
+        x.append(tmp_x)
+        y.append(tmp_y)
+    return np.array(x), np.array(y)
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 #scaler = MinMaxScaler()
@@ -171,14 +171,14 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
 
 #2-1. 모델
-input1 = Input(shape=(4,))
+input1 = Input(shape=(2,))
 dense1 = Dense(8, activation='relu', name='dense1')(input1)
 dense2 = Dense(4, activation='relu', name='dense2')(dense1)
 dense3 = Dense(2, activation='relu', name='dense3')(dense2)
 output1 = Dense(1, activation='relu', name='output1')(dense3)
 
 #2-2. 모델
-input2 = Input(shape=(4,))
+input2 = Input(shape=(2,))
 dense11 = Dense(8, activation='relu', name='dense11')(input2)
 dense12 = Dense(4, activation='relu', name='dense12')(dense11)
 dense14 = Dense(2, activation='relu', name='dense14')(dense12)

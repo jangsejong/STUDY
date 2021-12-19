@@ -108,14 +108,14 @@ print(type(closing_price_ki))
 
 '''
 # 삼성주식의 액면 분할 전시점을 날려주며 행을 맞춰준다.
-samsung1 = samsung.drop(range(20,1120), axis=0)
-kiwoom1 = kiwoom.drop(range(20,1060), axis=0)
+samsung1 = samsung.drop(range(30,1120), axis=0)
+kiwoom1 = kiwoom.drop(range(30,1060), axis=0)
 
 #과거순으로 행을 역순 시켜 준다.
 samsung2 = samsung1.loc[::-1].reset_index(drop=True)
 kiwoom2 = kiwoom1.loc[::-1].reset_index(drop=True)
 
-#print(samsung.describe)
+print(samsung.describe)
 
 # print(samsung.shape, kiwoom.shape)  #(893, 17) (893, 17)
 
@@ -125,8 +125,8 @@ kiwoom2 = kiwoom1.loc[::-1].reset_index(drop=True)
 # print(samsung.info())
 # print(kiwoom.info())  
 
-x1 = samsung2.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량'], axis=1) 
-x2 = kiwoom2.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량'], axis=1) 
+x1 = samsung2.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량', '기관', '외국계'], axis=1) 
+x2 = kiwoom2.drop(columns=['일자','Unnamed: 6','등락률', '고가', '저가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '거래량', '기관', '외국계'], axis=1) 
 x1 = np.array(x1)
 x2 = np.array(x2)
 print(x1.shape, x2.shape) #(893, 4) (893, 4)
@@ -184,7 +184,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
 
 #2-1. 모델
-input1 = Input(shape=(5, 3))
+input1 = Input(shape=(5, 1))
 dense1 = LSTM(10, activation='linear', name='dense1')(input1)
 dense2 = Dense(4, activation='linear', name='dense2')(dense1)
 dense3 = Dense(2, activation='linear', name='dense3')(dense2)
@@ -199,7 +199,7 @@ output1 = Dense(1, activation='linear', name='output1')(dense3)
 
 
 #2-2. 모델
-input2 = Input(shape=(5, 3))
+input2 = Input(shape=(5, 1))
 dense11 = LSTM(10, activation='linear', name='dense11')(input2)
 dense21 = Dense(4, activation='linear', name='dense21')(dense11)
 dense31 = Dense(2, activation='linear', name='dense31')(dense21)
