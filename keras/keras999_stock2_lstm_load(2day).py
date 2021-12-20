@@ -57,6 +57,19 @@ x2_ki, y2_ki = split_xy3(x2, 5, 2)
 
 # print(x1_ss[-1])
 
+xx1 = samsung2.drop(columns=['일자','Unnamed: 6','등락률', '고가', '시가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '종가', '기관', '저가', '거래량'], axis=1) 
+xx2 = kiwoom2.drop(columns =['일자','Unnamed: 6','등락률', '고가', '시가', '금액(백만)', '전일비', '신용비', '개인', '외인(수량)', '프로그램', '외인비', '종가', '기관', '저가', '거래량'], axis=1) 
+
+def split_x(dataset, size):                     # size : 몇개로 나눌 것인가
+    aaa = []
+    for i in range(len(dataset) - size + 1):
+        subset = dataset[i : (i + size)]
+        aaa.append(subset)
+    return np.array(aaa)
+
+pred1 = split_x(xx1, 5)
+pred2 = split_x(xx2, 5)
+
 from sklearn.model_selection import train_test_split
 
 x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1_ss, x2_ki, y1_ss, y2_ki ,train_size=0.8, random_state=66)
@@ -120,10 +133,10 @@ model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=1, 
 #4. 평가, 예측
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
 print('loss :', loss) #loss :
-y1_pred, y2_pred = model.predict([x1_test, x2_test])
-print('삼성예측값 : ', y1_pred[-1])
-print('키움예측값 : ', y2_pred[-1])
-print(y1_pred[:5])
+y1_pred, y2_pred = model.predict([pred1, pred2])
+print('삼성예측값 : ', y1_pred[-1][-1])
+print('키움예측값 : ', y2_pred[-1][-1])
+#print(y1_pred[:5])
 
 
 '''
