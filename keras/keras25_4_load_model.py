@@ -61,7 +61,8 @@ model.fit(x_train, y_train, epochs=1100, batch_size=13,
 
 #model.save("./_save/keras25_3_save_model.h5")
 '''
-c
+
+model = load_model("./_save/keras25_save_model.h5")
 
 
 #4. 평가, 예측

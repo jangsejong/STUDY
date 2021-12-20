@@ -226,13 +226,13 @@ merge1 = Concatenate()([output1, output2])#, axis=1)  # axis=0 y축방향 병합
 #2-3 output모델1
 output21 = Dense(32)(merge1)
 output22 = Dense(16)(output21)
-output23 = Dense(8, activation='linear')(output22)
+output23 = Dense(8, activation='relu')(output22)
 last_output1 = Dense(3)(output23)
 
 #2-3 output모델2
 output31 = Dense(32)(merge1)
 output32 = Dense(16)(output31)
-output33 = Dense(8, activation='linear')(output32)
+output33 = Dense(8, activation='relu')(output32)
 last_output2 = Dense(3)(output33)
 
 model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
@@ -287,6 +287,8 @@ ss_ki_1220_lastcost7(거래량)
 삼성예측값 :  7745136.0
 키움예측값 :  15842.258
 
+5일치 11,367,410 / 48,705
+
 ss_ki_1220_lastcost8(거래량)
 삼성예측값 :  11139224.0
 키움예측값 :  31802.123
@@ -296,5 +298,6 @@ ss_ki_1220_lastcost9(거래량)
 키움예측값 :  49075.27
 
 ss_ki_1220_lastcost10(거래량)
-
+삼성예측값 :  8966532.0
+키움예측값 :  76041.04
 '''

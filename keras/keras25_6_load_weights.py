@@ -49,8 +49,6 @@ model = Model(inputs=input1, outputs=ouput1)
 
 #model.summary()
 
-#model.save("./_save/keras25_save_model.h5")
-#model.save_weights("./_save/keras25_save_weights.h5")
 
 #model.load_weights("./_save/keras25_save_weights.h5")
 
@@ -64,7 +62,7 @@ model.compile(loss='mse', optimizer='adam')
          # validation_data = (x_val, y_val))
 
 
-# model.load_weights("./_save/keras25_1_save_weights.h5")
+model.load_weights("./_save/keras25_1_save_weights.h5")
 
 
 
