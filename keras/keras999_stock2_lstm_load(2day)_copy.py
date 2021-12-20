@@ -73,9 +73,9 @@ x2_ki, y2_ki = split_xy3(x2, 5, 2)
 from sklearn.model_selection import train_test_split
 
 x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1_ss, x2_ki, y1_ss, y2_ki ,train_size=0.8, random_state=66)
-'''
-#print(x1_train.shape) #(19, 5, 1)
 
+#print(x1_train.shape) #(19, 5, 1)
+'''
 
 #2. 모델구성
 from tensorflow.keras.models import Model
@@ -123,12 +123,12 @@ model.compile(loss='mse', optimizer='adam', metrics=['mse']) #rms
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 es = EarlyStopping(monitor='val_loss', patience= 50 , mode = 'auto', verbose=1, restore_best_weights=True)
-#mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1221_Trafevol1.hdf6')
+#mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1221_Trafevol14.hdf5')
 
 model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=1, validation_split=0.2, verbose=1, callbacks=[es])#,mcp]) 
 '''
 #model.save_weights("./_save/keras999_1_save_weights.h5")
-model = load_model('./_ModelCheckPoint/ss_ki_1221_Trafevol1.hdf6')
+model = load_model('./_ModelCheckPoint/ss_ki_1221_Trafevol14.hdf5')
 
 #4. 평가, 예측
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
@@ -145,9 +145,9 @@ result1, result2 = model.predict([pred1, pred2])
 print('삼성예측값 : ', y1_pred[-1][-1])
 print('키움예측값 : ', y2_pred[-1][-1])
 
-submit_file.to_csv(path+'소스코드(거래량).csv', index=False)
+submit_file.to_csv(path+'2day(거래량).csv', index=False)
 '''
-ss_ki_1221_Trafevol1
-삼성예측값 :  12547077.0
-키움예측값 :  66135.586
+ss_ki_1221_Trafevol14
+삼성예측값 :  10271464.0
+키움예측값 :  47737.785
 '''
