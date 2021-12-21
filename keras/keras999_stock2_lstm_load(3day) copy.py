@@ -70,7 +70,7 @@ x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = tra
 
 print(x1_train.shape) #(58, 5, 1)
 
-
+'''
 #2. 모델구성
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
@@ -116,13 +116,13 @@ model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
 model.compile(loss='mse', optimizer='adam', metrics=['mse']) #rms
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 56 , mode = 'auto', verbose=1, restore_best_weights=True)
-mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1222_Trafevol8.hdf5')
+es = EarlyStopping(monitor='val_loss', patience= 58 , mode = 'auto', verbose=1, restore_best_weights=True)
+mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1222_Trafevol4.hdf5')
 
 model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=5, validation_split=0.2, verbose=1, callbacks=[es,mcp]) 
-
+'''
 #model.save_weights("./_save/keras999_1_save_weights.h5")
-#model = load_model('./_ModelCheckPoint/ss_ki_1222_Trafevol1.hdf5')
+model = load_model('./_ModelCheckPoint/ss_ki_1222_Trafevol5.hdf5')
 
 #4. 평가, 예측
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
@@ -142,40 +142,9 @@ print('키움예측값 : ', y2_pred[-1][-1])
 
 #submit_file.to_csv(path+'2day(거래량).csv', index=False)
 '''
-삼성  78,100   78,400        78,300
-키움 108,000  110,000       108,000 
-
-ss_ki_1222_Trafevol1
-삼성예측값 :  77701.9           -400
-키움예측값 :  107711.875       +289
-
-ss_ki_1222_Trafevol2
-삼성예측값 :  78117.25              +17
-키움예측값 :  110072.61             +2072
-
-ss_ki_1222_Trafevol3
-삼성예측값 :  77912.69          -198
-키움예측값 :  108200.234        +200
-
-ss_ki_1222_Trafevol4
-삼성예측값 :  80069.45           +1969
-키움예측값 :  109951.734         +1951
-
 ss_ki_1222_Trafevol5
 삼성예측값 :  78681.39        +581
 키움예측값 :  108505.195      +505
-
-ss_ki_1222_Trafevol6
-삼성예측값 :  79057.984         +957
-키움예측값 :  108102.09         +102
-
-ss_ki_1222_Trafevol7
-삼성예측값 :  77961.36          -139
-키움예측값 :  108404.9          +404
-
-ss_ki_1222_Trafevol8
-삼성예측값 :  78859.836
-키움예측값 :  108352.38
 
 참조 넣을것 : kmk881204@naver.com
 '''
