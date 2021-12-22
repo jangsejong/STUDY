@@ -117,9 +117,9 @@ model.compile(loss='mse', optimizer='adam', metrics=['mse']) #rms
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 es = EarlyStopping(monitor='val_loss', patience= 58 , mode = 'auto', verbose=1, restore_best_weights=True)
-mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1222_Trafevol4.hdf5')
+#mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1222_Trafevol4.hdf5')
 
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=5, validation_split=0.2, verbose=1, callbacks=[es,mcp]) 
+model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=5, validation_split=0.2, verbose=1, callbacks=[es])#,mcp]) 
 '''
 #model.save_weights("./_save/keras999_1_save_weights.h5")
 model = load_model('./_ModelCheckPoint/ss_ki_1222_Trafevol5.hdf5')
@@ -142,9 +142,11 @@ print('키움예측값 : ', y2_pred[-1][-1])
 
 #submit_file.to_csv(path+'2day(거래량).csv', index=False)
 '''
+시가 삼성[78900] 키움[109000]
+
 ss_ki_1222_Trafevol5
-삼성예측값 :  78681.39        +581
-키움예측값 :  108505.195      +505
+삼성예측값 :  78681.39        
+키움예측값 :  108505.195      
 
 참조 넣을것 : kmk881204@naver.com
 '''
