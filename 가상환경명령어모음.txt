@@ -1,0 +1,5 @@
+conda create -n torch python=3.8.5 anaconda
+
+deactivate
+
+activate torch
