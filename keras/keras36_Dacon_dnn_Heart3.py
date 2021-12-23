@@ -40,11 +40,11 @@ for header in ['age', 'trestbps', 'chol', 'thalach', 'oldpeak', 'ca']:
     feature_columns.append(tf.feature_column.numeric_column(header))
     
 age = tf.feature_column.numeric_column("age")
-age_buckets = tf.feature_column.bucketized_column(age, boundaries=[18, 25,30,35,40,45,50,55,60,65,70,75,77])
+age_buckets = tf.feature_column.bucketized_column(age, boundaries=[18, 25,30,35,40,45,50,55,60,65])
 feature_columns.append(age_buckets)
 
 # train["thal"] = train["thal"].apply(str)
-thal = tf.feature_column.categorical_column_with_vocabulary_list('thal',['0','1','2','3'])
+# thal = tf.feature_column.categorical_column_with_vocabulary_list('thal',['3','6','7'])
 # htal_one_hot = tf.feature_column.indicator_column(thal)
 # feature_columns.append(htal_one_hot)
 
@@ -53,14 +53,6 @@ thal = tf.feature_column.categorical_column_with_vocabulary_list('thal',['0','1'
 # htal_one_hot = tf.feature_column.indicator_column(thal)
 # feature_columns.append(htal_one_hot)
 
-thal_embedding = tf.feature_column.embedding_column(thal, dimension=8)
-feature_columns.append(thal_embedding)
-
-age_thai_crossed = tf.feature_column.crossed_column([age_buckets,thal],hash_bucket_size=1000)
-age_thai_crossed = tf.feature_column.indicator_column(age_thai_crossed)
-feature_columns.append(age_thai_crossed)
-
-#cp_slope_crossed = tf.feature_column.crossed_column([cp,slope],hash_bucket_size=1000)
 
 # print(train.shape)  #(151, 15)
 # print(test_file.shape)  #(152, 14)
@@ -89,10 +81,10 @@ model.add(Dropout(0.2))
 # model.add(Dense(16, activation='relu'))
 # model.add(Dense(32, activation='linear'))
 model.add(Dense(32, activation='relu'))
-model.add(Dropout(0.1))
+model.add(Dropout(0.2))
 model.add(Dense(16, activation='relu'))
-model.add(Dropout(0.1))
-model.add(Dense(4, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(8, activation='relu'))
 # model.add(Dense(4, activation='linear'))
 model.add(Dense(1, activation='sigmoid'))
 

@@ -22,8 +22,8 @@ submission = pd.read_csv(path+"sample_submission.csv")
 x = train.drop(['id','target'], axis =1)
 y = train['target']
 
-x = x.drop(['trestbps','restecg','sex','age'],axis =1)
-test_file =test_file.drop(['id','trestbps','restecg','sex','age'],axis =1)
+x = x.drop(['sex','age'],axis =1)
+test_file =test_file.drop(['id','sex','age'],axis =1)
 
 y = y.to_numpy()
 x = x.to_numpy()
@@ -43,11 +43,11 @@ x_test = scaler.transform(x_test)
 
 model1 = RandomForestClassifier(oob_score= True, bootstrap=True, class_weight=None, criterion='gini',
             max_depth=None, max_features='auto', max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None,min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, n_estimators= 30000, n_jobs=None, verbose=0, warm_start=False, random_state=66)
+            min_weight_fraction_leaf=0.0, n_estimators= 10000, n_jobs=None, verbose=0, warm_start=False, random_state=66)
 
-model2 = GradientBoostingClassifier(n_estimators = 30000,random_state=66)
+model2 = GradientBoostingClassifier(n_estimators = 10000,random_state=66)
 
-model3 = ExtraTreesClassifier(n_estimators = 30000,random_state =66)
+model3 = ExtraTreesClassifier(n_estimators = 10000,random_state =66)
 
 from sklearn.experimental import enable_hist_gradient_boosting
 from sklearn.ensemble import HistGradientBoostingClassifier
@@ -69,7 +69,7 @@ for classifier in classifiers:
     print('{0} F1_Score : {1}'.format(class_name, num2))
     y_pred_ = classifier.predict(test_file)
     submission['target'] = y_pred_
-    submission.to_csv(path+ str(num) +"_" + class_name + "heart102.csv", index=False)
+    submission.to_csv(path+ str(num) +"_" + class_name + "heart_1222_01.csv", index=False)
     
 voting_model.fit(x_train, y_train)
 pred = voting_model.predict(x_test)
