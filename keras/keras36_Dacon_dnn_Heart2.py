@@ -48,12 +48,17 @@ thal = tf.feature_column.categorical_column_with_vocabulary_list('thal',['0','1'
 # htal_one_hot = tf.feature_column.indicator_column(thal)
 # feature_columns.append(htal_one_hot)
 
+# train['slope'] = train['slope'].apply(str)
+# slope = tf.feature_column.sequence_categorical_column_with_vocabulary_list('slope',['0','1','2'])
+# slope_one_hot = tf.feature_column.indicator_column(slope)
+# feature_columns.append(slope_one_hot)
+
 # test_file["thal"] = test_file["thal"].apply(str)
 # thal = tf.feature_column.categorical_column_with_vocabulary_list('thal',['3','6','7'])
 # htal_one_hot = tf.feature_column.indicator_column(thal)
 # feature_columns.append(htal_one_hot)
 
-thal_embedding = tf.feature_column.embedding_column(thal, dimension=8)
+thal_embedding = tf.feature_column.embedding_column(thal, dimension=2)
 feature_columns.append(thal_embedding)
 
 age_thai_crossed = tf.feature_column.crossed_column([age_buckets,thal],hash_bucket_size=1000)
@@ -119,7 +124,7 @@ mcp=ModelCheckpoint(monitor='val_loss', mode='max', verbose=1,
 
 model.fit(x_train, y_train, epochs=1000, batch_size=13, validation_split=0.1, callbacks=[es, mcp])
 
-scaler = MinMaxScaler()
+scaler = MinMaxScaler()#feature_range=(0,100))
 #scaler=StandardScaler()
 #scaler=RobustScaler()
 #scaler=MaxAbsScaler()
@@ -140,7 +145,7 @@ results=model.predict(test_file)
 results=results.round(0).astype(int)
 
 submit_file['target']=results
-submit_file.to_csv(path + "heart_1222_4.csv", index=False)  
+submit_file.to_csv(path + "heart_1223_1.csv", index=False)  
 '''
 heart_1222_2.csv
 loss :  0.3836241662502289
