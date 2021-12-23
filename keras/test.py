@@ -9,8 +9,8 @@ class Calc:
         self.n2 = n2
         return print(self.n1 + self.n2)
 
-#s = Calc(1,2)
+s = Calc(1,2)
 
 #print(s)
-Calc.__call__(1, 2)
-Calc(2,3)
+s.__call__(1, 2)
+s(2,3)
