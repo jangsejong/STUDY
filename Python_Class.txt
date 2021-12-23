@@ -1,0 +1,223 @@
+# self
+파이썬 메서드의 첫 번째 매개변수 이름은 관례적으로 self를 사용한다. 객체를 호출할 때 호출한 객체 자신이 전달되기 때문에 self를 사용한 것이다. 
+물론 self말고 다른 이름을 사용해도 상관없다.
+※ 메서드의 첫 번째 매개변수 self를 명시적으로 구현하는 것은 파이썬만의 독특한 특징이다. 예를 들어 자바 같은 언어는 첫 번째 매개변수 self가 필요없다.
+
+# 
+
+
+
+
+
+#Classs 와 def 의 차이점
+
+: 클래스 함수도 함수의 일종이라는 점을 강조하였지만 사실 적이 않은 차이점을이 있다MSE.RMSE.RMSLE
+
+1. 클래스 함수는 def 대신 class 로 정의하는 객체 생성 함수로 이를 호출하면 내부에 정의된 대로의 객체를 리턴한다는 특징이 있지만 
+  호출시 내부 코드를 실행한다는 점에서는 일반 파이썬 함수와 전혀 다를바가 없다.
+
+2. 일반 파이썬 함수 내부에 정의된 함수는 변수가 자신의 네임스페이스에서 발견되지 않는 경우 외부(상위) 함수의 네임스페이스에서 그 변수를 조회하게 되지만,
+ 클래스 함수 내부에 정의된 함수는 그런 방식의 조회를 하지 않습니다. 클래스 함수의 경우에는  '.' 찍는 방식으로 네임스페이스를 정확하게 지정하는 방식을 사용합니다.
+즉, 클래스 함수 내부의 필드나 메서드는 '.'을 찍는 방식으로 네임스페이스를 표시하여 접근할 수 있지만,
+ 일반 함수는 그 자체의 네임스페이스를 가짐에도 불구하고 그렇게 접근할 수 없습니다. 일반 함수의 경우에는 해당 네임스페이스에 변수가 없으면 상위 네임스페이스에 조회하는 방식으로 변수를 찾을 수 있을 뿐입니다.
+
+3. ③ 클래스 함수 내부에 정의되는 내부 함수를 보면 인자가 하나라도 있는 것과 그렇지 않은 것이 있는데 인자가 하나라도 있는 내부 함수는 이 클래스 함수 호출로 생성되는 객체(인스턴스)의 내부 함수(메서드)로 사용가능하도록 자동 등록됩니다
+
+class Class_sample():
+    z=1
+    print("z in Class_sample: ", z)
+    def __init__(self):
+        self.z=2
+        print("z init as :", self.z)
+    def class_func():
+        print("z by class_func: ", Class_sample.z)
+    def instance_func(self):
+        print("z by instance_func: ", self.z)
+
+instance_sample = Class_sample()
+Class_sample.class_func() #Class_sample.instance_func()시 에러
+instance_sample.instance_func() #instance_sample.class_func() 시 에러
+Class_sample.instance_func(instance_sample) #정상 처리가 됨
+
+이렇게 일반적으로 말할 수 있는 이유는 클래스 함수 내에서 정의된 함수를 - 이 클래스 함수 호출에 의해 생성된 - 객체(인스턴스)에서 호출하는 경우 제1인자로 바로 그 자신(그 생성된 객체)가 자동입력된다는 점에 있습니다.
+
+그래서 인스턴스에서 호출할 함수(메서드) 정의시 반드시 자동입력될 객체를 받아줄 변수(파라미터)를 'self' 등의 이름을 사용하여 표시해주어야 하는 것입니다.
+
+4.  클래스 함수의 내부 함수 중 '__init__'이라는 이름의 함수가 있으면 이는 클래스 함수 호출시 객체(인스턴스) 생성 직후 이어서 자동으로 생성된 그 객체의 메서드로서 호출됩니다.
+ 즉, 인스턴스의 메서드로 호출되는 것이기 때문에 자동으로 그 자신(인스턴스)이 인자로 주어지며 이를 받아줄 변수(파라미터)를 'self' 등의 이름으로 표시해주어야 합니다.
+ 이 '__init__' 메서드를 통해서 우리는 객체(인스턴스) 생성시 매번 해주어야 하는 번거로운 작업이 있을 경우 이를 간단하게 처리할 수 있습니다.
+
+ class Class_sample():
+    pass # 아무 일도 하지 말라는 파이썬 명령어
+
+instance_sample1 = Class_sample()
+instance_sample1.z=2 # init 작업으로 생략된 중복 부분
+print("z init in instance1 as :", instance_sample1.z) # init 작업으로 생략된 중복 부분
+print("z in sample1: ", instance_sample1.z)
+
+instance_sample2 = Class_sample()
+instance_sample2.z=2 # init 작업으로 생략된 중복 부분
+print("z init in instance1 as :", instance_sample2.z) # init 작업으로 생략된 중복 부분
+print("z in sample2: ", instance_sample2.z)
+
+5. 클래스 함수를 호출하여 객체(인스턴스)를 생성할 때 다른 함수처럼 인자를 입력할 수 있습니다. 하지만 일반 함수의 호출할 때와는 조금 다르다는 점을 알 수 있습니다
+def foo(a):
+    z=a
+    print("z in foo: ", z)
+
+foo(2)
+
+하지만 클래스 함수는 이와 같은 코드를 실행하면 에러를 발생시킵니다.
+class Class_name(a):
+    z=a
+    print("z in Class_name: ", z)
+
+Class_name(2)
+NameError: name 'a' is not defined
+그 이유는 클래스 함수 정의 단계시 그 식별자 뒤에 오는 괄호 안에는 클래스 함수 호출시 입력하는 인자를 받아내는 변수(파라미터)를 표시할 수 없게 되어 있습니다. 
+왜냐하면 여기에 명시할 수 있는 것은 원칙적으로 클래스 함수의 식별자뿐이기 때문입니다. 
+그래서 클래스 함수 호출시 인자를 입력할 필요가 있는 경우 이를 클래스 함수 내부에서 받아내는 식별자는 위 자리 대신 클래스 함수 정의시 클래스 함수 내부에서 '__init__' 함수을 반드시 정의하면서 이 '__init__' 함수의 인자 자리에 표시되어야 합니다.
+이 이야기는 결국 클래스 함수 호출시 인자를 입력하는 경우 이 인자를 사용할 수 있는 내부 메서드는 오로지 '__init__' 메서드에 한정된다는 뜻입니다.
+class Foo():
+    def __init__(self, x) : #이 함수는 인스턴스 메서드로 실행되므로 제1인자로 자기자신
+                            #을 받는 식별자를 우선 표시하고 그 다음에 클래스 함수 호출
+                            #시 입력되는 인자를 받아내는 식별자(파라미터)를 표시함
+        z=x
+        print("z in class Foo: ", z)
+    
+Foo(2)
+z in class Foo:  2
+반면, 클래스 함수 내부의 '__init__' 이외의 메서드 정의시 식별자 뒤 괄호 안에 표시된 식별자(파라미터)들은 클래스 함수 호출로 생성된 객체를 통해서 호출되는 메서드의 인자를 - 객체 생성이 마쳐진 이후 - 그 호출 단계에서 받아내는 파라미터들입니다.
+class Class_sample():
+    z=1
+    print("z in Class_sample: ", z)
+    def __init__(self):
+        self.z=2
+        print("z init as :", self.z)
+    def instance_func(self, x):
+        print("z by instance_func: ", self.z)
+        print(x)
+        
+foo = Class_sample()
+foo.instance_func(3)
+z in Class_sample:  1
+z init as : 2
+z by instance_func:  2
+3
+⑥ 클래스 함수 정의 단계시 그 식별자 뒤에 오는 괄호 안은 클래스 함수 호출시 입력하는 인자를 받아내는 변수(파라미터)를 표시하는 자리가 아니라 
+이미 정의 작업이 마쳐진 다른 클래스 함수의 식별자를 표시해주는 자리입니다.
+그런데 어떤 클래스 함수를 정의할 때 그 식별자 뒤 괄호 안에 다른 클래스의 식별자를 지정해주는 이유는 무엇이며 이렇게 정의된 클래스 함수를 호출하는 경우 
+파이썬 인터프리터는 어떤 작동을 하게 되는가요?
+class Human():
+    species = 'human'        #상위 클래스와 하위 클래스 공통 클래스 속성(필드)
+    def __init__(self):
+        self.lifespan = 100
+    def nature(self):        #상위 클래스와 하위 클래스 공통 클래스 메서드
+        print("good nature")
+
+class Lawyer(Human):
+    status = "rich"          #추가된 클래스 속성(필드)
+    def __init__(self):      #덮어씌워지는 메서드
+        self.job = 'lawyer'
+        self.lifespan = 200  #추가된 객체 속성(필드)
+        
+print("Peter Case: ")
+peter = Human()
+print(peter.species, "  ", peter.lifespan)
+peter.nature()
+
+print("James Case: ")
+james = Lawyer()
+print(james.species, "  ", james.job, "  ", james.lifespan, "  ", james.status)
+james.nature()
+Peter Case: 
+human    100
+good nature
+James Case: 
+human    lawyer    200    rich
+good nature
+새 클래스 함수 정의시 식별자 뒤 괄호 안에 다른 클래스 식별자를 표시한다는 것은 - 
+충돌하는 내용이 있으면 이를 주석 처리하여 새 클래스 함수의 정의를 따르게 하는 것을 제외하고는 - 
+그 다른 클래스 함수를 정의하는 내용을 그대로 복사해서 가져온다는 것을 의미한다고 쉽게 생각할 수 있습니다. 
+그래서 위 두 클래스 함수 정의는 다음과 같은 뜻이라는 것을 알 수 있습니다.
+class Human():
+    species = 'human'        #상위 클래스와 하위 클래스 공통 클래스 속성(필드)
+    def __init__(self):
+        self.lifespan = 100
+    def nature(self):        #상위 클래스와 하위 클래스 공통 클래스 메서드
+        print("good nature")
+
+class Lawyer():
+###복사 시작###
+    species = 'human'        #상위 클래스와 하위 클래스 공통 클래스 속성(필드)
+#   def __init__(self):      충돌하는 내용이 있으니 메서드 전체 주석 처리
+#       self.lifespan = 100  
+    def nature(self):        #상위 클래스와 하위 클래스 공통 클래스 메서드
+        print("good nature")
+###복사 끝###
+
+    status = "rich"          #추가된 클래스 속성(필드)
+    def __init__(self):      #덮어씌워지는 메서드
+        self.job = 'lawyer'
+        self.lifespan = 200  #추가된 객체 속성(필드)
+
+print("Peter Case: ")
+peter = Human()
+print(peter.species, "  ", peter.lifespan)
+peter.nature()
+
+print("James Case: ")
+james = Lawyer()
+print(james.species, "  ", james.job, "  ", james.lifespan, "  ", james.status)
+james.nature()
+Peter Case: 
+human    100
+good nature
+James Case: 
+human    lawyer    200    rich
+good nature
+역시 실행 결과는 완전히 같습니다.
+이를 두고 자식 클래스인 Lawyer 클래스는 부모 클래스인 Human 클래스를 상속했다고 표현합니다.
+이런 상속 기법은 여러 클래스들의 조상 클래스를 만들어서 클래스 사이에 위계적인 정돈을 할 수 있게 해줍니다.
+참고로 주석 처리된 것을 다시 복사해서 가져오는 것도 가능합니다. 
+이 경우 부모 클래스 함수의 메서드를 실행하는 것을 가능하게 해주는 super()라는 일종의 내장 함수를 사용합니다.
+class Human():
+    species = 'human'        #상위 클래스와 하위 클래스 공통 클래스 속성(필드)
+    def __init__(self):
+        self.lifespan = 100
+    def nature(self):        #상위 클래스와 하위 클래스 공통 클래스 메서드
+        print("good nature")
+
+class Lawyer(Human):
+    status = "rich"          #추가된 클래스 속성(필드)
+    def __init__(self):      #덮어씌워지는 메서드
+        self.job = 'lawyer'
+        self.lifespan = 200  #추가된 객체 속성(필드)
+        super().__init__()   #이는 부모 클래스의 __init__ 메서드 내의
+                             # self.lifespan = 100 을 실행하는 셈
+        
+print("Peter Case: ")
+peter = Human()
+print(peter.species, "  ", peter.lifespan)
+peter.nature()
+
+print("James Case: ")
+james = Lawyer()
+print(james.species, "  ", james.job, "  ", james.lifespan, "  ", james.status)
+james.nature()
+Peter Case: 
+human    100
+good nature
+James Case: 
+human    lawyer    100    rich
+good nature
+
+7. 이상을 종합하여 보면 일반 함수 정의는 그 내부의 코드를 실행하는 것이 목적이라고 할 수 있고 
+클래스 함수 정의는 그 호출을 통해 생성되는 객체 내부 네임스페이스에 일정한 속성과 메서드를 의도한 바대로 귀속시켜 정돈하고 
+그 객체로 하여금 보완적으로 클래스 함수 내부 네임스페이스도 역시 접근할 수 있도록 하는 것이 목적이라고 할 수 있습니다.
+
+링크: 
+
+https://wikidocs.net/28
+https://wikidocs.net/774
+https://post.naver.com/viewer/postView.naver?volumeNo=27854409&memberNo=21815&vType=VERTICAL
