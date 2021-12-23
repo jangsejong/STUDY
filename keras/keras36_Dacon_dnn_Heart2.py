@@ -86,18 +86,19 @@ y = y.to_numpy()
 x = x.to_numpy()
 test_file = test_file.to_numpy()
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=66)
 
 model = Sequential()
-model.add(Dense(64, activation='relu', input_dim=13))
-model.add(Dropout(0.2))
+model.add(Dense(64, activation='relu', input_dim=12))
+model.add(Dropout(0.1))
 # model.add(Dense(16, activation='relu'))
-# model.add(Dense(32, activation='linear'))
 model.add(Dense(32, activation='relu'))
+# model.add(Dense(32, activation='linear'))
 model.add(Dropout(0.1))
 model.add(Dense(16, activation='relu'))
 model.add(Dropout(0.1))
 model.add(Dense(4, activation='relu'))
+model.add(Dropout(0.1))
 # model.add(Dense(4, activation='linear'))
 model.add(Dense(1, activation='sigmoid'))
 
@@ -116,13 +117,13 @@ model_path = "".join([filepath, 'k26_', datetime, '_', filename])
             #./_ModelCheckPoint/k26_1206_0456_2500-0.3724.hdf
 ##############################################################################################################
 
-es = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1, restore_best_weights=True)
 
 mcp=ModelCheckpoint(monitor='val_loss', mode='max', verbose=1, 
                     save_best_only=True,
                     filepath=model_path)
 
-model.fit(x_train, y_train, epochs=1000, batch_size=13, validation_split=0.1, callbacks=[es, mcp])
+model.fit(x_train, y_train, epochs=1000, batch_size=1, validation_split=0.1, callbacks=[es, mcp])
 
 scaler = MinMaxScaler()#feature_range=(0,100))
 #scaler=StandardScaler()
