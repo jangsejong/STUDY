@@ -76,15 +76,17 @@ x = train.drop(['id','target','chol','fbs','restecg','trestbps'], axis =1)
 y = train['target']
 
 #print(train.shape, test_file.shape)           # (151, 15) (152, 14)
-
+#print(test_file)  id  age  sex  cp  trestbps  chol  fbs  restecg  thalach  exang  oldpeak  slope  ca  thal  
 # x = x.drop([''],axis =1)
 test_file =test_file.drop(['id','chol','fbs','restecg','trestbps'],axis =1)
+print(test_file.info)
+
 test_file.iloc[40,7] = "3"
 test_file.iloc[45,7] = "3"
 test_file.iloc[79,7] = "3"
 test_file.iloc[80,7] = "3"
 test_file.iloc[95,7] = "3"
-#print(test_file)
+#print(test_file)  age  sex  cp  thalach  exang  oldpeak  slope  ca  thal
 
 
 # print(x.shape, test_file.shape)  (151, 10) (152, 10)
