@@ -72,13 +72,20 @@ feature_columns.append(age_thai_crossed)
 # print(submit_file.shape) #(152, 2)
 # print(train.describe) #(151, 15)
 
-x = train.drop(['id','target'], axis =1)
+x = train.drop(['id','target','chol','fbs','restecg','trestbps'], axis =1)
 y = train['target']
 
 #print(train.shape, test_file.shape)           # (151, 15) (152, 14)
 
 # x = x.drop([''],axis =1)
-test_file =test_file.drop(['id'],axis =1)
+test_file =test_file.drop(['id','chol','fbs','restecg','trestbps'],axis =1)
+test_file.iloc[40,7] = "3"
+test_file.iloc[45,7] = "3"
+test_file.iloc[79,7] = "3"
+test_file.iloc[80,7] = "3"
+test_file.iloc[95,7] = "3"
+#print(test_file)
+
 
 # print(x.shape, test_file.shape)  (151, 10) (152, 10)
 
@@ -86,18 +93,29 @@ y = y.to_numpy()
 x = x.to_numpy()
 test_file = test_file.to_numpy()
 
+
+
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.9, random_state=66)
 
+scaler = MinMaxScaler()#feature_range=(0,100))
+#scaler=StandardScaler()
+#scaler=RobustScaler()
+#scaler=MaxAbsScaler()
+scaler.fit(x_train)
+x_train=scaler.transform(x_train)
+x_test=scaler.transform(x_test)
+test_file=scaler.transform(test_file)
+
 model = Sequential()
-model.add(Dense(64, activation='relu', input_dim=12))
+model.add(Dense(300, activation='relu', input_dim=9))
+model.add(Dropout(0.3))
+# model.add(Dense(80, activation='relu'))
+model.add(Dense(300, activation='relu'))
+# # model.add(Dense(32, activation='linear'))
 model.add(Dropout(0.1))
-# model.add(Dense(16, activation='relu'))
-model.add(Dense(32, activation='relu'))
-# model.add(Dense(32, activation='linear'))
+model.add(Dense(100, activation='relu'))
 model.add(Dropout(0.1))
-model.add(Dense(16, activation='relu'))
-model.add(Dropout(0.1))
-model.add(Dense(4, activation='relu'))
+model.add(Dense(10, activation='relu'))
 model.add(Dropout(0.1))
 # model.add(Dense(4, activation='linear'))
 model.add(Dense(1, activation='sigmoid'))
@@ -123,16 +141,9 @@ mcp=ModelCheckpoint(monitor='val_loss', mode='max', verbose=1,
                     save_best_only=True,
                     filepath=model_path)
 
-model.fit(x_train, y_train, epochs=1000, batch_size=1, validation_split=0.1, callbacks=[es, mcp])
+model.fit(x_train, y_train, epochs=1000, batch_size=9, validation_split=0.1, callbacks=[es, mcp])
 
-scaler = MinMaxScaler()#feature_range=(0,100))
-#scaler=StandardScaler()
-#scaler=RobustScaler()
-#scaler=MaxAbsScaler()
-scaler.fit(x_train)
-x_train=scaler.transform(x_train)
-x_test=scaler.transform(x_test)
-test_file=scaler.transform(test_file)
+
 
 loss = model.evaluate(x_test, y_test)
 y_predict=model.predict(x_test)
@@ -146,7 +157,8 @@ results=model.predict(test_file)
 results=results.round(0).astype(int)
 
 submit_file['target']=results
-submit_file.to_csv(path + "heart_1223_1.csv", index=False)  
+submit_file.to_csv(path + "heart_1223_6.csv", index=False)  
+
 '''
 heart_1222_2.csv
 loss :  0.3836241662502289
@@ -156,7 +168,59 @@ loss :  0.43839049339294434
 accuracy :   0.9677419066429138
 f1_score :   0.9767441860465117
 
-heart_1222_4
+heart_1223_1
+loss :  0.3176395297050476
+accuracy :   0.9375
+f1_score :   0.9473684210526316
 
+heart_1223_2
+loss :  0.31535929441452026
+accuracy :   1.0
+f1_score :   1.0
+
+heart_1223_3
+loss :  0.3062933087348938
+accuracy :   1.0
+f1_score :   1.0
+
+heart_1223_4
+loss :  0.5404765009880066
+accuracy :   1.0
+f1_score :   1.0
+
+heart_1223_5
+loss :  0.1639932096004486
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+heart_1223_6
+loss :  0.21505576372146606
+accuracy :   1.0
+f1_score :   1.0
+
+heart_1223_7
+loss :  0.17381486296653748
+accuracy :   1.0
+f1_score :   1.0
+
+heart_1223_8
+loss :  0.12672555446624756
+accuracy :   1.0
+f1_score :   1.0
+
+heart_1223_9
+loss :  0.15368671715259552
+accuracy :   0.9375
+f1_score :   0.9473684210526316
+
+heart_1223_10
+loss :  0.16377535462379456
+accuracy :   1.0
+f1_score :   1.0
+
+heart_1223_11
+loss :  0.18633806705474854
+accuracy :   0.9375
+f1_score :   0.9473684210526316
 '''
 

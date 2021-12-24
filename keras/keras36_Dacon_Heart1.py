@@ -32,11 +32,14 @@ print(train.shape, test_file.shape)           # (151, 15) (152, 14)
 # plt.show()    
     
 
-x = x.drop(['trestbps','restecg','sex'],axis =1)
-test_file =test_file.drop(['id','trestbps','restecg','sex'],axis =1)
+x = x.drop(['chol','fbs','restecg','trestbps'],axis =1, inplace= True)
+test_file =test_file.drop(['chol','id','fbs','restecg','trestbps'],axis =1, inplace= True)
 # le = LabelEncoder()
 # le.fit(train['sex'])
 # x['sex'] = le.transform(train['sex'])
+
+# test2 = (test_file[test_file['ca'] == 4]).drop(['ca'], axis = 1)
+# test2id = test2['id']
 
 # le.fit(test_file['sex'])
 # test_file['sex'] = le.transform(test_file['sex'])
@@ -51,7 +54,7 @@ print(x.shape, test_file.shape)
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, 
-         train_size = 0.9, shuffle = True, random_state = 66) #
+         train_size = 0.8, shuffle = True, random_state = 66) #
 
 scaler = MinMaxScaler()
 #scaler = StandardScaler()
@@ -94,7 +97,7 @@ for classifier in classifiers:
     print('{0} F1_Score : {1}'.format(class_name, num2))
     y_pred_ = classifier.predict(test_file)
     submission['target'] = y_pred_
-    submission.to_csv(path+ str(num) +"_" + class_name + "heart110.csv", index=False)
+    submission.to_csv(path+ str(num) +"_" + class_name + "heart1223_001.csv", index=False)
     
 voting_model.fit(x_train, y_train)
 pred = voting_model.predict(x_test)
