@@ -1,6 +1,9 @@
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+
+#1. Data
+
 train_datagen = ImageDataGenerator(
     rescale = 1./255,
     horizontal_flip=True,
@@ -60,41 +63,85 @@ xy_test = train_datagen.flow_from_directory(
 # print(type(xy_train[0][1]))         <class 'numpy.ndarray'>
 
 
-'''
+
 #2. 모델
-from keras.models import Sequential
+from tensorflow.keras.models import Sequential
 from keras.layers import *
 
 model = Sequential()
-model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=(28,28,3), activation='relu'))
+model.add(Conv2D(64, kernel_size=(2,2), padding='same', input_shape=(150,150,3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.25))
 
-model.add(Conv2D(128, kernel_size=(3,3),padding='same', activation='relu'))
+model.add(Conv2D(128, kernel_size=(2,2),padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.25))
 
-model.add(Conv2D(256, kernel_size=(3,3), padding='same', activation='relu'))
+model.add(Conv2D(256, kernel_size=(2,2), padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.25))
-model.add(Dense(5, activation='softmax'))
+model.add(Dense(1, activation='sigmoid'))
 
 
-model.summary()
+#model.summary()
 
 
-model.compile(loss='categorical_crossentropy',
+model.compile(loss='binary_crossentropy',
              optimizer='adam',
              metrics=['accuracy'])
              
-model.fit_generator(
-    trainGenSet,
-    steps_per_epoch=20,
-    epochs=200,
-    validation_data=testGenSet,
-    validation_steps=10,
-'''
+hist = model.fit_generator(xy_train, epochs=50, steps_per_epoch=32,
+                    validation_data=xy_test,
+                    validation_steps=4 )                  #과제
+                    # 한 epoch 종료 시 마다 검증할 때 사용되는 검증 스텝 수를 지정합니다. 
+                    # 총 160 개의 검증 샘플이 있고 배치사이즈가 5이므로 4의 배수스텝으로 지정합니다.
+
+# model.fit(xy_train[0][0],xy_train[0][1])
+
+accuracy = hist.history['accuracy']
+val_accuracy = hist.history['accuracy']
+loss = hist.history['loss']
+val_loss = hist.history['val_loss']
+
+# 그래프 그리기
+import matplotlib.pyplot as plt
+# summarize history for accuracy
+plt.plot(accuracy)
+plt.plot(val_accuracy)
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(loss)
+plt.plot(val_loss)
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
+# import matplotlib.pyplot as plt
+# plt.figure(figsize=(9,5))
+
+# plt.plot(hist.history['loss'], marker='.', c='red', label='loss')
+# plt.plot(hist.history['val_loss'], marker='.', c='blue', label='val_loss')
+# plt.grid()
+# plt.title('loss')
+# plt.ylabel('loss')
+# plt.xlabel('epoch')
+# plt.legend(loc='upper right')
+# plt.show()
+
+print('acc : ', acc[-1])
+print('val_acc : ', val_acc[-1])
+print('loss : ', loss[-1])
+print('val_loss : ', val_loss[-1])
+
+
+
