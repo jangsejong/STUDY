@@ -93,7 +93,6 @@ print('val_acc : ', val_accuracy[-1])
 print('loss : ', loss[-1])
 print('val_loss : ', val_loss[-1])
 
-
 import numpy as np
 from google.colab import files
 from keras.preprocessing import image
@@ -102,7 +101,7 @@ uploaded=files.upload()
 
 for fn in uploaded.keys():
 
-  path='/content/' + fn
+  path='../_data/image/cat_dog/2021.ipynb' + fn
   img=image.load_img(path, target_size=(150, 150))
 
   x=image.img_to_array(img)

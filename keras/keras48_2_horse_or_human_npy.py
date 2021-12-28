@@ -10,15 +10,15 @@ train_human_dir = '../_data/image/horse-or-human/humans'
 
 # horses 파일 이름 리스트
 train_horse_names = os.listdir(train_horse_dir)
-print(train_horse_names[:10])
+# print(train_horse_names[:10])
 
 # humans 파일 이름 리스트
 train_human_names = os.listdir(train_human_dir)
-print(train_human_names[:10])
+# print(train_human_names[:10])
 
 # horses/humans 총 이미지 파일 개수
-print('total training horse images:', len(os.listdir(train_horse_dir)))  #500
-print('total training human images:', len(os.listdir(train_human_dir)))  #527
+# print('total training horse images:', len(os.listdir(train_horse_dir)))  #500
+# print('total training human images:', len(os.listdir(train_human_dir)))  #527
 
 #이미지확인하기
 import matplotlib.pyplot as plt
@@ -76,7 +76,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 
-model.summary()
+# model.summary()
 
 
 
@@ -84,7 +84,7 @@ model.summary()
 
 from tensorflow.keras.optimizers import RMSprop
 
-hist = model.compile(loss='binary_crossentropy',
+model.compile(loss='binary_crossentropy',
             optimizer=RMSprop(lr=0.001),
             metrics=['accuracy'])
 
@@ -103,12 +103,10 @@ train_generator = train_datagen.flow_from_directory(
 )
 
 #모델 훈련하기
-history = model.fit(
-  train_generator,
-  steps_per_epoch=8,
-  epochs=15,
-  verbose=1
-)
+history = model.fit(train_generator,steps_per_epoch=8,epochs=15,verbose=1)
+
+# hist = model.fit(x_train, y_train, epochs=50, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])#, mcp]) ) 
+
 
 import matplotlib.pyplot as plt
 
@@ -118,6 +116,11 @@ val_accuracy = hist.history['val_accuracy']
 loss = hist.history['loss']
 val_loss = hist.history['val_loss']
 epochs = range(len(accuracy))
+
+print('acc : ', accuracy[-1])
+print('val_acc : ', val_accuracy[-1])
+print('loss : ', loss[-1])
+print('val_loss : ', val_loss[-1])
 
 plt.plot(epochs, accuracy, 'bo', label='Training accuracy')
 plt.plot(epochs, val_accuracy, 'b', label='Validation accuracy')

@@ -29,7 +29,7 @@ test_datagen = ImageDataGenerator(                  #평가만 해야하기 때�
 
 xy_train = train_datagen.flow_from_directory(
     '../_data/image/cat_dog/training_set',
-    target_size=(150,150),  #사이즈조절가능
+    target_size=(15,15),  #사이즈조절가능
     batch_size=200,
     class_mode='binary',
     shuffle=True
@@ -37,14 +37,14 @@ xy_train = train_datagen.flow_from_directory(
 
 xy_test = train_datagen.flow_from_directory(
     '../_data/image/cat_dog/test_set',
-    target_size=(150,150),  #사이즈조절가능
+    target_size=(15,15),  #사이즈조절가능
     batch_size=200,
     class_mode='binary'
 )                                   #Found 120 images belong to 2 classes.
      
 
-print(xy_train[0][0].shape)     #(5, 150, 150, 3)
-print(xy_train[0][1].shape)     #(5,)
+print(xy_train[0][0].shape)     #(200, 15, 15, 3)
+print(xy_train[0][1].shape)     #(200,)
 
 np.save('./_save_npy/keras48_1_train_x.npy', arr= xy_train[0][0])
 np.save('./_save_npy/keras48_1_train_y.npy', arr= xy_train[0][1])

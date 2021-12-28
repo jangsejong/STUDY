@@ -3,3 +3,50 @@ conda create -n torch python=3.8.5 anaconda
 deactivate
 
 activate torch
+conda activate py385
+
+pip install tensorflow-gpu==2.4.1
+
+conda create -n 이름 python=3.8.5 anaconda 아나콘다 가상환경 파이썬 다운로드
+conda remove --n 이름 --all
+conda env list 가상환경 리스트 보기
+
+activate base = 베이스의 환경에서 하겠다
+activate torch = 토치 환경에서 하겠다
+
+빠져나오는법 : deactivate
+
+conda create -n 가상환경이름 python=3.9.7 anaconda
+
+​
+
+참고1. 가상환경 삭제 : conda remove --name 가상환경이름 --all
+
+참고2. python3.8버전은 tensorflow2.4까지만 설치됨
+
+            tensorflow 2.5 이상은 python3.9 버전대로 설치
+
+​
+
+참고3. 가상환경 이동 :
+
+         activate 가상환경이름
+
+         deactivate
+
+         activate base
+
+참고4. 설치가능 버전 확인
+
+         conda search python
+
+         conda search tensorflow
+
+참고5. 기존 버전을 바꿀때 (겁나 오래 걸려 비추!)
+
+         conda install python=3.9.6
+
+참고6. 설치된 가상환경 확인
+
+         conda env list
+[출처] Tensorflow-gpu 2.7.0 설치|작성자 게마
