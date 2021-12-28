@@ -68,7 +68,7 @@ loss = hist.history['loss']
 val_loss = hist.history['val_loss']
 
 print("걸린시간 : ", round(end, 3), '초')
-model.save("./_save_npy/keras48_1_save_weights.h5")
+model.save("../_save_npy/keras48_1_save_weights.h5")
 
 # 그래프 그리기
 import matplotlib.pyplot as plt

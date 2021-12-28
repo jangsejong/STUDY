@@ -8,7 +8,7 @@ from tensorflow.keras.preprocessing import image
 import matplotlib.pyplot as plt
 
 pic_path = '../_data/image/cat_dog/KakaoTalk_20211227_203446096.jpg'
-model_path = './_save_npy/keras48_1_save_weights.h5'
+model_path = '../_save_npy/keras48_1_save_weights.h5'
 
 def load_my_image(img_path,show=False):
     img = image.load_img(img_path, target_size=(15,15))
