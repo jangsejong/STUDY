@@ -8,7 +8,7 @@ from tensorflow.keras.preprocessing import image
 import matplotlib.pyplot as plt
 
 pic_path = '../_data/image/cat_dog/KakaoTalk_20211227_203446096.jpg'
-model_path = './_save_npy/keras48_2_save_weights.h5'
+model_path = '../_save_npy/keras48_2_save_weights.h5'
 
 def load_my_image(img_path,show=False):
     img = image.load_img(img_path, target_size=(300,300))
@@ -27,12 +27,12 @@ if __name__ == '__main__':
     model = load_model(model_path)
     new_img = load_my_image(pic_path)
     pred = model.predict(new_img)
-    cat = pred[0][0]*100
-    dog = pred[0][1]*100
-    if cat > dog:
-        print(f"당신은 {round(cat,2)} % 확률로 사람 입니다")
+    haman = pred[0][0]*100
+    hourse = pred[0][1]*100
+    if haman > hourse:
+        print(f"당신은 {round(haman,2)} % 확률로 사람 입니다")
     else:
-        print(f"당신은 {round(dog,2)} % 확률로 말 입니다")
+        print(f"당신은 {round(hourse,2)} % 확률로 말 입니다")
 
 
 '''

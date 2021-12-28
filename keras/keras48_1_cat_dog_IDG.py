@@ -4,6 +4,7 @@
 
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.python.keras.backend import binary_crossentropy
 
 train_datagen = ImageDataGenerator(
     rescale = 1./255,
@@ -46,12 +47,50 @@ xy_test = train_datagen.flow_from_directory(
 print(xy_train[0][0].shape)     #(200, 15, 15, 3)
 print(xy_train[0][1].shape)     #(200, 1)
 
-np.save('./_save_npy/keras48_1_train_x.npy', arr= xy_train[0][0])
-np.save('./_save_npy/keras48_1_train_y.npy', arr= xy_train[0][1])
-np.save('./_save_npy/keras48_1_test_x.npy', arr= xy_test[0][0])
-np.save('./_save_npy/keras48_1_test_y.npy', arr= xy_test[0][1])
+np.save('../_save_npy/keras48_1_train_x.npy', arr= xy_train[0][0])
+np.save('../_save_npy/keras48_1_train_y.npy', arr= xy_train[0][1])
+np.save('../_save_npy/keras48_1_test_x.npy', arr= xy_test[0][0])
+np.save('../_save_npy/keras48_1_test_y.npy', arr= xy_test[0][1])
 
 
+# 2. 모델
+from tensorflow.keras.models import Sequential
+from keras.layers import *
+
+model = Sequential()
+model.add(Conv2D(16, kernel_size=(3,3), padding='same', input_shape=(15,15,3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.2))
+
+model.add(Conv2D(64, kernel_size=(3,3),padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.3))
+
+model.add(Conv2D(128, kernel_size=(3,3), padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.5))
+
+model.add(Flatten())
+model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(2, activation='softmax'))
 
 
+# 3. 컴파일, 훈련
+model.compile(loss='categorical_crossentropy', optimizer= 'adam', metrics=['acc'])
+
+hist = model.fit_generator(xy_train, epochs = 20, steps_per_epoch = 1, 
+                    validation_data = test_datagen,
+                    validation_steps = 4,)
+
+
+acc = hist.history['acc']
+val_acc = hist.history['val_acc']
+loss = hist.history['loss']
+val_loss = hist.history['val_loss']
+
+print('loss:', loss[-1])
+print('val_loss:', val_loss[-1])
+print('acc:', acc[-1])
+print('val_acc:',val_acc [-1])
 

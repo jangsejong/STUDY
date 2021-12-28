@@ -45,27 +45,107 @@ test_datagen = ImageDataGenerator(                  #평가만 해야하기 때�
 
 # D:\_data\image\brain
 
-traintest_horse = train_datagen.flow_from_directory(
-    '../_data/image/horse-or-human/horses',
+train_generator = train_datagen.flow_from_directory(
+    '../_data/image/horse-or-human',
     target_size=(150,150),  #사이즈조절가능
     batch_size=600,
-    class_mode='binary',
-    shuffle=True
-)
+    class_mode='categorical',
+    shuffle=True,
+    subset='training') # set as training data
 
-traintest_human = train_datagen.flow_from_directory(
-    '../_data/image/horse-or-human/humans',
+validation_generator = train_datagen.flow_from_directory(
+    '../_data/image/horse-or-human',
     target_size=(150,150),  #사이즈조절가능
     batch_size=600,
-    class_mode='binary'
-)                                   #Found 120 images belong to 2 classes.
+    class_mode='categorical',
+    subset='validation') # set as validation data
+
      
 
-# print(train_horse.shape)     #(5, 150, 150, 3)
-# print(train_human.shape)     #(5,)
+print(train_generator[0][0].shape)     #(600, 150, 150, 3)
+print(validation_generator[0][0].shape)     #(205, 150, 150, 3)
 
-# np.save('./_save_npy/keras48_2_train_x.npy', arr= train_horse_dir[0][0])
-# np.save('./_save_npy/keras48_2_train_y.npy', arr= train_horse_dir[0][1])
-# np.save('./_save_npy/keras48_2_test_x.npy', arr= train_human_dir[0][0])
-# np.save('./_save_npy/keras48_2_test_y.npy', arr= train_human_dir[0][1])
+np.save('../_save_npy/keras48_2_1_train_x.npy', arr= train_generator[0][0])
+np.save('../_save_npy/keras48_2_1_train_y.npy', arr= train_generator[0][1])
+np.save('../_save_npy/keras48_2_1_test_x.npy', arr= validation_generator[0][0])
+np.save('../_save_npy/keras48_2_1_test_y.npy', arr= validation_generator[0][1])
 
+# print(train_generator[0])
+# print(validation_generator[0])
+
+# xy_train = train_datagen.flow_from_directory(         
+#     '../_data/image/horse-or-human/training_set',
+#     target_size = (50,50),                         
+#     batch_size = 10,
+#     class_mode = 'binary',
+#     shuffle = True,
+#     )           
+
+# xy_test = test_datagen.flow_from_directory(
+#     '../_data/image/cat_dog/test_set',
+#     target_size = (50,50),
+#     batch_size = 10, 
+#     class_mode = 'binary',
+# )
+
+# print(xy_train[0][0].shape, xy_train[0][1].shape)  # (10, 50, 50, 3) (10,)
+
+# np.save('./_save_npy/keras48_2_train_x.npy', arr = train_generator[0][0])
+# np.save('./_save_npy/keras48_2_train_y.npy', arr = train_generator[0][1])
+# np.save('./_save_npy/keras48_2_test_x.npy', arr = validation_generator[0][0])
+# np.save('./_save_npy/keras48_2_test_y.npy', arr = validation_generator[0][1])
+
+
+# 2. 모델
+from tensorflow.keras.models import Sequential
+from keras.layers import *
+
+model = Sequential()
+model.add(Conv2D(16, kernel_size=(3,3), padding='same', input_shape=(150,150,3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.2))
+
+model.add(Conv2D(64, kernel_size=(3,3),padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.3))
+
+model.add(Conv2D(128, kernel_size=(3,3), padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.5))
+
+model.add(Flatten())
+model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(2, activation='softmax'))
+
+# 3. 컴파일, 훈련
+model.compile(loss='categorical_crossentropy', optimizer= 'adam', metrics=['acc'])
+
+hist = model.fit_generator(train_generator, epochs = 20, steps_per_epoch = 1, 
+                    validation_data = validation_generator,
+                    validation_steps = 4,)
+
+acc = hist.history['acc']
+val_acc = hist.history['val_acc']
+loss = hist.history['loss']
+val_loss = hist.history['val_loss']
+
+print('loss:', loss[-1])
+print('val_loss:', val_loss[-1])
+print('acc:', acc[-1])
+print('val_acc:',val_acc [-1])
+
+
+# model.fit_generator(
+#     train_generator,
+#     steps_per_epoch = train_generator.samples // batch_size,
+#     validation_data = validation_generator, 
+#     validation_steps = validation_generator.samples // batch_size,
+#     epochs = nb_epochs)
+
+'''
+loss: 0.678576648235321
+val_loss: 0.9945012331008911
+acc: 0.5733333230018616
+val_acc: 0.5121951103210449
+'''

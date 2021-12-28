@@ -1,86 +1,21 @@
-# 1.세이브
-# 2.세이브한뒤에 주석처리
-# 3.
 import numpy as np
-import os
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-# horses/humans 데이터셋 경로 지정
-train_horse_dir = '../_data/image/horse-or-human/horses'
-train_human_dir = '../_data/image/horse-or-human/humans'
+#1. 데이터
 
-# horses 파일 이름 리스트
-train_horse_names = os.listdir(train_horse_dir)
-# print(train_horse_names[:10])
-
-# humans 파일 이름 리스트
-train_human_names = os.listdir(train_human_dir)
-# print(train_human_names[:10])
-
-# horses/humans 총 이미지 파일 개수
-# print('total training horse images:', len(os.listdir(train_horse_dir)))  #500
-# print('total training human images:', len(os.listdir(train_human_dir)))  #527
-
-#이미지확인하기
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-
-nrows = 4
-ncols = 4
-
-pic_index = 0
-
-fig = plt.gcf()
-fig.set_size_inches(ncols * 4, nrows * 4)
-
-pic_index += 8
-next_horse_pix = [os.path.join(train_horse_dir, fname) for fname in train_horse_names[pic_index-8:pic_index]]
-next_human_pix = [os.path.join(train_human_dir, fname) for fname in train_human_names[pic_index-8:pic_index]]
-
-for i, img_path in enumerate(next_horse_pix+next_human_pix):
-  sp = plt.subplot(nrows, ncols, i + 1)
-  sp.axis('Off')
-
-  img = mpimg.imread(img_path)
-  plt.imshow(img)
-
-plt.show()
+x_train = np.load('../_save_npy/keras48_2_1_train_x.npy')
+y_train = np.load('../_save_npy/keras48_2_1_train_y.npy')
+x_test = np.load('../_save_npy/keras48_2_1_test_x.npy')
+y_test = np.load('../_save_npy/keras48_2_1_test_y.npy')
 
 
-#모델구성하기
 
+#2. 모델
 from tensorflow.keras.models import Sequential
 from keras.layers import *
-import tensorflow as tf
-
-# model = tf.keras.models.Sequential([
-#     # The first convolution
-#     tf.keras.layers.Conv2D(16, (3, 3), activation='relu', input_shape=(300, 300, 3)),
-#     tf.keras.layers.MaxPool2D(2, 2),
-#     # The second convolution
-#     tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
-#     tf.keras.layers.MaxPool2D(2, 2),
-#     # The third convolution
-#     tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-#     tf.keras.layers.MaxPool2D(2, 2),
-#     # The fourth convolution
-#     tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-#     tf.keras.layers.MaxPool2D(2, 2),
-#     # The fifth convolution
-#     tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-#     tf.keras.layers.MaxPool2D(2, 2),
-#     # Flatten
-#     tf.keras.layers.Flatten(),
-#     # 512 Neuron (Hidden layer)
-#     tf.keras.layers.Dense(512, activation='relu'),
-#     # 1 Output neuron
-#     tf.keras.layers.Dense(1, activation='sigmoid')
-# ])
-
-# model.summary()
-
 
 model = Sequential()
-model.add(Conv2D(16, kernel_size=(3,3), padding='same', input_shape=(300, 300, 3), activation='relu'))
+model.add(Conv2D(16, kernel_size=(3,3), padding='same', input_shape=(150,150,3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
@@ -98,66 +33,67 @@ model.add(Dropout(0.5))
 model.add(Dense(2, activation='softmax'))
 
 
+#model.summary()
 
-
-#모델 컴파일
-
-from tensorflow.keras.optimizers import RMSprop
 
 model.compile(loss='categorical_crossentropy',
-            optimizer=RMSprop(lr=0.001),
-            metrics=['accuracy'])
+             optimizer='adam',
+             metrics=['accuracy'])
 
+import time
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+es = EarlyStopping(monitor='val_loss', patience= 10 , mode = 'auto', verbose=1, restore_best_weights=True)
+#mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/keras48_1_MCP.hdf5')
 
-#이미지 데이터 전처리
+start = time.time()
+             
+# hist = model.fit(x_train, y_train, epochs=50,
+                    
+#                      callbacks = [es])#, mcp]) )                  #과제
+#                     # 한 epoch 종료 시 마다 검증할 때 사용되는 검증 스텝 수를 지정합니다. 
+#                     # 총 160 개의 검증 샘플이 있고 배치사이즈가 5이므로 4의 배수스텝으로 지정합니다.
+hist = model.fit(x_train, y_train, epochs=500, batch_size=2, verbose=1, validation_split=0.2, callbacks=[es])#, mcp]) ) 
+                    
+end = time.time()- start
 
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-
-train_datagen = ImageDataGenerator(rescale=1/255)
-
-train_generator = train_datagen.flow_from_directory(
-  '../_data/image/horse-or-human',
-  target_size=(300, 300),
-  batch_size=128,
-  class_mode='categorical'
-)
-
-#모델 훈련하기
-hist = model.fit(train_generator,steps_per_epoch=8,epochs=15,verbose=1)
-
-# hist = model.fit(x_train, y_train, epochs=50, batch_size=100, verbose=1, validation_split=0.2, callbacks=[es])#, mcp]) ) 
-
-model.save("./_save_npy/keras48_2_save_weights.h5")
-
-import matplotlib.pyplot as plt
-
+# model.fit(xy_train[0][0],xy_train[0][1])
 
 accuracy = hist.history['accuracy']
-# val_accuracy = hist.history['val_accuracy']
+val_accuracy = hist.history['val_accuracy']
 loss = hist.history['loss']
-# val_loss = hist.history['val_loss']
-epochs = range(len(accuracy))
+val_loss = hist.history['val_loss']
+
+print("걸린시간 : ", round(end, 3), '초')
+model.save("./_save_npy/keras48_2_save_npy.h5")
+
+# 그래프 그리기
+import matplotlib.pyplot as plt
+# summarize history for accuracy
+plt.plot(accuracy)
+plt.plot(val_accuracy)
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(loss)
+plt.plot(val_loss)
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
 
 print('acc : ', accuracy[-1])
-#print('val_acc : ', val_accuracy[-1])
+print('val_acc : ', val_accuracy[-1])
 print('loss : ', loss[-1])
-#print('val_loss : ', val_loss[-1])
+print('val_loss : ', val_loss[-1])
 
-# plt.plot(epochs, accuracy, 'bo', label='Training accuracy')
-# #plt.plot(epochs, val_accuracy, 'b', label='Validation accuracy')
-# plt.title('Training and validation accuracy')
-# plt.legend()
-
-# plt.figure()
-
-# plt.plot(epochs, loss, 'go', label='Training Loss')
-# #plt.plot(epochs, val_loss, 'g', label='Validation Loss')
-# plt.title('Training and validation loss')
-# plt.legend()
-
-# plt.show()
-#print("걸린시간 : ", round(end, 3), '초')
 '''
-acc :  0.9988876581192017
-loss :  0.010299109853804111
+acc :  0.9979166388511658
+val_acc :  0.9416666626930237
+loss :  0.013998224399983883
+val_loss :  0.2613716721534729
 '''

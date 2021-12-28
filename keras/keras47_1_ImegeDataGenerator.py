@@ -31,21 +31,25 @@ test_datagen = ImageDataGenerator(                  #평가만 해야하기 때�
 
 # D:\_data\image\brain
 
-xy_train = train_datagen.flow_from_directory(
+train_generator = train_datagen.flow_from_directory(
     '../_data/image/brain/train',
     target_size=(150,150),  #사이즈조절가능
     batch_size=5,
     class_mode='binary',
-    shuffle=True
+    shuffle=True,
+    subset='training'
 )
 
-xy_test = train_datagen.flow_from_directory(
+validation_generator = train_datagen.flow_from_directory(
     '../_data/image/brain/test',
     target_size=(150,150),  #사이즈조절가능
     batch_size=5,
-    class_mode='binary'
+    class_mode='binary',
+    subset='validation'
 )                                   #Found 120 images belong to 2 classes.
 
+print(train_generator[0][0].shape)  # 719
+print(validation_generator[0][0].shape) # 308
 
 #<tensorflow.python.keras.preprocessing.image.DirectoryIterator object at 0x00000125B62D4F70>
 
@@ -68,13 +72,13 @@ xy_test = train_datagen.flow_from_directory(
 # print(type(xy_train[0][1]))         <class 'numpy.ndarray'>
 
 
-'''
+
 #2. 모델
 from keras.models import Sequential
 from keras.layers import *
 
 model = Sequential()
-model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=(28,28,3), activation='relu'))
+model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=(150,150,3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.25))
 
@@ -89,20 +93,20 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.25))
-model.add(Dense(5, activation='softmax'))
+model.add(Dense(1, activation='sigmoid'))
 
 
 model.summary()
 
-
-model.compile(loss='categorical_crossentropy',
+# 컴파일,훈련
+model.compile(loss='binary_crossentropy',
              optimizer='adam',
              metrics=['accuracy'])
              
-model.fit_generator(
-    trainGenSet,
+hist = model.fit_generator(
+    train_generator,
     steps_per_epoch=20,
     epochs=200,
-    validation_data=testGenSet,
+    # validation_data=testGenSet,
     validation_steps=10,
-'''
+)
