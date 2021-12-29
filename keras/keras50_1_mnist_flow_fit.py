@@ -4,14 +4,11 @@
 #중복데이터는 temp 에 저장후 훈련 끝난후 결과 보고 삭제
 
 
-from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.datasets import mnist 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 
-(x_train, y_train), (x_test, y_test) = cifar10.load_data()
-
-# print(x_train.shape, y_train.shape) #(50000, 32, 32, 3) (50000, 1)  
-# print(x_test.shape, y_test.shape)  #(10000, 32, 32, 3) (10000, 1)
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
 
 train_datagen = ImageDataGenerator(
     rescale=1./255,
@@ -27,21 +24,21 @@ train_datagen = ImageDataGenerator(
 test_datagen = ImageDataGenerator(
     rescale=1./255)
 
-augment_size = 50000
+augment_size = 40000
 randidx = np.random.randint(x_train.shape[0], size = augment_size)  #randint
-# print(x_train.shape[0])                   # 50000
+# print(x_train.shape[0])                   # 60000
 # print(randidx)                            # [28809 11925 51827 ... 34693  6672 48569]
-# print(np.min(randidx), np.max(randidx))   # 0 49998
+# print(np.min(randidx), np.max(randidx))   # 0 59998
 
 x_augmented = x_train[randidx].copy()
 y_augmented = y_train[randidx].copy()
-print(x_augmented.shape)                   # (40000, 32, 32)
+print(x_augmented.shape)                   # (40000, 28, 28)
 print(y_augmented.shape)                   # (40000, )  ?
 
 
-x_augmented = x_augmented.reshape(x_augmented.shape[0],x_augmented.shape[1],x_augmented.shape[2],x_augmented.shape[3])
-x_train = x_train.reshape(50000,32,32,3)
-x_test = x_test.reshape(x_test.shape[0],32,32,3)
+x_augmented = x_augmented.reshape(x_augmented.shape[0],x_augmented.shape[1],x_augmented.shape[2],1)
+x_train = x_train.reshape(60000,28,28,1)
+x_test = x_test.reshape(x_test.shape[0],28,28,1)
 print(x_augmented.shape) #(40000, 28, 28, 1) (40000,)
 
 
@@ -54,13 +51,13 @@ print(x_augmented.shape) #(40000, 28, 28, 1) (40000,)
 #                                  )#.next()     
 
 # print(xy_train)
-# print(xy_train[0].shape,xy_train[1].shape) #(50000, 32, 32, 3) (50000,)
-# print(x_train.shape) #(50000, 32, 32, 3) (50000,)
+# print(xy_train[0].shape,xy_train[1].shape) #(40000, 28, 28, 1) (40000,)
+# print(x_train.shape) #(40000, 28, 28, 1) (40000,)
 
 x_train = np.concatenate((x_train, x_augmented))
 y_train = np.concatenate((y_train, y_augmented))
 
-print(x_train.shape)  #(100000, 32, 32, 3)              
+print(x_train.shape)  #(100000, 28, 28, 1)              
 print(y_train.shape)  #(100000,)
 
 # xy_train = train_datagen.flow(x_train, y_train, #np.zeors(augment_size),
@@ -76,15 +73,15 @@ from tensorflow.keras.models import *
 from tensorflow.keras.layers import *
 
 model = Sequential()
-model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=(32,32,3), activation='relu'))
+model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=(28,28,1), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
-# model.add(Dropout(0.5))
+# model.add(Dropout(0.2))
 
-model.add(Conv2D(32, kernel_size=(3,3),padding='same', activation='relu'))
+model.add(Conv2D(32, kernel_size=(2,2),padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
-# model.add(Dropout(0.5))
+# model.add(Dropout(0.3))
 
-model.add(Conv2D(16, kernel_size=(3,3), padding='same', activation='relu'))
+model.add(Conv2D(16, kernel_size=(2,2), padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 # model.add(Dropout(0.5))
 
@@ -97,12 +94,11 @@ model.add(Dense(10, activation='softmax'))
 #컴파일,훈련
 model.compile(optimizer='adam',loss='sparse_categorical_crossentropy', metrics=['acc'])
 
-model.fit(x_train,y_train,  epochs=10, batch_size=256)
+model.fit(x_train,y_train, epochs=10, batch_size=256)
                     # validation_data = validation_generator,
                     # validation_steps = 400,)
 
 
-#평가
 
 loss = model.evaluate(x_test,y_test)
 print('loss : ', loss[0])
@@ -123,8 +119,21 @@ from sklearn.metrics import r2_score, accuracy_score
 
 a=accuracy_score(y_test, y_predict)
 print('accuracy score:' , a)
+
+
 '''
-loss :  1.172825813293457
-accuracy: 0.5799999833106995
-accuracy score: 0.58
-'''                    
+acc : 0.9788333177566528
+----------------------
+LSTM 반영시
+걸린시간 :  126.511 초
+acc : 0.9825000166893005
+========================
+Conv1D
+걸린시간 :  13.096 초.
+acc : 0.9590833187103271
+------------------------
+loss :  0.056710608303546906
+accuracy: 0.9840999841690063
+accuracy score: 0.9841
+'''
+          

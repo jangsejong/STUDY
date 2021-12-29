@@ -2,7 +2,6 @@ import numpy as np
 from tensorflow.keras.datasets import cifar100 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, SimpleRNN, LSTM, Bidirectional, Conv1D, Flatten
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.python.keras.metrics import accuracy
@@ -34,6 +33,8 @@ y_test = to_categorical(y_test)
 
 #x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=66)
 
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
 scaler = MinMaxScaler()
 #scaler = StandardScaler()
 #scaler = RobustScaler()
