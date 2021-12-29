@@ -1,7 +1,7 @@
 from tensorflow.keras.datasets import fashion_mnist
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
-
+import os
 (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
 
 train_datagen = ImageDataGenerator(
@@ -44,3 +44,49 @@ print(x_train)
 
 # print(x_train)
 
+
+
+#x_augmented and x_train 10pic
+#subplot(2,10,?)  사용
+'''
+x_augmented = os.listdir(x_augmented)
+x_train = os.listdir(x_train)
+'''
+
+
+#이미지확인하기
+# import matplotlib.pyplot as plt
+# import matplotlib.image as mpimg
+
+
+
+# nrows = 4
+# ncols = 4
+
+# pic_index = 0
+
+# fig = plt.gcf()
+# fig.set_size_inches(ncols * 4, nrows * 4)
+
+# pic_index += 8
+# x_augmented_pic = x_augmented[0]
+# x_train_pic = x_train[0]
+
+# for i, img_path in enumerate(x_augmented_pic+x_train_pic):
+#   sp = plt.subplot(nrows, ncols, i + 1)
+#   sp.axis('Off')
+
+#   img = mpimg.imread(img_path)
+#   plt.imshow(img)
+
+# plt.show()
+
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(7,7))
+for i in range(49):
+    plt.subplot(7,7,i+1)
+    plt.axis('off')
+    plt.imshow((x_augmented[0]+x_train[0]), cmap='gray')
+ 
+plt.show()

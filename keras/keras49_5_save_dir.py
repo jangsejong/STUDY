@@ -16,7 +16,7 @@ train_datagen = ImageDataGenerator(
     fill_mode='nearest'
 )
 
-augment_size = 40000
+augment_size = 40000000
 randidx = np.random.randint(x_train.shape[0], size = augment_size)  #randint
 # print(x_train.shape[0])                   # 60000
 # print(randidx)                            # [28809 11925 51827 ... 34693  6672 48569]
@@ -31,16 +31,25 @@ x_augmented = x_augmented.reshape(x_augmented.shape[0],x_augmented.shape[1],x_au
 x_train = x_train.reshape(60000,28,28,1)
 x_test = x_test.reshape(x_test.shape[0],28,28,1)
 
+import time
+start_time = time.time()
 
 x_augmented = train_datagen.flow(x_augmented, y_augmented, #np.zeors(augment_size),
-                                 batch_size=augment_size, shuffle=False
+                                 batch_size=augment_size, shuffle=False,
+                                 #savedir
                                  ).next()[0]
-print(x_augmented)
-print(x_augmented.shape)
+end_time = time.time() - start_time
 
-x_train = np.concatenate((x_train, x_augmented))
-y_train = np.concatenate((y_train, y_augmented))
-print(x_train)         
+print("걸린시간 : ", round(end_time, 3), '초')
 
-# print(x_train)
+
+
+# print(x_augmented)
+# print(x_augmented.shape)
+
+# x_train = np.concatenate((x_train, x_augmented))
+# y_train = np.concatenate((y_train, y_augmented))
+# print(x_train)         
+
+# # print(x_train)
 

@@ -16,7 +16,7 @@ train_datagen = ImageDataGenerator(
     fill_mode='nearest'
 )
 
-augument_size = 100
+augment_size = 100
 print(x_train[0].shape)  #(28, 28)
 print(x_train[0].reshape(28*28).shape)  #(784,)
 print(np.tile(x_train[0].reshape(28*28), augument_size).reshape(-1,28,28,1).shape) #(100, 28, 28, 1)
