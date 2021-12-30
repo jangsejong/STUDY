@@ -24,17 +24,17 @@ train_human_names = os.listdir(train_human_dir)
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-nrows = 4
+nrows = 5
 ncols = 4
 
 pic_index = 0
 
 fig = plt.gcf()
-fig.set_size_inches(ncols * 4, nrows * 4)
+fig.set_size_inches(ncols * 4, nrows * 5)
 
-pic_index += 8
-next_horse_pix = [os.path.join(train_horse_dir, fname) for fname in train_horse_names[pic_index-8:pic_index]]
-next_human_pix = [os.path.join(train_human_dir, fname) for fname in train_human_names[pic_index-8:pic_index]]
+pic_index += 10
+next_horse_pix = [os.path.join(train_horse_dir, fname) for fname in train_horse_names[pic_index-10:pic_index]]
+next_human_pix = [os.path.join(train_human_dir, fname) for fname in train_human_names[pic_index-10:pic_index]]
 
 for i, img_path in enumerate(next_horse_pix+next_human_pix):
   sp = plt.subplot(nrows, ncols, i + 1)
