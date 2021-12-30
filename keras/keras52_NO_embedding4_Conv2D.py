@@ -1,7 +1,5 @@
 from tensorflow.keras.preprocessing.text import Tokenizer
-import tensorflow as tf
 import numpy as np
-import pandas as pd
 
 #1. 데이터
 docs = ['너무 재밌어요', ' 참 최고에요', ' 참 잘 만든 영화에요', '추천하고 싶은 영화입니다', '한 번 더 보고 싶네요', ' 글쎄요', ' 별로에요', ' 생각보다 지루해요', ' 연기가 어색해요'
@@ -34,15 +32,6 @@ from tensorflow.keras.preprocessing.sequence import *
 pad_x = pad_sequences(x, padding='pre', maxlen=5)
 # print(pad_x)
 # print(pad_x.shape)  #(13, 5)
-
-x_predict = '나는 반장이 정말 재미없다 정말'
-
-tokenizer.fit_on_texts(x_predict)
-y_train = tokenizer.texts_to_sequences(x_predict)
-pad_y = pad_sequences(y_train, padding='pre', maxlen=5)
-
-
-
 world_size = len(tokenizer.word_index)
 print("world_size :", world_size)   #26
 # pad_x = np.unique(pad_x)
@@ -55,67 +44,32 @@ print(np.unique(pad_x))
 #원핫 인코딩하면 (13, 5) >(13, 5, 26)
 
 
-
-
 from tensorflow.keras.models import Sequential, Model, load_model, Model,save_model
 from tensorflow.keras.layers import Conv2D, Dense, Flatten, MaxPool2D, Dropout, Embedding, LSTM
 
-#2. 모델
+#2. 모델   #좋은방법이 아니다.
 model = Sequential()
                 #  단어사전의갯수                 단어수,길이
-model.add(Embedding(input_dim=27, output_dim=10, input_length=5))    #(13, 5, 27)  >>>  (27,10) 변경/ 벡터화
-#model.add(Embedding(27, 10, input_length=5)) 
-model.add(LSTM(30, activation='linear'))
-model.add(Dense(30, activation='relu'))
-model.add(Dense(18, activation='linear'))
+# # model.add(Embedding(input_dim=27, output_dim=10, input_length=5))    #(13, 5, 26)  >>>  (26,10) 변경/ 벡터화
+# model.add(Embedding(27, 10, input_length=5)) 
+# model.add(LSTM(32, activation='relu'))
+# model.add(Dropout(0.5))
+model.add(Dense(32,input_shape=(5,), activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(8, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(4, activation='linear'))
 model.add(Dense(2, activation='linear'))
 model.add(Dense(1, activation='sigmoid'))
 
 # model.summary()
-from tensorflow.keras.callbacks import EarlyStopping,ModelCheckpoint  
 
 
-es = EarlyStopping(monitor='val_loss',mode = 'min',verbose = 1,patience=4) 
-mc = ModelCheckpoint('best_model.h5',monitor='val_loss',mode='max',verbose=1,save_best_only=True)
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['acc'])  
 
 
-
-
-model.compile(optimizer='rmsprop',loss='binary_crossentropy',metrics=['acc']) 
-fitting = model.fit(pad_x,labels,epochs=15,callbacks=[es,mc],batch_size=60,validation_split=0.2)
-
+model.fit(pad_x, labels, epochs=100, batch_size=32)
 
 
 acc = model.evaluate(pad_x, labels)[1]
 print('acc :', acc)
-
-##########################################
-# x_predict = '나는 반장이 정말 정말 재미없다'
-
-# tokenizer.fit_on_texts(x_predict)
-# y_train = tokenizer.texts_to_sequences(x_predict)
-# pad_y = pad_sequences(y_train, padding='pre', maxlen=5)
-
-# acc1 = model.evaluate(pad_y, labels)[1]
-acc1 = model.evaluate(pad_y, labels)[1]
-
-# print(acc1)
-
-
-
-
-# def predict_review(sentence, model):
-#   #  // 테스트 문장을 전처리
-#     test_prepro = preprocessing(sentence, okt, True, stop_words)
-#     test_review = []
-#     test_review.append(test_prepro)
-    
-#  #   // 전처리된 문장을 토큰화
-#     test_token = tokenizer.texts_to_sequences(test_review)
-#     test_seq = pad_sequences(test_token, maxlen = MAX_SEQUENCE_LENGTH, padding='post')
-#     ret = model.predict(test_seq)
-    
-#     return ret
-    

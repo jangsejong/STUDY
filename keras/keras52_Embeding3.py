@@ -36,7 +36,7 @@ pad_x = pad_sequences(x, padding='pre', maxlen=5)
 # print(pad_x.shape)  #(13, 5)
 
 x_predict = '나는 반장이 정말 재미없다 정말'
-
+x_predict = [x_predict]
 tokenizer.fit_on_texts(x_predict)
 y_train = tokenizer.texts_to_sequences(x_predict)
 pad_y = pad_sequences(y_train, padding='pre', maxlen=5)
@@ -63,8 +63,8 @@ from tensorflow.keras.layers import Conv2D, Dense, Flatten, MaxPool2D, Dropout, 
 #2. 모델
 model = Sequential()
                 #  단어사전의갯수                 단어수,길이
-model.add(Embedding(input_dim=27, output_dim=10, input_length=5))    #(13, 5, 27)  >>>  (27,10) 변경/ 벡터화
-#model.add(Embedding(27, 10, input_length=5)) 
+# model.add(Embedding(input_dim=27, output_dim=10, input_length=5))    #(13, 5, 27)  >>>  (27,10) 변경/ 벡터화
+model.add(Embedding(27, 10, input_length=5)) 
 model.add(LSTM(30, activation='linear'))
 model.add(Dense(30, activation='relu'))
 model.add(Dense(18, activation='linear'))
@@ -98,12 +98,14 @@ print('acc :', acc)
 # y_train = tokenizer.texts_to_sequences(x_predict)
 # pad_y = pad_sequences(y_train, padding='pre', maxlen=5)
 
-# acc1 = model.evaluate(pad_y, labels)[1]
-acc1 = model.evaluate(pad_y, labels)[1]
-
-# print(acc1)
+# acc1 = model.evaluate(pad_y, labels)[2]
 
 
+score = float(model.predict(x_predict)) # 예측
+if(score > 0.5):
+    print("{:.2f}% 확률로 긍정 리뷰입니다.\n".format(score * 100))
+else:
+    print("{:.2f}% 확률로 부정 리뷰입니다.\n".format((1 - score) * 100))
 
 
 # def predict_review(sentence, model):
