@@ -35,11 +35,10 @@ pad_x = pad_sequences(x, padding='pre', maxlen=5)
 # print(pad_x)
 # print(pad_x.shape)  #(13, 5)
 
-x_predict = '나는 반장이 정말 재미없다 정말'
-
-tokenizer.fit_on_texts(x_predict)
-y_train = tokenizer.texts_to_sequences(x_predict)
-pad_y = pad_sequences(y_train, padding='pre', maxlen=5)
+# x_predict = '나는 반장이 정말 재미없다 정말'
+# tokenizer.fit_on_texts(x_predict)
+# y_train = tokenizer.texts_to_sequences(x_predict)
+# pad_y = pad_sequences(y_train, padding='pre', maxlen=5)
 
 
 
@@ -92,30 +91,52 @@ acc = model.evaluate(pad_x, labels)[1]
 print('acc :', acc)
 
 ##########################################
-# x_predict = '나는 반장이 정말 정말 재미없다'
+x_predict = '나는 반장이 정말 재미없다 정말'
 
 # tokenizer.fit_on_texts(x_predict)
 # y_train = tokenizer.texts_to_sequences(x_predict)
 # pad_y = pad_sequences(y_train, padding='pre', maxlen=5)
 
 # acc1 = model.evaluate(pad_y, labels)[1]
-acc1 = model.evaluate(pad_y, labels)[1]
+# acc1 = model.evaluate(pad_y, labels)[1]
 
 # print(acc1)
+'''
+def sentiment_predict(new_sentence):
+      new_sentence = re.sub(r'[나는 반장이 정말 재미없다 정말]','', new_sentence)
+  new_sentence = okt.morphs(new_sentence, stem=True) # 토큰화
+  new_sentence = [word for word in new_sentence if not word in stopwords] # 불용어 제거
+  encoded = tokenizer.texts_to_sequences([new_sentence]) # 정수 인코딩
+  pad_new = pad_sequences(encoded, maxlen = max_len) # 패딩
+  score = float(model.predict(pad_new)) # 예측
+  if(score > 0.5):
+    print("{:.2f}% 확률로 긍정 리뷰입니다.\n".format(score * 100))
+  else:
+    print("{:.2f}% 확률로 부정 리뷰입니다.\n".format((1 - score) * 100))
+'''
 
 
+#실습######################################소스를 완성하거라!
+#결과는??? 긍정인지? 부정인지?
+x_predict = '나는 반장이 정말 재미없다 정말'
+x_predict = [x_predict]                         # 리스트로 만들기
+#print(x_predict)
 
+token = Tokenizer()
+token.fit_on_texts(x_predict)   
+# print(token.word_index)
+# {'정말': 1, '나는': 2, '반장이': 3, '재미없다': 4}
+#print(x_predict)
 
-# def predict_review(sentence, model):
-#   #  // 테스트 문장을 전처리
-#     test_prepro = preprocessing(sentence, okt, True, stop_words)
-#     test_review = []
-#     test_review.append(test_prepro)
-    
-#  #   // 전처리된 문장을 토큰화
-#     test_token = tokenizer.texts_to_sequences(test_review)
-#     test_seq = pad_sequences(test_token, maxlen = MAX_SEQUENCE_LENGTH, padding='post')
-#     ret = model.predict(test_seq)
-    
-#     return ret
-    
+x_predict = token.texts_to_sequences(x_predict)
+#print(len(x_predict))
+
+pad_x_predict = pad_sequences(x_predict, padding='pre')
+y_pred = model.predict(pad_x_predict)
+print(y_pred)
+score = float(model.predict(pad_x_predict)) # 예측
+
+if y_pred < 0.5:
+    print("{:.2f}% 확률로 긍정 리뷰입니다.\n".format(score * 100))
+else : 
+    print("{:.2f}% 확률로 부정 리뷰입니다.\n".format((1 - score) * 100))

@@ -7,7 +7,7 @@ import urllib.request
 from tqdm import tqdm
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-
+# 링크 : https://wikidocs.net/44249
 
 #1) 데이터 로드하기
 
@@ -139,3 +139,7 @@ print("전체 등장 빈도에서 희귀 단어 등장 빈도 비율:", (rare_fr
 
 
 
+#딕셔너리 : 키,벨류 데이터셋 예제 3개
+#성적 (이름:점수)
+#아파트주차장  (호수:위치)
+#과일가게     (과일종류:가격)
