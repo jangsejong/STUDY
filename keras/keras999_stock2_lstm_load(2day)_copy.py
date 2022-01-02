@@ -146,6 +146,7 @@ print('삼성예측값 : ', y1_pred[-1][-1])
 print('키움예측값 : ', y2_pred[-1][-1])
 
 submit_file.to_csv(path+'2day(거래량).csv', index=False)
+
 '''
 ss_ki_1221_Trafevol14
 삼성예측값 :  10271464.0

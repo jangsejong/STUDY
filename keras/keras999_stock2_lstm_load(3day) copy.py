@@ -17,7 +17,7 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
-#1 데이터
+#1 데이터 
 path = "D:\\Study\\_data\\bit\\stock\\"
 samsung = pd.read_csv(path +"삼성전자.csv", thousands=",", encoding='cp949')
 kiwoom = pd.read_csv(path +"키움증권.csv", thousands=",", encoding='cp949')
