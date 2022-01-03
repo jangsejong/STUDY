@@ -91,7 +91,7 @@ df = df[[
 # df['기준일시'] = pd.to_datetime(df['기준일시'])
 
 # 엑셀 저장 (해당 .py또는 .ipynb 파일이 있는 폴더)
-df.to_csv("keras1000_Corona(시도발생현황).csv", mode='w',encoding='euc-kr')
+df.to_csv("../개인프로젝트/keras1000_Corona(시도발생현황).csv", mode='w',encoding='euc-kr')
 df
 
 
