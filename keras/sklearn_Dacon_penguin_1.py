@@ -149,6 +149,8 @@ d15_model.fit(train[Delta_features].iloc[train['Delta 15 N (o/oo)'].dropna().ind
 train['Delta 15 N (o/oo)'].iloc[np.where(train['Delta 15 N (o/oo)'].isnull()==True)] =  d15_model.predict(train[train['Delta 15 N (o/oo)'].isnull()][Delta_features])
 test['Delta 15 N (o/oo)'].iloc[np.where(test['Delta 15 N (o/oo)'].isnull()==True)] =  d15_model.predict(test[test['Delta 15 N (o/oo)'].isnull()][Delta_features])
 
+
+
 d13_model = LinearRegression()
 d13_model.fit(train[Delta_features].iloc[train['Delta 13 C (o/oo)'].dropna().index]
                                ,train['Delta 13 C (o/oo)'].iloc[train['Delta 13 C (o/oo)'].dropna().index])
@@ -274,7 +276,7 @@ params = { 'n_estimators' : [10, 50,100],
            'min_samples_split' : [2, 8, 16, 20]
             }
 model = RandomForestRegressor()
-kfold = KFold(n_splits= num_folds,random_state = seed,shuffle = True)
+kfold = KFold(n_splits= num_folds,random_state = 66 ,shuffle = True)
 grid = GridSearchCV(estimator= model, param_grid = params,scoring= 'neg_root_mean_squared_error',cv=kfold )
 grid_result = grid.fit(scaled_X,y_all)
 
@@ -289,7 +291,7 @@ params = { 'n_estimators' : [10, 50,100],
            'min_samples_split' : [2,4,8, 16]
             }
 model =ExtraTreesRegressor()
-kfold = KFold(n_splits= num_folds,random_state = seed,shuffle = True)
+kfold = KFold(n_splits= num_folds,random_state = 66 ,shuffle = True)
 grid = GridSearchCV(estimator= model, param_grid = params,scoring= 'neg_root_mean_squared_error',cv=kfold )
 grid_result = grid.fit(X_all,y_all)  
   
@@ -335,7 +337,7 @@ lr_test = LR.predict(scaled_X_test)
 pred_test.append(('LR',lr_test))  
   
   
-RF =RandomForestRegressor(max_depth= 24, min_samples_leaf= 12, min_samples_split= 16, n_estimators= 10)
+RF =RandomForestRegressor(max_depth= 24, min_samples_leaf= 12, min_samples_split= 16, n_estimators= 16)
 RF.fit(scaled_X_train,y_train)
 rf_valid = RF.predict(scaled_X_valid)
 rmse = math.sqrt(mean_squared_error(y_valid, rf_valid))
@@ -344,7 +346,7 @@ pred_valid.append(('RF',rf_valid))
 rf_test = RF.predict(scaled_X_test)
 pred_test.append(('RF',rf_test))  
   
-ET =ExtraTreesRegressor(max_depth=24, min_samples_leaf= 1, min_samples_split= 8, n_estimators= 10)
+ET =ExtraTreesRegressor(max_depth=24, min_samples_leaf= 1, min_samples_split= 8, n_estimators= 16)
 ET.fit(X_train,y_train)
 et_valid = ET.predict(X_valid)
 rmse = math.sqrt(mean_squared_error(y_valid, et_valid))
@@ -355,7 +357,7 @@ pred_test.append(('ET',et_test))
   
 CAT = CatBoostRegressor(iterations=10000,random_state=66
            ,eval_metric="RMSE")
-CAT.fit(X_train,y_train, eval_set=[(X_valid,y_valid)],early_stopping_rounds=300
+CAT.fit(X_train,y_train, eval_set=[(X_valid,y_valid)],early_stopping_rounds=100
         ,verbose=1000 )
 cat_valid = CAT.predict(X_valid)
 rmse = math.sqrt(mean_squared_error(y_valid, cat_valid))
