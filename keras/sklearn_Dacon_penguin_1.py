@@ -30,3 +30,14 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn import preprocessing
 import seaborn as sns
+
+path = 'D:\\Study\\_data\\dacon\\penguin\\'
+# id column은 필요없으니 제거
+train_dataset = pd.read_csv(path+'train.csv').drop(['id'],axis=1)
+test_dataset = pd.read_csv(path+'test.csv').drop(['id'],axis=1)
+
+train_dataset.head()
+'''
+
+
+'''
