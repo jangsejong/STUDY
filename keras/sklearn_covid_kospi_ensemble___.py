@@ -149,14 +149,14 @@ x1.drop("2020-05-05", axis=0, inplace=True)
 x1.drop("2020-05-01", axis=0, inplace=True)
 # x1.drop("2020-06-06", axis=0, inplace=True)
 # x1.drop("2020-08-15", axis=0, inplace=True)
-x1.drop("2020-09-30", axis=0, inplace=True)
+x1.drop("2020-09-30", axis=0, inplace=True)#
 x1.drop("2020-10-01", axis=0, inplace=True)
 x1.drop("2020-10-02", axis=0, inplace=True)
-x1.drop("2020-12-31", axis=0, inplace=True)
+x1.drop("2020-12-31", axis=0, inplace=True)#
 x1.drop("2020-10-09", axis=0, inplace=True)
-x1.drop("2020-08-17", axis=0, inplace=True)
+x1.drop("2020-08-17", axis=0, inplace=True)#
 x1.drop("2020-12-25", axis=0, inplace=True)
-x1.drop("2021-01-01", axis=0, inplace=True)
+x1.drop("2021-01-01", axis=0, inplace=True)#
 # x1.drop("2020-12-05", axis=0, inplace=True)
 # x1.drop("2021-01-03", axis=0, inplace=True)
 x1.drop("2021-02-11", axis=0, inplace=True)

@@ -117,13 +117,18 @@ x2 = kospi.drop(columns =['대비','등락률(%)', '배당수익률(%)', '주가
 # print(delete_sat)
 
 
+
+#주식장이 열리지 않는 주말에 해당하는 행을 삭제하여 준다.
+x1 = x1.drop(pd.date_range('2020-01-20', '2022-01-02', freq='W-SAT'),axis=0)
+x1 = x1.drop(pd.date_range('2020-01-20', '2022-01-02', freq='W-SUN'),axis=0)
+
 #주식장이 열리지 않는 공휴일,임시공휴일에 해당하는 행을 삭제하여 준다.
 import holidays
 kr_holidays = holidays.KR(years=[2020,2021])
 # print(kr_holidays)
 
 date_list=[]
-holiday_dict={}
+# holiday_dict={}
 
 for date, occasion in kr_holidays.items():
     # print(f'{date},{occasion}')
@@ -131,18 +136,51 @@ for date, occasion in kr_holidays.items():
     occasion1 = (f'{occasion}')
 #     # print(date)    
 #     # print(occasion)
-#     date_list.append(date)
-#     holiday_dict[date]=occasion
-
-x1= x1.drop( date1, axis=0, inplace=True)
-# # date_list = np.array(date_list)
+    date_list.append(date1)
+    date_list.sort()
+# #     holiday_dict[date]=occasion
+# # print(x1.info)
 # print(date_list)
+# date_list1 = date_list.remove('2020-01-25')
+date_list.remove('2020-01-01')
+date_list.remove('2020-01-25')
+date_list.remove('2020-01-26')
+date_list.remove('2020-03-01')
+date_list.remove('2020-06-06')
+date_list.remove('2020-08-15')
+date_list.remove('2020-10-03')
+date_list.remove('2020-10-09')
+date_list.remove('2020-12-25')
+date_list.remove('2021-02-13')
+date_list.remove('2021-05-01')
+date_list.remove('2021-06-06')
+date_list.remove('2021-08-15')
+date_list.remove('2021-10-03')
+date_list.remove('2021-10-09')
+date_list.remove('2021-12-25')
+
+
+# # # date_list = np.array(date_list)
+# print(date_list)
+# # date_list = date_list.drop()
+
+print(date_list)
+
+
+'''
+['2020-01-01', '2020-01-24', '2020-01-25', '2020-01-26', '2020-01-27', '2020-03-01', '2020-04-30', '2020-05-01', '2020-05-05',
+'2020-06-06', '2020-08-15', '2020-08-17', '2020-09-30', '2020-10-01', '2020-10-02', '2020-10-03', '2020-10-09', '2020-12-25',
+'2021-01-01', '2021-02-11', '2021-02-12', '2021-02-13', '2021-03-01', '2021-05-01', '2021-05-05', '2021-05-19', '2021-06-06',
+'2021-08-15', '2021-08-16', '2021-09-20', '2021-09-21', '2021-09-22', '2021-10-03', '2021-10-04', '2021-10-09', '2021-10-11', '2021-12-25']
+'''
 # date = np.array(date)
 # print(date_list)
-
+x1.drop(date_list[0:], axis=0, inplace=True)
+# x1 = x1.drop(date_list[4:9], axis=0, inplace=True)
 # # print(x1.info, date_list.info)
 # print(date_list[0:-1])
 
+# print(x1.info)
 
 
 '''
@@ -201,10 +239,8 @@ x1.drop("2021-12-31", axis=0, inplace=True)
 '''
 
 
-#주식장이 열리지 않는 주말에 해당하는 행을 삭제하여 준다.
-x1 = x1.drop(pd.date_range('2020-01-20', '2022-01-02', freq='W-SAT'),axis=0)
-x1 = x1.drop(pd.date_range('2020-01-20', '2022-01-02', freq='W-SUN'),axis=0)
-
+x1 = np.array(x1)
+x2 = np.array(x2)
 
 # print(x1.info)
 # print(x2.info)
@@ -217,8 +253,7 @@ x1 = x1.drop(pd.date_range('2020-01-20', '2022-01-02', freq='W-SUN'),axis=0)
 
 # from pytimekr import pytimekr
  
-# x1 = np.array(x1)
-# x2 = np.array(x2)
+
 # print(x1.head, x2.head)
 
 # x1.plot(x='일자', y='계(명)')
