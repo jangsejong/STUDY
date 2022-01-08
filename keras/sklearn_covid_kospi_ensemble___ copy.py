@@ -257,18 +257,18 @@ from tensorflow.keras.layers import Dense, Input
 
 #2-1. 모델
 input1 = Input(shape=(5, 3))
-dense1 = LSTM(16, activation='relu', name='dense1')(input1)
+dense1 = LSTM(16, activation='tanh', name='dense1')(input1)
 dense2 = Dense(4, activation='linear', name='dense2')(dense1)
 dense3 = Dense(2, activation='linear', name='dense3')(dense2)
-output1 = Dense(1, activation='linear', name='output1')(dense3)
+output1 = Dense(1, activation='sigmoid', name='output1')(dense3)
 
 
 #2-2. 모델
 input2 = Input(shape=(5, 3))
-dense11 = LSTM(16, activation='relu', name='dense11')(input2)
+dense11 = LSTM(16, activation='tanh', name='dense11')(input2)
 dense21 = Dense(4, activation='linear', name='dense21')(dense11)
 dense31 = Dense(2, activation='linear', name='dense31')(dense21)
-output2 = Dense(1, activation='linear', name='output2')(dense31)
+output2 = Dense(1, activation='sigmoid', name='output2')(dense31)
 
 
 from tensorflow.keras.layers import concatenate, Concatenate
@@ -279,13 +279,13 @@ merge1 = Concatenate()([output1, output2])#, axis=1)  # axis=0 y축방향 병합
 #2-3 output모델1
 output21 = Dense(16)(merge1)
 output22 = Dense(8)(output21)
-output23 = Dense(4, activation='relu')(output22)
+output23 = Dense(4, activation='linear')(output22)
 last_output1 = Dense(1)(output23)
 
 #2-3 output모델2
 output31 = Dense(16)(merge1)
 output32 = Dense(8)(output31)
-output33 = Dense(4, activation='relu')(output32)
+output33 = Dense(4, activation='linear')(output32)
 last_output2 = Dense(1)(output33)
 
 model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
@@ -308,36 +308,34 @@ model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=1, 
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
 print('loss :', loss) #loss :
 y1_pred, y2_pred = model.predict([x1_test, x2_test])
-print('코로나환자예상수 : ', y1_pred[-1])
+# print('코로나환자예상수 : ', y1_pred[-1])
 print('코스피예상지수 : ', y2_pred[-1])
 print(y1_pred[:5])
 
 '''
-코로나환자예상수 [3019]
-코스피예상지수  [2988.77]
+코로나환자수 [3019]
+코스피지수  [2988.77]
 
-코로나환자예상수 :  [2096.9817]
-코스피예상지수 :  [3142.9739]
+코스피예상지수 :  [3068.3394]
 
-코로나환자예상수 :  [1825.9004]
-코스피예상지수 :  [3180.8027]
+코스피예상지수 :  [2978.539]
 
-코로나환자예상수 :  [1844.933]
 코스피예상지수 :  [2834.2913]
 
-코로나환자예상수 :  [1917.9602]
 코스피예상지수 :  [3095.1743]
 
-코로나환자예상수 :  [1988.4749]
 코스피예상지수 :  [3160.3574]
 
-코로나환자예상수 :  [1730.416]
-코스피예상지수 :  [3183.8826]
+코스피예상지수 :  [2930.443]
 
-코로나환자예상수 :  [2317.9138]
 코스피예상지수 :  [3127.4482]
 
-코로나환자예상수 :  [1727.2743]
 코스피예상지수 :  [3104.3767]
+
+코스피예상지수 :  [3068.3394]
+
+코스피예상지수 :  [2719.2747]
+
+10번 평균치 3008
 '''
 
