@@ -70,7 +70,7 @@ x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = tra
 
 print(x1_train.shape) #(58, 5, 1)
 
-'''
+
 #2. 모델구성
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
@@ -120,9 +120,9 @@ es = EarlyStopping(monitor='val_loss', patience= 58 , mode = 'auto', verbose=1, 
 #mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1222_Trafevol4.hdf5')
 
 model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=5, validation_split=0.2, verbose=1, callbacks=[es])#,mcp]) 
-'''
+
 #model.save_weights("./_save/keras999_1_save_weights.h5")
-model = load_model('./_ModelCheckPoint/ss_ki_1222_Trafevol5.hdf5')
+# model = load_model('./_ModelCheckPoint/ss_ki_1222_Trafevol5.hdf5')
 
 #4. 평가, 예측
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test], batch_size=1)
@@ -150,3 +150,8 @@ ss_ki_1222_Trafevol5
 
 참조 넣을것 : kmk881204@naver.com
 '''
+# plt.figure(figsize=(12, 9))
+# plt.plot(y2_ki, label='actual')
+# plt.plot(y2_pred, label='prediction')
+# plt.legend()
+# plt.show()

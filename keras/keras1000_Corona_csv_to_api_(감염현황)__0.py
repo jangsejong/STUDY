@@ -27,7 +27,7 @@ serviceKey = 'lKyyDlz+TK1rYYop8yeEkCqE//5+z/ZEugxxiNdsaG+ozoMwypoTgDOnBETRWj3kIV
 params = {'ServiceKey' : serviceKey,
           'pageNo' : '1',
           'numOfRows' : '10',
-          'startCreateDt' : '20200303', # 데이터 호출범위지정(시작일)
+          'startCreateDt' : '20200210', # 데이터 호출범위지정(시작일)
           'endCreateDt' : '20211230' # 데이터 호출범위지정(종료일)
          }
 
@@ -90,3 +90,5 @@ df.to_csv("../개인프로젝트/keras1000_Corona(감염현황).csv", mode='w',e
 df
 
 print(df.info)
+
+

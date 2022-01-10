@@ -1,5 +1,6 @@
-#파이썬은 인터프린터 언어
-Fully Connected Layer
-전체 노드를 하는것보다 일부분을 하는게 더 좋다. 과적합 부분에서 성능이 좋아진다
-중간값을 활용한다 (123,234,345...)
-사진 모델 돌릴시 픽셀,행열 치수가 맞아야 한다. 데이터 수집,정제
+http://cafe.daum.net/bitcampblockchain
+
+1. 블록체인 개념
+2. Flask
+3. Flask 기반 blockchain  구현
+4. 거래소 API를 이용한 가상화폐 자동매매

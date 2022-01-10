@@ -60,6 +60,17 @@ kospi = kospi.drop(kospi.index[range(0,12)] ,axis=0)
 
 # print(covid_19.info())
 print(kospi.info())
+'''
+DatetimeIndex: 484 entries, 2020-01-20 to 2021-12-30
+Data columns (total 4 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   현재지수    484 non-null    float64
+ 1   시가지수    484 non-null    float64
+ 2   고가지수    484 non-null    float64
+ 3   저가지수    484 non-null    float64
+dtypes: float64(4)
+'''
 
 
 # 기존 일자를 new_data 로 수정후 일자 삭제, new_data를 인덱스로 넣어 주었다.
@@ -71,7 +82,7 @@ kospi['new_Date'] = pd.to_datetime(kospi['일자'])
 
 kospi.drop('일자', axis = 1, inplace=True)
 kospi.set_index('new_Date', inplace=True)
-# print(x1.head())
+print(kospi.head())
 # print('\n')
 # print(x1.info())
 # print('\n')
@@ -115,6 +126,18 @@ x2_train, x2_test, y2_train, y2_test = train_test_split(x2_ko, y2_ko ,train_size
 
 # print(x1_train.shape) #(20, 5, 1)
 
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.figure(figsize=(13,13))
+sns.heatmap(data= x2.corr(), square=True, annot=True, cbar=True)
+plt.show()    
+# plt.figure(figsize=(16, 9))
+# sns.lineplot(y=x2['현재지수'], x=x2.index)
+# plt.xlabel('new_Date')
+# plt.ylabel('현재지수')
+# plt.show()
 
 #2. 모델구성
 from tensorflow.keras.models import Model
@@ -160,3 +183,8 @@ print(y2_pred[:5])
 10번 결과값 평균 : 2705
 '''
 
+plt.figure(figsize=(12, 9))
+plt.plot(y2_test, label='actual')
+plt.plot(y2_pred, label='prediction')
+plt.legend()
+plt.show()
