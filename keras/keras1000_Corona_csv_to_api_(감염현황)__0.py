@@ -90,10 +90,3 @@ df.to_csv("../개인프로젝트/keras1000_Corona(감염현황).csv", mode='w',e
 df
 
 print(df.info)
-'''
-
-# import os
-# os. getcwd()
-
-print(df.info)
-'''
