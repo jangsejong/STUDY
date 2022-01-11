@@ -39,7 +39,6 @@ from sklearn import metrics
 from tensorflow.keras.layers import Dropout, Dense, SimpleRNN, LSTM
 from tensorflow.keras.models import Sequential, load_model
 import tensorflow as tf
-import pickle
 import platform
 import os
 import warnings
@@ -218,14 +217,21 @@ print(x2.head())
 # new_col=col1+col2
 # x1=x1[new_col]
 # print(x1.head)
+X11 = x1.drop(['계(명)'], axis=1)
+X22 = x2.drop(['현재지수'], axis=1)
+X11=np.asarray(X11).astype(np.int)
+X22=np.asarray(X22).astype(np.int)
+print(X11)
+print(X22)
 
+# x_ss = ss.drop(['일자', '시가', '고가', '저가', '종가','전일비', 'Unnamed: 6', '등락률', '신용비', '외인비'], axis =1)
 x11 = np.array(x1)
 x22 = np.array(x2)
 
-# print(x1.info())
-# print(x2.info())
-# x11=np.asarray(x1).astype(np.int)
-# x22=np.asarray(x2).astype(np.int)
+print(x1.info())
+print(x2.info())
+x11=np.asarray(x1).astype(np.int)
+x22=np.asarray(x2).astype(np.int)
 
 # scaler = MinMaxScaler()
 # #scaler=StandardScaler()
@@ -262,8 +268,10 @@ from sklearn.model_selection import train_test_split
 
 x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1_co, x2_ko, y1_co, y2_ko ,train_size=0.8, random_state=66)
 
-print(x1_train.shape) #(20, 5, 1)
-
+print(x1_train.shape, x1_test.shape)    # (382, 5, 3) (96, 5, 3)
+print(x2_train.shape, x2_test.shape)    # (382, 5, 3) (96, 5, 3)
+print(y1_train.shape, y1_test.shape)    # (382, 2) (96, 2)
+print(y2_train.shape, y2_test.shape)    # (382, 2) (96, 2)
 
 
 #2. 모델구성
@@ -280,7 +288,7 @@ dense5 = Dense(32, activation='linear')(dense4)
 dense6 = Dense(32, activation='linear')(dense5)
 dense7 = Dense(16, activation='linear')(dense6)
 dense8 = Dense(8, activation='linear')(dense7)
-output1 = Dense(2, activation='linear')(dense8)
+output1 = Dense(15, activation='linear')(dense8)
 
 
 #2-2. 모델
@@ -293,7 +301,7 @@ dense51 = Dense(32, activation='linear')(dense41)
 dense61 = Dense(32, activation='linear')(dense51)
 dense71 = Dense(16, activation='linear')(dense61)
 dense81 = Dense(8, activation='linear')(dense71)
-output2 = Dense(2, activation='linear')(dense81)
+output2 = Dense(15, activation='linear')(dense81)
 
 
 from tensorflow.keras.layers import concatenate, Concatenate
@@ -306,14 +314,14 @@ output21 = Dense(64)(merge1)
 output22 = Dense(32)(output21)
 output23 = Dense(16)(output22)
 output24 = Dense(8, activation='relu')(output23)
-last_output1 = Dense(1)(output24)
+last_output1 = Dense(2)(output24)
 
 #2-3 output모델2
 output31 = Dense(64)(merge1)
 output32 = Dense(32)(output31)
 output33 = Dense(16)(output32)
 output34 = Dense(8, activation='relu')(output33)
-last_output2 = Dense(1)(output34)
+last_output2 = Dense(2)(output34)
 
 model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
 
@@ -326,7 +334,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1220_lastcost7.hdf6')
 
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=10, validation_split=0.1, verbose=1, callbacks=[es])#,mcp]) 
+model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=10000, batch_size=10, validation_split=0.1, verbose=1, callbacks=[es])#,mcp]) 
 
 # model.save_weights("./_save/co_ko_1_save_weights.h5")
 
@@ -335,68 +343,45 @@ model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=10,
 #4. 평가, 예측
 loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test])
 print('loss :', loss) #loss :
-y1_pred, y2_pred = model.predict([x1_test, x2_test])
-# print('코로나환자예상수 : ', y1_pred[-1])
-print('코스피예상지수 : ', y2_pred[-1])
+a = X11[-5:]
+b = X22[-5:]
+a = a.reshape(1,5,3)
+b = b.reshape(1,5,3)
+y1_predict, y2_predict = model.predict([a, b])
+print('코로나환자예상수 : ', y1_predict[0][-1])
+print('코스피예상지수 : ', y2_predict[0][-1])
 # print(y1_pred[:5])
 
-'''
-코로나환자수 [3019]
-코스피지수  [2988.77]
+# '''
+# 코로나환자수 [3019]
+# 코스피지수  [2988.77]
 
-코스피예상지수 :  [3068.3394]
+# 코스피예상지수 :  [3068.3394]
 
-코스피예상지수 :  [2978.539]
+# 코스피예상지수 :  [2978.539]
 
-코스피예상지수 :  [2834.2913]
+# 코스피예상지수 :  [2834.2913]
 
-코스피예상지수 :  [3095.1743]
+# 코스피예상지수 :  [3095.1743]
 
-코스피예상지수 :  [2987.2097]
+# 코스피예상지수 :  [2987.2097]
 
-코스피예상지수 :  [2930.443]
+# 코스피예상지수 :  [2930.443]
 
-코스피예상지수 :  [3127.4482]
+# 코스피예상지수 :  [3127.4482]
 
-코스피예상지수 :  [3104.3767]
+# 코스피예상지수 :  [3104.3767]
 
-코스피예상지수 :  [3068.3394]
+# 코스피예상지수 :  [3068.3394]
 
-코스피예상지수 :  [3059.4219
+# 코스피예상지수 :  [3059.4219
 
-10번 평균치 3008
-'''
-from sklearn.preprocessing import MinMaxScaler
+# 10번 평균치 3008
+# '''
 
-# kospi.sort_index(ascending=False).reset_index(drop=True)
-
-scaler = MinMaxScaler()
-scale_cols = kospi['현재지수','시가지수', '고가지수', '저가지수']
-df_scaled = scaler.fit_transform(kospi[scale_cols])
-df_scaled = pd.DataFrame(df_scaled)
-df_scaled.columns = scale_cols
-
-df_scaled
-TEST_SIZE = 200
-WINDOW_SIZE = 20
-
-train = df_scaled[:-TEST_SIZE]
-test = df_scaled[-TEST_SIZE:]
-
-
-label_cols = kospi['현재지수']
-test_label = test[label_cols]
-plt.figure(figsize=(12, 9))
-plt.plot(test_label, label = 'actual')
-plt.plot(y2_pred, label = 'prediction')
-plt.legend()
-plt.show()
-
-# train_data=x2[:388] 
-# valid_data=x2[388:] 
-# train_data['Predictions']=y1_pred
-# valid_data['Predictions']=y2_pred
-# plt.plot(train_data["현재지수","Predictions"]) 
+# train_data=x1 
+# valid_data=x2
+# valid_data['Predictions']=y2_pred[:][-1]
+# plt.plot(train_data["현재지수"])
 # plt.plot(valid_data[['현재지수',"Predictions"]])
 # plt.show()
-

@@ -50,11 +50,10 @@ warnings.filterwarnings('ignore')
 path = 'D:\\Study\\개인프로젝트\\데이터자료\\csv\\'
 
 covid_19 = pd.read_csv(path +"코로나바이러스감염증-19_확진환자_발생현황_220110.csv", thousands=",", encoding='cp949')
-kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", encoding='cp949')
+#kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", encoding='cp949')
 
 # print(covid_19.head())
 # print(kospi.head())
-
 
 #데이터 전처리
 
@@ -67,20 +66,20 @@ covid_19 = covid_19.drop(covid_19.columns[range(5,8)], axis=1)
 
 
 #covid_19 데이터와 상관 관계를 위하여 날짜를 맞추기 위해 kospi 데이터 1월19일까지의 데이터를 삭제 해주었다.
-kospi = kospi.drop(kospi.index[range(0,12)] ,axis=0)
+# kospi = kospi.drop(kospi.index[range(0,12)] ,axis=0)
 
 
 
 
 # 기존 일자를 new_data 로 수정후 일자 삭제, new_data를 인덱스로 넣어 주었다.
 covid_19['new_Date'] = pd.to_datetime(covid_19['일자'])
-kospi['new_Date'] = pd.to_datetime(kospi['일자'])
+# kospi['new_Date'] = pd.to_datetime(kospi['일자'])
 
 covid_19.drop('일자', axis = 1, inplace=True)
 covid_19.set_index('new_Date', inplace=True)
 
-kospi.drop('일자', axis = 1, inplace=True)
-kospi.set_index('new_Date', inplace=True)
+# kospi.drop('일자', axis = 1, inplace=True)
+# kospi.set_index('new_Date', inplace=True)
 # print(x1.head())
 # print('\n')
 # print(x1.info())
@@ -89,7 +88,7 @@ kospi.set_index('new_Date', inplace=True)
 
             
 x1 = covid_19.drop(columns=[], axis=1) 
-x2 = kospi.drop(columns =['대비','등락률(%)', '주가이익비율', '주가자산비율', '거래량(천주)', '상장시가총액(백만원)', '거래대금(백만원)','배당수익률(%)'], axis=1) 
+# x2 = kospi.drop(columns =['대비','등락률(%)', '주가이익비율', '주가자산비율', '거래량(천주)', '상장시가총액(백만원)', '거래대금(백만원)','배당수익률(%)'], axis=1) 
 
 # for col1 in x1.columns:
 #     n_nan1 = x1[col1].isnull().sum()
@@ -178,7 +177,7 @@ x1.drop("2021-12-31", axis=0, inplace=True)  #한국 폐장일
 
 
 print(x1.head())
-print(x2.head())
+# print(x2.head())
 
 # print(x1.info)
 # print(x2.info)
@@ -188,191 +187,101 @@ print(x2.head())
 # print(x2.shape)
 
 
+x11 = np.array(x1)
+# x22 = np.array(x2)
 
-# from pytimekr import pytimekr
- 
-# x1 = np.array(x1)
-# x2 = np.array(x2)
-# print(x1.head, x2.head)
 
-# x1.plot(x='일자', y='계(명)')
-# x2.plot(x='일자', y='시가지수')
+import matplotlib
+import pandas as pd
+import numpy as np
+import numpy as np
+from numpy.core.fromnumeric import shape
+import pandas as pd
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint 
+import time
+from tensorflow.keras.layers import Dropout, Dense, SimpleRNN,LSTM
+import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+import matplotlib as mpl
+import csv
+import matplotlib.font_manager as fm
+import matplotlib_inline
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib.font_manager as fm
 
-# plt.figure(figsize = (9, 5))
-# plt.grid()
-# plt.legend(loc = 'upper right')
+# # 설치된 폰트 출력
+# font_list = [font.name for font in fm.fontManager.ttflist]
+# print(font_list)
+
+#
+import matplotlib
+from matplotlib import font_manager, rc
+import platform
+
+
+#matplotlib 에서 사용하는 폰트를 한글 지원이 가능한 것으로 바꾸는 코드
+if platform.system() == 'Windows':
+# 윈도우인 경우
+    font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/malgun.ttf").get_name()
+    rc('font', family=font_name)
+else:    
+# Mac 인 경우
+    rc('font', family='AppleGothic')
+    
+matplotlib.rcParams['axes.unicode_minus'] = False   
+#그래프에서 마이너스 기호가 표시되도록 하는 설정입니다. 
+
+plt.figure(figsize=(10,8))
+plt.title("CORONA of Features", y = 1.05, size = 15)
+plt.rcParams['font.family'] = 'Malgun Gothic'
+plt.rcParams['axes.unicode_minus'] = False
+
+# plt.xticks(rotation = + 20 )
+# sns.barplot(x="일자", y="현재지수",data= kospi)
+
+sns.heatmap(data= covid_19.corr(), square=True, annot=True, cbar=True)
+plt.show()    
+# plt.figure(figsize=(16, 9))
+# sns.lineplot(y=x2['현재지수'], x=x2.index)
+# plt.xlabel('new_Date')
+# plt.ylabel('현재지수')
 # plt.show()
 
-# plt.figure(figsize=(16, 9))
-# sns.lineplot(y=x1['계(명)'], x=x1.index)
-# plt.xlabel('new_Date')
-# plt.ylabel('계(명)')
-# plt.show()   
+# # 기존 일자를 new_data 로 수정후 일자 삭제, new_data를 인덱스로 넣어 주었다.
+# covid_19['new_Date'] = pd.to_datetime(covid_19['일자'])
+# # kospi['new_Date'] = pd.to_datetime(kospi['일자'])
 
-# print(x1.shape, x2.shape) #(484, 4) (484, 4)
+# covid_19.drop('일자', axis = 1, inplace=True)
+# covid_19.set_index('new_Date', inplace=True)
 
-# #slice 사용하여 칼럼 위치 변경 (일별환자수보다 누적 환자수를 타켓값으로 줄때 값이 좋게 나왔다)
-
-# col1=x1.columns[-1:].to_list()
-# col2=x1.columns[:1].to_list()
-# new_col=col1+col2
-# x1=x1[new_col]
-# print(x1.head)
-
-x11 = np.array(x1)
-x22 = np.array(x2)
-
+# kospi.drop('일자', axis = 1, inplace=True)
+# kospi.set_index('new_Date', inplace=True)
+# print(kospi.head())
+# print('\n')
 # print(x1.info())
-# print(x2.info())
-# x11=np.asarray(x1).astype(np.int)
-# x22=np.asarray(x2).astype(np.int)
+# print('\n')
+# print(type(x1['new_Date'][1]))
 
-# scaler = MinMaxScaler()
-# #scaler=StandardScaler()
-# #scaler=RobustScaler()
-# #scaler=MaxAbsScaler()
-# scaler.fit(x1)
-# scaler.fit(x2)
-# x11=scaler.transform(x1)
-# x22=scaler.transform(x2)
+            
+x1 = covid_19.drop(columns=[], axis=1) 
+# x2 = kospi.drop(columns =['대비','등락률(%)', '상장시가총액(백만원)', '주가이익비율', '거래량(천주)', '배당수익률(%)', '거래대금(백만원)'], axis=1) 
 
 
-def split_xy3(dataset, time_steps, y_column):                 
-    x, y = list(), list()
-    for i in range(len(dataset)):
-        x_end_number = i + time_steps                    # 0 + 5 = 5
-        y_end_number = x_end_number + y_column      # 5 + 2 = 7
-        
-        if y_end_number > len(dataset):
-            break
-             
-        tmp_x = dataset[i:x_end_number, 1:]                #0:5,  1:
-        tmp_y = dataset[x_end_number:y_end_number, 0]    #5:7, 0
-        x.append(tmp_x)
-        y.append(tmp_y)
-    return np.array(x), np.array(y)
+#주식장이 열리지 않는 공휴일,임시공휴일에 해당하는 행을 삭제하여 준다.
+import holidays
+kr_holidays = holidays.KR(years=[2020,2021])
+# print(kr_holidays)
 
+# x22 = np.array(x2)
 
-x1_co, y1_co = split_xy3(x11, 5, 2)
-x2_ko, y2_ko = split_xy3(x22, 5, 2)
-
-
-
-from sklearn.model_selection import train_test_split
-
-x1_train, x1_test, x2_train, x2_test, y1_train, y1_test, y2_train, y2_test = train_test_split(x1_co, x2_ko, y1_co, y2_ko ,train_size=0.8, random_state=66)
-
-print(x1_train.shape) #(20, 5, 1)
-
-
-
-#2. 모델구성
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, Input
-
-#2-1. 모델
-input1 = Input(shape=(5, 3))
-dense1 = LSTM(128, activation='relu')(input1)
-dense2 = Dense(64, activation='relu')(dense1)
-dense3 = Dropout(0.5)(dense2)
-dense4 = Dense(32, activation='linear')(dense3)
-dense5 = Dense(32, activation='linear')(dense4)
-dense6 = Dense(32, activation='linear')(dense5)
-dense7 = Dense(16, activation='linear')(dense6)
-dense8 = Dense(8, activation='linear')(dense7)
-output1 = Dense(2, activation='linear')(dense8)
-
-
-#2-2. 모델
-input2 = Input(shape=(5, 3))
-dense11 = LSTM(128, activation='relu')(input2)
-dense21 = Dense(64, activation='relu')(dense11)
-dense31 =Dropout(0.5)(dense21)
-dense41 = Dense(32, activation='linear')(dense31)
-dense51 = Dense(32, activation='linear')(dense41)
-dense61 = Dense(32, activation='linear')(dense51)
-dense71 = Dense(16, activation='linear')(dense61)
-dense81 = Dense(8, activation='linear')(dense71)
-output2 = Dense(2, activation='linear')(dense81)
-
-
-from tensorflow.keras.layers import concatenate, Concatenate
-
-merge1 = Concatenate()([output1, output2])#, axis=1)  # axis=0 y축방향 병합 (200,3)
-
-
-#2-3 output모델1
-output21 = Dense(64)(merge1)
-output22 = Dense(32)(output21)
-output23 = Dense(16)(output22)
-output24 = Dense(8, activation='relu')(output23)
-last_output1 = Dense(1)(output24)
-
-#2-3 output모델2
-output31 = Dense(64)(merge1)
-output32 = Dense(32)(output31)
-output33 = Dense(16)(output32)
-output34 = Dense(8, activation='relu')(output33)
-last_output2 = Dense(1)(output34)
-
-model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
-
-
-
-#3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam', metrics=['mae']) #rms
-
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
-#mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1220_lastcost7.hdf6')
-
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=10, validation_split=0.1, verbose=1, callbacks=[es])#,mcp]) 
-
-# model.save_weights("./_save/co_ko_1_save_weights.h5")
-
-#model = load_model("./_ModelCheckPoint/co_ko_1220_lastcost5.hdf5")
-
-#4. 평가, 예측
-loss = model.evaluate ([x1_test, x2_test], [y1_test,y2_test])
-print('loss :', loss) #loss :
-y1_pred, y2_pred = model.predict([x1_test, x2_test])
-# print('코로나환자예상수 : ', y1_pred[-1])
-print('코스피예상지수 : ', y2_pred[-1])
-# print(y1_pred[:5])
-
-'''
-코로나환자수 [3019]
-코스피지수  [2988.77]
-
-코스피예상지수 :  [3068.3394]
-
-코스피예상지수 :  [2978.539]
-
-코스피예상지수 :  [2834.2913]
-
-코스피예상지수 :  [3095.1743]
-
-코스피예상지수 :  [2987.2097]
-
-코스피예상지수 :  [2930.443]
-
-코스피예상지수 :  [3127.4482]
-
-코스피예상지수 :  [3104.3767]
-
-코스피예상지수 :  [3068.3394]
-
-코스피예상지수 :  [3059.4219
-
-10번 평균치 3008
-'''
 from sklearn.preprocessing import MinMaxScaler
 
-# kospi.sort_index(ascending=False).reset_index(drop=True)
+x1.sort_index(ascending=False).reset_index(drop=True)
 
 scaler = MinMaxScaler()
-scale_cols = kospi['현재지수','시가지수', '고가지수', '저가지수']
-df_scaled = scaler.fit_transform(kospi[scale_cols])
+scale_cols = ['계(명)', '국내발생(명)', '해외유입(명)', '누적환자수']
+df_scaled = scaler.fit_transform(x1[scale_cols])
 df_scaled = pd.DataFrame(df_scaled)
 df_scaled.columns = scale_cols
 
@@ -383,20 +292,123 @@ WINDOW_SIZE = 20
 train = df_scaled[:-TEST_SIZE]
 test = df_scaled[-TEST_SIZE:]
 
+def make_dataset(data, label, window_size=20):
+    feature_list = []
+    label_list = []
+    for i in range(len(data) - window_size):
+        feature_list.append(np.array(data.iloc[i:i+window_size]))
+        label_list.append(np.array(label.iloc[i+window_size]))
+    return np.array(feature_list), np.array(label_list)
 
-label_cols = kospi['현재지수']
+from sklearn.model_selection import train_test_split
+
+feature_cols = [ '국내발생(명)', '해외유입(명)', '누적환자수']
+label_cols = ['계(명)']
+
+train_feature = train[feature_cols]
+train_label = train[label_cols]
+
+train_feature, train_label = make_dataset(train_feature, train_label, 20)
+
+x_train, x_valid, y_train, y_valid = train_test_split(train_feature, train_label, test_size=0.2)
+x_train.shape, x_valid.shape
+
+test_feature = test[feature_cols]
 test_label = test[label_cols]
+
+test_feature.shape, test_label.shape
+
+test_feature, test_label = make_dataset(test_feature, test_label, 20)
+test_feature.shape, test_label.shape
+
+
+# print(x2.info())
+
+# def split_xy3(dataset, time_steps, y_column):                 
+#     x, y = list(), list()
+#     for i in range(len(dataset)):
+#         x_end_number = i + time_steps                    # 0 + 5 = 5
+#         y_end_number = x_end_number + y_column      # 5 + 2 = 7
+        
+#         if y_end_number > len(dataset):
+#             break
+             
+#         tmp_x = dataset[i:x_end_number, 1:]                #0:5,  1:
+#         tmp_y = dataset[x_end_number:y_end_number, 0]    #5:7, 0
+#         x.append(tmp_x)
+#         y.append(tmp_y)
+#     return np.array(x), np.array(y)
+
+
+# x2_ko, y2_ko = split_xy3(x22, 5, 2)
+
+# from sklearn.model_selection import train_test_split
+
+# x2_train, x2_test, y2_train, y2_test = train_test_split(x2_ko, y2_ko ,train_size=0.8, random_state=66)
+
+# print(x1_train.shape) #(20, 5, 1)
+
+
+
+
+#2. 모델구성
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Input
+
+model = Sequential()
+model.add(LSTM(64, activation='linear', input_shape=(20, 3)))
+model.add(Dense(16, activation='linear'))
+model.add(Dense(8, activation='linear'))
+model.add(Dense(1))
+
+#3. 컴파일, 훈련
+model.compile(loss='mean_squared_error', optimizer='adam')#, metrics=['mae']) #rms
+
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
+#mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1220_lastcost7.hdf6')
+
+model.fit(x_train, y_train, epochs=1000, batch_size=10, validation_split=0.2, verbose=1, callbacks=[es])#,mcp]) 
+
+# model.save_weights("./_save/keras999_1_save_weights.h5")
+
+#model = load_model("./_ModelCheckPoint/ss_ki_1220_lastcost5.hdf5")
+
+#4. 평가, 예측
+# loss = model.evaluate ([x2_test], [y2_test], batch_size=1)
+# print('loss :', loss) #loss :
+# y2_pred = model.predict([x2_test])
+# print('코스피예상지수 : ', y2_pred[-1])
+# print(y2_pred[:5])
+
+pred = model.predict(test_feature)
+
+pred.shape
+
+'''
+코스피예상지수 :  [2706.0867]
+코스피예상지수 :  [2705.1616]
+코스피예상지수 :  [2704.216]
+코스피예상지수 :  [2700.6172]
+코스피예상지수 :  [2706.017]
+코스피예상지수 :  [2705.435]
+코스피예상지수 :  [2703.2097]
+코스피예상지수 :  [2705.1052]
+코스피예상지수 :  [2706.6223]
+코스피예상지수 :  [2705.0889]
+
+10번 결과값 평균 : 2705
+'''
+
 plt.figure(figsize=(12, 9))
 plt.plot(test_label, label = 'actual')
-plt.plot(y2_pred, label = 'prediction')
+plt.plot(pred, label = 'prediction')
 plt.legend()
 plt.show()
 
 # train_data=x2[:388] 
 # valid_data=x2[388:] 
-# train_data['Predictions']=y1_pred
-# valid_data['Predictions']=y2_pred
-# plt.plot(train_data["현재지수","Predictions"]) 
+# valid_data['Predictions']=y2_pred 
+# plt.plot(train_data["현재지수"]) 
 # plt.plot(valid_data[['현재지수',"Predictions"]])
 # plt.show()
-
