@@ -52,8 +52,8 @@ path = 'D:\\Study\\개인프로젝트\\데이터자료\\csv\\'
 covid_19 = pd.read_csv(path +"코로나바이러스감염증-19_확진환자_발생현황_220110.csv", thousands=",", encoding='cp949')
 kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", encoding='cp949')
 
-# print(covid_19.head())
-# print(kospi.head())
+print(covid_19.head())
+print(kospi.head())
 
 
 #데이터 전처리
@@ -61,8 +61,10 @@ kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", e
 #covid_19.csv 에서 결측치 칼럼이 확인되어 삭제해주었다.
 
 # covid_19 = covid_19.drop(covid_19.index[range(0,1)] ,axis=0)
-covid_19 = covid_19.drop(covid_19.columns[range(5,8)], axis=1)
-# covid_19 = covid_19.replace("-","0")
+
+
+covid_19 = covid_19.drop(covid_19.columns[range(5,8)], axis=1) 
+covid_19 = covid_19.replace("-","0")
 
 
 
@@ -370,25 +372,11 @@ from sklearn.preprocessing import MinMaxScaler
 
 # kospi.sort_index(ascending=False).reset_index(drop=True)
 
-scaler = MinMaxScaler()
-scale_cols = kospi['현재지수','시가지수', '고가지수', '저가지수']
-df_scaled = scaler.fit_transform(kospi[scale_cols])
-df_scaled = pd.DataFrame(df_scaled)
-df_scaled.columns = scale_cols
-
-df_scaled
-TEST_SIZE = 200
-WINDOW_SIZE = 20
-
-train = df_scaled[:-TEST_SIZE]
-test = df_scaled[-TEST_SIZE:]
 
 
-label_cols = kospi['현재지수']
-test_label = test[label_cols]
 plt.figure(figsize=(12, 9))
-plt.plot(test_label, label = 'actual')
-plt.plot(y2_pred, label = 'prediction')
+plt.plot(y2_test[0][-1], label = 'actual')
+plt.plot(y2_pred[0][-1], label = 'prediction')
 plt.legend()
 plt.show()
 

@@ -224,7 +224,6 @@ X22=np.asarray(X22).astype(np.int)
 print(X11)
 print(X22)
 
-# x_ss = ss.drop(['일자', '시가', '고가', '저가', '종가','전일비', 'Unnamed: 6', '등락률', '신용비', '외인비'], axis =1)
 x11 = np.array(x1)
 x22 = np.array(x2)
 
@@ -281,27 +280,28 @@ from tensorflow.keras.layers import Dense, Input
 #2-1. 모델
 input1 = Input(shape=(5, 3))
 dense1 = LSTM(128, activation='relu')(input1)
-dense2 = Dense(64, activation='relu')(dense1)
-dense3 = Dropout(0.5)(dense2)
+dense2 = Dense(64, activation='linear')(dense1)
+dense3 = Dropout(0.4)(dense2)
 dense4 = Dense(32, activation='linear')(dense3)
 dense5 = Dense(32, activation='linear')(dense4)
 dense6 = Dense(32, activation='linear')(dense5)
 dense7 = Dense(16, activation='linear')(dense6)
 dense8 = Dense(8, activation='linear')(dense7)
-output1 = Dense(15, activation='linear')(dense8)
+output1 = Dense(16, activation='linear')(dense8)
 
 
 #2-2. 모델
 input2 = Input(shape=(5, 3))
 dense11 = LSTM(128, activation='relu')(input2)
-dense21 = Dense(64, activation='relu')(dense11)
-dense31 =Dropout(0.5)(dense21)
+dense21 = Dense(64, activation='linear')(dense11)
+dense31 =Dropout(0.4)(dense21)
 dense41 = Dense(32, activation='linear')(dense31)
 dense51 = Dense(32, activation='linear')(dense41)
 dense61 = Dense(32, activation='linear')(dense51)
 dense71 = Dense(16, activation='linear')(dense61)
 dense81 = Dense(8, activation='linear')(dense71)
-output2 = Dense(15, activation='linear')(dense81)
+output2 = Dense(16, activation='linear')(dense81)
+
 
 
 from tensorflow.keras.layers import concatenate, Concatenate
@@ -310,22 +310,23 @@ merge1 = Concatenate()([output1, output2])#, axis=1)  # axis=0 y축방향 병합
 
 
 #2-3 output모델1
-output21 = Dense(64)(merge1)
+output21 = Dense(32)(merge1)
 output22 = Dense(32)(output21)
 output23 = Dense(16)(output22)
 output24 = Dense(8, activation='relu')(output23)
-last_output1 = Dense(2)(output24)
+last_output1 = Dense(1)(output24)
 
 #2-3 output모델2
-output31 = Dense(64)(merge1)
+output31 = Dense(32)(merge1)
 output32 = Dense(32)(output31)
 output33 = Dense(16)(output32)
 output34 = Dense(8, activation='relu')(output33)
-last_output2 = Dense(2)(output34)
+last_output2 = Dense(1)(output34)
 
 model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
 
 
+model.summary()
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mae']) #rms
@@ -334,7 +335,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1220_lastcost7.hdf6')
 
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=10000, batch_size=10, validation_split=0.1, verbose=1, callbacks=[es])#,mcp]) 
+model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=10, validation_split=0.1, verbose=1, callbacks=[es])#,mcp]) 
 
 # model.save_weights("./_save/co_ko_1_save_weights.h5")
 
@@ -350,6 +351,10 @@ b = b.reshape(1,5,3)
 y1_predict, y2_predict = model.predict([a, b])
 print('코로나환자예상수 : ', y1_predict[0][-1])
 print('코스피예상지수 : ', y2_predict[0][-1])
+
+y1_pred, y2_pred = model.predict([x1_co, x2_ko])
+
+
 # print(y1_pred[:5])
 
 # '''
@@ -368,9 +373,9 @@ print('코스피예상지수 : ', y2_predict[0][-1])
 
 # 코스피예상지수 :  [2930.443]
 
-# 코스피예상지수 :  [3127.4482]
+# 코스피예상지수 :  3040.0396
 
-# 코스피예상지수 :  [3104.3767]
+# 코스피예상지수 :  2927.8196
 
 # 코스피예상지수 :  [3068.3394]
 
@@ -378,10 +383,12 @@ print('코스피예상지수 : ', y2_predict[0][-1])
 
 # 10번 평균치 3008
 # '''
-
-# train_data=x1 
-# valid_data=x2
-# valid_data['Predictions']=y2_pred[:][-1]
-# plt.plot(train_data["현재지수"])
-# plt.plot(valid_data[['현재지수',"Predictions"]])
-# plt.show()
+aa=x2[4:-2]
+train_data=aa['현재지수']
+valid_data=aa
+print(train_data.shape)
+print(valid_data.shape)
+valid_data['Predictions']=y2_pred
+plt.plot(train_data)
+plt.plot(valid_data["Predictions"])
+plt.show()
