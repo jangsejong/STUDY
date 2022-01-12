@@ -9,7 +9,22 @@ import warnings
 warnings.filterwarnings('ignore')
 from matplotlib import font_manager, rc 
 from xgboost import plot_importance
- 
+
+import matplotlib
+import platform
+
+
+#matplotlib 에서 사용하는 폰트를 한글 지원이 가능한 것으로 바꾸는 코드
+if platform.system() == 'Windows':
+# 윈도우인 경우
+    font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/malgun.ttf").get_name()
+    rc('font', family=font_name)
+else:    
+# Mac 인 경우
+    rc('font', family='AppleGothic')
+    
+matplotlib.rcParams['axes.unicode_minus'] = False   
+#그래프에서 마이너스 기호가 표시되도록 하는 설정입니다. 
 
 #데이터 로드
 
@@ -45,7 +60,7 @@ kospi.set_index('new_Date', inplace=True)
 
             
 # x1 = covid_19.drop(columns=[], axis=1) 
-x2 = kospi.drop(columns =['대비','등락률(%)', '배당수익률(%)', '주가이익비율', '주가자산비율', '거래량(천주)', '상장시가총액(백만원)', '거래대금(백만원)','현재지수'], axis=1) 
+x2 = kospi.drop(columns =['현재지수'], axis=1) 
 y2 = kospi['현재지수']
 
 
@@ -58,7 +73,7 @@ y2 = kospi['현재지수']
 
 
 df4_x_train, df4_x_test, df4_y_train, df4_y_test=train_test_split(x2, y2, test_size=0.3, random_state=66, shuffle=True)
-xgb_model=xgboost.XGBRegressor(n_estimators=100, learning_rate=0.08, gamma=0, subsampel=0.7, colsample_bytree=1, max_depth=7)
+xgb_model=xgboost.XGBRegressor(n_estimators=10000, learning_rate=0.08, gamma=0, subsampel=0.7, colsample_bytree=1, max_depth=7)
 
 print(len(df4_x_train), len(df4_x_test))
 xgb_model.fit(df4_x_train, df4_y_train)
@@ -70,9 +85,11 @@ XGBRegressor(base_score=0.5, booster='gbtree', colsample_bylevel=1, colsample_by
 xgboost.plot_importance(xgb_model)
 fig, ax = plt.subplots(figsize=(10,12))
 plot_importance(xgb_model, ax=ax)
-
 predictions=xgb_model.predict(df4_x_test)
-predictions
+print(predictions)
+
+
+plt.show()
 
 from tensorflow.python.keras.metrics import accuracy
 
@@ -83,3 +100,7 @@ print(explained_variance_score(predictions, df4_y_test))
 
 # test_loss, test_acc = xgb_model.evaluate(df4_x_test, df4_y_test)
 # print(" accuracy :%.2f%%" % (test_acc*100.0))
+'''
+r_sq : 0.9998540178355485
+explained_variance_score : 0.9984578066997549
+'''

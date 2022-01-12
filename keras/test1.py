@@ -296,27 +296,27 @@ from tensorflow.keras.layers import Dense, Input
 
 #2-1. 모델
 input1 = Input(shape=(5, 3))
-dense1 = LSTM(128, activation='relu')(input1)
-dense2 = Dense(64, activation='linear')(dense1)
-dense3 = Dropout(0.4)(dense2)
-dense4 = Dense(32, activation='linear')(dense3)
-dense5 = Dense(32, activation='linear')(dense4)
-dense6 = Dense(32, activation='linear')(dense5)
-dense7 = Dense(16, activation='linear')(dense6)
-dense8 = Dense(8, activation='linear')(dense7)
+dense1 = LSTM(256, activation='relu')(input1)
+dense2 = Dense(128, activation='linear')(dense1)
+dense3 = Dropout(0.2)(dense2)
+dense4 = Dense(64, activation='relu')(dense3)
+dense5 = Dense(64, activation='linear')(dense4)
+dense6 = Dense(32, activation='relu')(dense5)
+dense7 = Dense(32, activation='linear')(dense6)
+dense8 = Dense(32, activation='relu')(dense7)
 output1 = Dense(16, activation='linear')(dense8)
 
 
 #2-2. 모델
 input2 = Input(shape=(5, 3))
-dense11 = LSTM(128, activation='relu')(input2)
-dense21 = Dense(64, activation='linear')(dense11)
-dense31 =Dropout(0.4)(dense21)
-dense41 = Dense(32, activation='linear')(dense31)
-dense51 = Dense(32, activation='linear')(dense41)
-dense61 = Dense(32, activation='linear')(dense51)
-dense71 = Dense(16, activation='linear')(dense61)
-dense81 = Dense(8, activation='linear')(dense71)
+dense11 = LSTM(256, activation='relu')(input2)
+dense21 = Dense(128, activation='linear')(dense11)
+dense31 =Dropout(0.2)(dense21)
+dense41 = Dense(64, activation='relu')(dense31)
+dense51 = Dense(64, activation='linear')(dense41)
+dense61 = Dense(32, activation='relu')(dense51)
+dense71 = Dense(32, activation='linear')(dense61)
+dense81 = Dense(32, activation='relu')(dense71)
 output2 = Dense(16, activation='linear')(dense81)
 
 
@@ -327,15 +327,15 @@ merge1 = Concatenate()([output1, output2])#, axis=1)  # axis=0 y축방향 병합
 
 
 #2-3 output모델1
-output21 = Dense(32)(merge1)
-output22 = Dense(32)(output21)
+output21 = Dense(64)(merge1)
+output22 = Dense(32, activation='relu')(output21)
 output23 = Dense(16)(output22)
 output24 = Dense(8, activation='relu')(output23)
 last_output1 = Dense(1)(output24)
 
 #2-3 output모델2
-output31 = Dense(32)(merge1)
-output32 = Dense(32)(output31)
+output31 = Dense(64)(merge1)
+output32 = Dense(32, activation='relu')(output31)
 output33 = Dense(16)(output32)
 output34 = Dense(8, activation='relu')(output33)
 last_output2 = Dense(1)(output34)
