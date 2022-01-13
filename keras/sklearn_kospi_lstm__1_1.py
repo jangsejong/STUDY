@@ -237,9 +237,13 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
 
 model = Sequential()
-model.add(LSTM(64, activation='linear', input_shape=(20, 4)))
-model.add(Dense(16, activation='linear'))
+model.add(LSTM(256, activation='relu', input_shape=(20, 4)))
+model.add(Dense(128, activation='linear'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='linear'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(8, activation='linear'))
+model.add(Dense(4, activation='relu'))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련

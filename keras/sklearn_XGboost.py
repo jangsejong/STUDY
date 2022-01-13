@@ -64,7 +64,7 @@ x2 = kospi.drop(columns =['현재지수'], axis=1)
 y2 = kospi['현재지수']
 
 
-
+#print(x2.shape) #(484, 11)
 # x22 = np.array(x2)
 # y22 = np.array(y2)
 

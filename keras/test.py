@@ -49,10 +49,10 @@ warnings.filterwarnings('ignore')
 path = 'D:\\Study\\개인프로젝트\\데이터자료\\csv\\'
 
 covid_19 = pd.read_csv(path +"코로나바이러스감염증-19_확진환자_발생현황_220110.csv", thousands=",", encoding='cp949')
-kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", encoding='cp949')
+kospi = pd.read_csv(path +"코스피지수(202001~202112)_결측치.csv", thousands=",", encoding='cp949')
 
-# print(covid_19.head())
-# print(kospi.head())
+print(covid_19.head())
+print(kospi.head())
 
 
 #데이터 전처리
@@ -63,7 +63,11 @@ kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", e
 covid_19 = covid_19.drop(covid_19.columns[range(5,8)], axis=1)
 # covid_19 = covid_19.replace("-","0")
 
-
+kospi.fillna(method = 'pad') #결측치 바로 이전 값으로 채우기
+kospi.fillna(method = 'bfill') #결측치 바로 이후 값으로 채우기
+# 컬럼의 평균으로 대체하기
+kospi['현재지수'] = kospi['현재지수'].fillna(kospi['현재지수'].mean()) 
+kospi = kospi.fillna(0)  # 0으로 대체하기
 
 #covid_19 데이터와 상관 관계를 위하여 날짜를 맞추기 위해 kospi 데이터 1월19일까지의 데이터를 삭제 해주었다.
 kospi = kospi.drop(kospi.index[range(0,12)] ,axis=0)

@@ -289,7 +289,6 @@ print(x2_train.shape, x2_test.shape)    # (382, 5, 3) (96, 5, 3)
 print(y1_train.shape, y1_test.shape)    # (382, 2) (96, 2)
 print(y2_train.shape, y2_test.shape)    # (382, 2) (96, 2)
 
-
 #2. 모델구성
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
@@ -297,48 +296,49 @@ from tensorflow.keras.layers import Dense, Input
 #2-1. 모델
 input1 = Input(shape=(5, 3))
 dense1 = LSTM(256, activation='relu')(input1)
-dense2 = Dense(128, activation='linear')(dense1)
-dense3 = Dropout(0.2)(dense2)
-dense4 = Dense(64, activation='relu')(dense3)
+dense2 = Dense(192, activation='linear')(dense1)
+dense3 = Dropout(0.4)(dense2)
+dense4 = Dense(128, activation='relu')(dense3)
 dense5 = Dense(64, activation='linear')(dense4)
-dense6 = Dense(32, activation='relu')(dense5)
+dense6 = Dense(48, activation='relu')(dense5)
 dense7 = Dense(32, activation='linear')(dense6)
-dense8 = Dense(32, activation='relu')(dense7)
-output1 = Dense(16, activation='linear')(dense8)
-
-
+dense8 = Dense(24, activation='relu')(dense7)
+output1 = Dense(18, activation='linear')(dense8)
 #2-2. 모델
 input2 = Input(shape=(5, 3))
 dense11 = LSTM(256, activation='relu')(input2)
-dense21 = Dense(128, activation='linear')(dense11)
-dense31 =Dropout(0.2)(dense21)
-dense41 = Dense(64, activation='relu')(dense31)
+dense21 = Dense(192, activation='linear')(dense11)
+dense31 =Dropout(0.4)(dense21)
+dense41 = Dense(128, activation='relu')(dense31)
 dense51 = Dense(64, activation='linear')(dense41)
-dense61 = Dense(32, activation='relu')(dense51)
+dense61 = Dense(48, activation='relu')(dense51)
 dense71 = Dense(32, activation='linear')(dense61)
-dense81 = Dense(32, activation='relu')(dense71)
-output2 = Dense(16, activation='linear')(dense81)
-
-
-
+dense81 = Dense(24, activation='relu')(dense71)
+output2 = Dense(18, activation='linear')(dense81)
 from tensorflow.keras.layers import concatenate, Concatenate
-
-merge1 = Concatenate()([output1, output2])#, axis=1)  # axis=0 y축방향 병합 (200,3)
-
-
+merge1 = Concatenate()([output1, output2])
 #2-3 output모델1
-output21 = Dense(64)(merge1)
-output22 = Dense(32, activation='relu')(output21)
-output23 = Dense(16)(output22)
-output24 = Dense(8, activation='relu')(output23)
-last_output1 = Dense(1)(output24)
-
+output21 = Dense(256, activation='relu')(merge1)
+output22 = Dense(128)(output21)
+output23 = Dense(64, activation='relu')(output22)
+output24 = Dense(48)(output23)
+output25 = Dense(32, activation='relu')(output24)
+output26 = Dense(24)(output25)
+output27 = Dense(16, activation='relu')(output26)
+output28 = Dense(8)(output27)
+output29 = Dense(4, activation='relu')(output28)
+last_output1 = Dense(1)(output29)
 #2-3 output모델2
-output31 = Dense(64)(merge1)
-output32 = Dense(32, activation='relu')(output31)
-output33 = Dense(16)(output32)
-output34 = Dense(8, activation='relu')(output33)
-last_output2 = Dense(1)(output34)
+output31 = Dense(256, activation='relu')(merge1)
+output32 = Dense(128)(output31)
+output33 = Dense(64, activation='relu')(output32)
+output34 = Dense(48)(output33)
+output35 = Dense(32, activation='relu')(output34)
+output36 = Dense(24)(output35)
+output37 = Dense(16, activation='relu')(output36)
+output38 = Dense(8)(output37)
+output39 = Dense(4, activation='relu')(output38)
+last_output2 = Dense(1)(output39)
 
 model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
 
@@ -349,10 +349,10 @@ model.summary()
 model.compile(loss='mse', optimizer='adam', metrics=['mae']) #rms
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience= 100 , mode = 'auto', verbose=1, restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1220_lastcost7.hdf6')
 
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=10, validation_split=0.1, verbose=1, callbacks=[es])#,mcp]) 
+model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=10000, batch_size=16, validation_split=0.25, verbose=1, callbacks=[es])#,mcp]) 
 
 # model.save_weights("./_save/co_ko_1_save_weights.h5")
 
@@ -378,25 +378,25 @@ y1_pred, y2_pred = model.predict([x1_co, x2_ko])
 # 코로나환자수 [3019]
 # 코스피지수  [2988.77]
 
-# 코스피예상지수 :  [3068.3394]
+# 코스피예상지수 :  3058.445
 
-# 코스피예상지수 :  [2978.539]
+# 코스피예상지수 :  2998.6736
 
-# 코스피예상지수 :  [2834.2913]
+# 코스피예상지수 :  3065.708
 
-# 코스피예상지수 :  [3095.1743]
+# 코스피예상지수 :  3026.167
 
-# 코스피예상지수 :  [2987.2097]
+# 코스피예상지수 :  2960.4084
 
-# 코스피예상지수 :  [2930.443]
+# 코스피예상지수 :  3253.4265
 
-# 코스피예상지수 :  3040.0396
+# 코스피예상지수 :  3085.0144
 
-# 코스피예상지수 :  2927.8196
+# 코스피예상지수 :  2810.0493
 
-# 코스피예상지수 :  3064.6743
+# 코스피예상지수 :  3040.9766
 
-# 코스피예상지수 :  [3059.4219
+# 코스피예상지수 :  3072.7698
 
 # 10번 평균치 2998
 # '''
