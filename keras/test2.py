@@ -49,22 +49,13 @@ warnings.filterwarnings('ignore')
 path = 'D:\\Study\\개인프로젝트\\데이터자료\\csv\\'
 
 covid_19 = pd.read_csv(path +"코로나바이러스감염증-19_확진환자_발생현황_220110.csv", thousands=",", encoding='cp949')
-kospi = pd.read_csv(path +"코스피지수(202001~202112)_결측치.csv", thousands=",", encoding='cp949')
+kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", encoding='cp949')
 
-
+# print(covid_19.head())
+# print(kospi.head())
 
 
 #데이터 전처리
-
-
-# kospi= kospi.fillna(method = 'pad') #결측치 바로 이전 값으로 채우기
-# kospi= kospi.fillna(method = 'bfill') #결측치 바로 이후 값으로 채우기
-# # 컬럼의 평균으로 대체하기
-# kospi['현재지수'] = kospi['현재지수'].fillna(kospi['현재지수'].mean()) 
-# kospi['주가이익비율'] = kospi['주가이익비율'].fillna(kospi['주가이익비율'].mean()) 
-# kospi['시가지수'] = kospi['시가지수'].fillna(kospi['시가지수'].mean()) 
-# kospi['저가지수'] = kospi['저가지수'].fillna(kospi['저가지수'].mean()) 
-# kospi = kospi.fillna()  # 0으로 대체하기
 
 #covid_19.csv 에서 결측치 칼럼이 확인되어 삭제해주었다.
 
@@ -73,8 +64,7 @@ covid_19 = covid_19.drop(covid_19.columns[range(5,8)], axis=1)
 # covid_19 = covid_19.replace("-","0")
 
 
-print(covid_19.head())
-print(kospi.head())
+
 #covid_19 데이터와 상관 관계를 위하여 날짜를 맞추기 위해 kospi 데이터 1월19일까지의 데이터를 삭제 해주었다.
 kospi = kospi.drop(kospi.index[range(0,12)] ,axis=0)
 
@@ -120,7 +110,7 @@ for col2 in x2.columns:
 # print(x1.shape)
 # print(x2.shape)
 
-'''
+
 #주식장이 열리지 않는 주말에 해당하는 행을 삭제하여 준다.
 x1 = x1.drop(pd.date_range('2020-01-20', '2022-01-02', freq='W-SAT'),axis=0)
 x1 = x1.drop(pd.date_range('2020-01-20', '2022-01-02', freq='W-SUN'),axis=0)
@@ -135,7 +125,6 @@ import pandas as pd
 kr_holidays = holidays.KR(years=[2020,2021]) 
 
 
-'''
 '''
 {datetime.date(2020, 1, 1): "New Year's Day", datetime.date(2020, 1, 24): "The day preceding of Lunar New Year's Day", 
 datetime.date(2020, 1, 25): "Lunar New Year's Day", datetime.date(2020, 1, 26): "The second day of Lunar New Year's Day", 
@@ -152,7 +141,6 @@ datetime.date(2021, 8, 15): 'Liberation Day', datetime.date(2021, 8, 16): 'Alter
 datetime.date(2021, 9, 20): 'The day preceding of Chuseok', datetime.date(2021, 9, 21): 'Chuseok', datetime.date(2021, 9, 22): 'The second day of Chuseok', 
 datetime.date(2021, 10, 3): 'National Foundation Day', datetime.date(2021, 10, 4): 'Alternative holiday of National Foundation Day', 
 datetime.date(2021, 10, 9): 'Hangeul Day', datetime.date(2021, 10, 11): 'Alternative holiday of Hangeul Day', datetime.date(2021, 12, 25): 'Christmas Day'}
-'''
 '''
 
 
@@ -204,7 +192,7 @@ x1.drop("2021-12-31", axis=0, inplace=True)  #한국 폐장일
 
 
 # x1.drop("2020-10-09", axis=0, inplace=True)
-'''
+
 
 
 
@@ -301,56 +289,56 @@ print(x2_train.shape, x2_test.shape)    # (382, 5, 3) (96, 5, 3)
 print(y1_train.shape, y1_test.shape)    # (382, 2) (96, 2)
 print(y2_train.shape, y2_test.shape)    # (382, 2) (96, 2)
 
-
 #2. 모델구성
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
 
 #2-1. 모델
 input1 = Input(shape=(5, 3))
-dense1 = LSTM(128, activation='relu')(input1)
-dense2 = Dense(64, activation='linear')(dense1)
+dense1 = LSTM(256, activation='relu', stateful= True)(input1)
+dense2 = Dense(192, activation='linear')(dense1)
 dense3 = Dropout(0.4)(dense2)
-dense4 = Dense(32, activation='linear')(dense3)
-dense5 = Dense(32, activation='linear')(dense4)
-dense6 = Dense(32, activation='linear')(dense5)
-dense7 = Dense(16, activation='linear')(dense6)
-dense8 = Dense(8, activation='linear')(dense7)
-output1 = Dense(16, activation='linear')(dense8)
-
-
+dense4 = Dense(128, activation='relu')(dense3)
+dense5 = Dense(64, activation='linear')(dense4)
+dense6 = Dense(48, activation='relu')(dense5)
+dense7 = Dense(32, activation='linear')(dense6)
+dense8 = Dense(24, activation='relu')(dense7)
+output1 = Dense(18, activation='linear')(dense8)
 #2-2. 모델
 input2 = Input(shape=(5, 3))
-dense11 = LSTM(128, activation='relu')(input2)
-dense21 = Dense(64, activation='linear')(dense11)
+dense11 = LSTM(256, activation='relu', stateful= True)(input2)
+dense21 = Dense(192, activation='linear')(dense11)
 dense31 =Dropout(0.4)(dense21)
-dense41 = Dense(32, activation='linear')(dense31)
-dense51 = Dense(32, activation='linear')(dense41)
-dense61 = Dense(32, activation='linear')(dense51)
-dense71 = Dense(16, activation='linear')(dense61)
-dense81 = Dense(8, activation='linear')(dense71)
-output2 = Dense(16, activation='linear')(dense81)
-
-
-
+dense41 = Dense(128, activation='relu')(dense31)
+dense51 = Dense(64, activation='linear')(dense41)
+dense61 = Dense(48, activation='relu')(dense51)
+dense71 = Dense(32, activation='linear')(dense61)
+dense81 = Dense(24, activation='relu')(dense71)
+output2 = Dense(18, activation='linear')(dense81)
 from tensorflow.keras.layers import concatenate, Concatenate
-
-merge1 = Concatenate()([output1, output2])#, axis=1)  # axis=0 y축방향 병합 (200,3)
-
-
+merge1 = Concatenate()([output1, output2])
 #2-3 output모델1
-output21 = Dense(32)(merge1)
-output22 = Dense(32)(output21)
-output23 = Dense(16)(output22)
-output24 = Dense(8, activation='relu')(output23)
-last_output1 = Dense(1)(output24)
-
+output21 = Dense(256, activation='relu')(merge1)
+output22 = Dense(128)(output21)
+output23 = Dense(64, activation='relu')(output22)
+output24 = Dense(48)(output23)
+output25 = Dense(32, activation='relu')(output24)
+output26 = Dense(24)(output25)
+output27 = Dense(16, activation='relu')(output26)
+output28 = Dense(8)(output27)
+output29 = Dense(4, activation='relu')(output28)
+last_output1 = Dense(1)(output29)
 #2-3 output모델2
-output31 = Dense(32)(merge1)
-output32 = Dense(32)(output31)
-output33 = Dense(16)(output32)
-output34 = Dense(8, activation='relu')(output33)
-last_output2 = Dense(1)(output34)
+output31 = Dense(256, activation='relu')(merge1)
+output32 = Dense(128)(output31)
+output33 = Dense(64, activation='relu')(output32)
+output34 = Dense(48)(output33)
+output35 = Dense(32, activation='relu')(output34)
+output36 = Dense(24)(output35)
+output37 = Dense(16, activation='relu')(output36)
+output38 = Dense(8)(output37)
+output39 = Dense(4, activation='relu')(output38)
+last_output2 = Dense(1)(output39)
 
 model = Model(inputs=[input1, input2], outputs= [last_output1, last_output2])
 
@@ -361,10 +349,10 @@ model.summary()
 model.compile(loss='mse', optimizer='adam', metrics=['mae']) #rms
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-es = EarlyStopping(monitor='val_loss', patience= 20 , mode = 'auto', verbose=1, restore_best_weights=True)
+es = EarlyStopping(monitor='val_loss', patience= 100 , mode = 'auto', verbose=1, restore_best_weights=True)
 #mcp = ModelCheckpoint(monitor='val_loss', mode= 'auto', verbose=1, save_best_only=True, filepath='./_ModelCheckPoint/ss_ki_1220_lastcost7.hdf6')
 
-model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=1000, batch_size=10, validation_split=0.1, verbose=1, callbacks=[es])#,mcp]) 
+model.fit([x1_train, x2_train], [y1_train,y2_train], epochs=10000, batch_size=16, validation_split=0.25, verbose=1, callbacks=[es])#,mcp]) 
 
 # model.save_weights("./_save/co_ko_1_save_weights.h5")
 
@@ -390,25 +378,25 @@ y1_pred, y2_pred = model.predict([x1_co, x2_ko])
 # 코로나환자수 [3019]
 # 코스피지수  [2988.77]
 
-# 코스피예상지수 :  [3068.3394]
+# 코스피예상지수 :  3058.445
 
-# 코스피예상지수 :  [2978.539]
+# 코스피예상지수 :  2998.6736
 
-# 코스피예상지수 :  [2834.2913]
+# 코스피예상지수 :  3065.708
 
-# 코스피예상지수 :  [3095.1743]
+# 코스피예상지수 :  3026.167
 
-# 코스피예상지수 :  [2987.2097]
+# 코스피예상지수 :  2960.4084
 
-# 코스피예상지수 :  [2930.443]
+# 코스피예상지수 :  3253.4265
 
-# 코스피예상지수 :  3040.0396
+# 코스피예상지수 :  3085.0144
 
-# 코스피예상지수 :  2927.8196
+# 코스피예상지수 :  2810.0493
 
-# 코스피예상지수 :  3064.6743
+# 코스피예상지수 :  3040.9766
 
-# 코스피예상지수 :  [3059.4219
+# 코스피예상지수 :  3072.7698
 
 # 10번 평균치 2998
 # '''
