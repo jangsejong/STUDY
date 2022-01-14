@@ -29,7 +29,9 @@ from sklearn.model_selection import train_test_split,KFold,cross_val_score,Strat
 # x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.2, shuffle=True, random_state=66)
 
 
-scoring = 'neg_root_mean_squared_error'
+# scoring = 'neg_root_mean_squared_error'
+scoring = 'cross_val_score'
+
 n_splits =5
 # kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=66)
