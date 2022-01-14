@@ -23,11 +23,16 @@ datasets= load_wine()
 x = datasets.data
 y = datasets.target
 
-from sklearn.model_selection import train_test_split,KFold,cross_val_score
+from sklearn.model_selection import train_test_split,KFold,cross_val_score,StratifiedKFold
 
-# scoring = 'neg_root_mean_squared_error'
+
+# x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.2, shuffle=True, random_state=66)
+
+
+scoring = 'neg_root_mean_squared_error'
 n_splits =5
-kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+# kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+kfold = StratifiedKFold(n_splits=n_splits, random_state=66)
 
 model = SVC()
 
@@ -35,3 +40,17 @@ scores = cross_val_score(model, x, y, cv=kfold)#, scoring=scoring)
 print("Acc :", scores, "\n cross_val_score :", round(np.mean(scores),4))
 
 
+'''
+#일반적인 k-fold
+label이 고르게 분포되지 못하는 현상이 발생합니다.
+#shuffle=True
+어느정도 고르게 나옵니다.
+#StratifiedKFold
+더 고르게 분할됩니다.
+
+1) 교차검증의 목적은 모델의 성능 평가를 일반화하는것
+
+2) sklearn의 kFold는 label을 고르게 분배하지 않음
+
+3) sklearn의 cross_val_score 사용해서 kfold 교차검증 수행
+'''
