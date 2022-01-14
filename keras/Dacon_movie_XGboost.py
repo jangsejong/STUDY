@@ -41,6 +41,53 @@ print(test.info())
 print(train.shape) #(5000, 3)
 print(test.shape)  #(5000, 2)
 
+# DataSet search
+
+# for col1 in train.columns:
+#     n_nan1 = train[col1].isnull().sum()
+#     if n_nan1>0:
+#       msg1 = '{:^20}에서 결측치 개수 : {}개'.format(col1,n_nan1)
+#       print(msg1)
+#     else:
+#           print('결측치가 없습니다.')    
+# for col2 in test.columns:
+#     n_nan2 = test[col2].isnull().sum()
+#     if n_nan2>0:
+#       msg2 = '{:^20}에서 결측치 개수 : {}개'.format(col2,n_nan2)
+#       print(msg2)
+#     else:
+#           print('결측치가 없습니다.')  
+
+# 결측치가 없다.
+'여행에 집중할수 있게 편안한 휴식을 제공하는 호텔이었습니다. 위치선정 또한 적당한 편이었고 청소나 청결상태도 좋았습니다.'
+'여행에 집중할수 있게 편안한 휴식을 제공하는 호텔이었습니다. 위치선정 또한 적당한 편이었고 청소나 청결상태도 좋았습니다.'
+
+
+
+#정규 표현식 적용
+import re
+
+def apply_regular_expression(document):
+    hangul = re.compile('[^ ㄱ-ㅣ 가-힣]')  # 한글 추출 규칙: 띄어 쓰기(1 개)를 포함한 한글
+    result = hangul.sub('', document)  # 위에 설정한 "hangul"규칙을 "text"에 적용(.sub)시킴
+    return result
+print(train['document'][1])
+print(apply_regular_expression(train['document'][1]))
+#정규 표현식을 적용한 후 특수 문자가 잘 제거된 것을 확인할 수 있습니다.
+
+#한국어 형태소 분석 - 명사 단위
+from konlpy.tag import Kkma, Komoran, Okt, Mecab
+from collections import Counter
+
+
+mec = Mecab()
+okt = Okt()
+kkm = Kkma()
+kom = Komoran()  # 명사 형태소 추출 함수
+nouns = mec.nouns(apply_regular_expression(train['text'][1]))
+print(nouns)
+
+
 
 
 '''
