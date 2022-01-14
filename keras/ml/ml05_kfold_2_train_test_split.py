@@ -32,11 +32,22 @@ from sklearn.model_selection import train_test_split,KFold,cross_val_score,Strat
 scoring = 'neg_root_mean_squared_error'
 n_splits =5
 # kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
-kfold = StratifiedKFold(n_splits=n_splits, random_state=66)
+kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=66)
 
 model = SVC()
 
 scores = cross_val_score(model, x, y, cv=kfold)#, scoring=scoring)
+'''
+cross_val_score는 여러 파라미터를 받습니다.
+첫번째는 모델
+두번째는 feature
+세번째는 target 
+cv는 분할 설정값
+scoring은 평가방법
+score = cross_val_score(dt, iris.data, iris.target, cv=kfold, scoring="accuracy")
+print(score.mean())
+'''
+
 print("Acc :", scores, "\n cross_val_score :", round(np.mean(scores),4))
 
 
