@@ -139,7 +139,7 @@ for tri, vai in cv.split(x_train):
     model.fit(x_train.iloc[tri], y_train[tri], 
             eval_set=[(x_train.iloc[vai], y_train[vai])], 
             early_stopping_rounds=patience ,
-            verbose = 100
+            verbose = 1000
         )
     
     models.append(model)
@@ -169,7 +169,7 @@ print(np.mean(scores))
 pred = np.mean( pred_list , axis = 0 )
 pred = np.where(pred >= threshold , 1, 0)
 
-sample_submission = pd.read_csv(f'{DATA_PATH}0114_1.csv')
+sample_submission = pd.read_csv(f'{DATA_PATH}0114_2.csv')
 sample_submission['target'] = pred
 sample_submission
 
