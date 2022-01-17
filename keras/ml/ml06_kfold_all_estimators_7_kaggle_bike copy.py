@@ -7,6 +7,7 @@ warnings.filterwarnings('ignore')
 
 import numpy as np
 import pandas as pd
+from sklearn.datasets import load_iris
 from tensorflow.python.keras.metrics import accuracy
 
 
