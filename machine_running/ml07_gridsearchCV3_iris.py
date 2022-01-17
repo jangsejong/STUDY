@@ -49,6 +49,23 @@ from sklearn.model_selection import cross_val_score, GridSearchCV
 x_train, x_test,y_train,y_test=train_test_split(x,y, shuffle=True, random_state=66, train_size=0.8)
 
 #2. 모델구성
+from sklearn.linear_model import *
+
+from sklearn.neighbors import *
+
+models = []
+models.append(('LR',LinearRegression()))
+models.append(('LASSO',Lasso()))
+models.append(('KNN',KNeighborsRegressor()))
+models.append(('CART',DecisionTreeRegressor()))
+models.append(('EN',ElasticNet()))
+models.append(('SVM',SVR()))
+models.append(('RFR',RandomForestRegressor()))
+models.append(('XGBR',XGBRegressor()))
+models.append(('LGBMR',LGBMRegressor()))
+models.append(('AdaR',AdaBoostRegressor()))
+models.append(('Cat',CatBoostRegressor(verbose=False)))
+models.append(('Xtree',ExtraTreesRegressor()))
 # model = GridSearchCV(SVC(), parameter, cv=kfold, verbose=1, refit=True)
 model = SVC(C=1, kernel='linear',degree=3)
 
