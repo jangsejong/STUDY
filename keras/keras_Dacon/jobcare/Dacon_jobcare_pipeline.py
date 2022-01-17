@@ -219,14 +219,14 @@ for tri, vai in cv.split(x_train):
 
 
 
-for name, model in models:
-  kfold = KFold(n_splits=10,random_state=7,shuffle = True)
-  cv_results = cross_val_score(model,x_train.iloc[tri], y_train[tri]
-                               ,cv= kfold,scoring='accuracy')
-  results.append(cv_results)
-  names.append(name)
-  msg = "%s : %f (%f) "%(name,cv_results.mean(),cv_results.std())
-  print(msg)
+# for name, model in models:
+#   kfold = KFold(n_splits=10,random_state=7,shuffle = True)
+#   cv_results = cross_val_score(model,x_train.iloc[tri], y_train[tri]
+#                                ,cv= kfold,scoring='accuracy')
+#   results.append(cv_results)
+#   names.append(name)
+#   msg = "%s : %f (%f) "%(name,cv_results.mean(),cv_results.std())
+#   print(msg)
 
 
 
@@ -236,30 +236,30 @@ scoring = 'neg_root_mean_squared_error'
 X_all = x_train.iloc[tri]
 y_all = y_train[tri]
 
-X_train, X_valid, y_train, y_valid = train_test_split(x_train.iloc[tri], y_train[tri]
+X_train, X_valid, y_train, y_valid = train_test_split(X_all, y_all
                                                       ,test_size=0.3,random_state=66)
 
 
 models = []
-models.append(('LR',LinearRegression()))
-models.append(('LASSO',Lasso()))
-models.append(('KNN',KNeighborsRegressor()))
-models.append(('CART',DecisionTreeRegressor()))
-models.append(('EN',ElasticNet()))
-models.append(('SVM',SVR()))
-models.append(('RFR',RandomForestRegressor()))
+# models.append(('LR',LinearRegression()))
+# models.append(('LASSO',Lasso()))
+# models.append(('KNN',KNeighborsRegressor()))
+# models.append(('CART',DecisionTreeRegressor()))
+# models.append(('EN',ElasticNet()))
+# models.append(('SVM',SVR()))
+# models.append(('RFR',RandomForestRegressor()))
 models.append(('XGBR',XGBRegressor()))
 models.append(('LGBMR',LGBMRegressor()))
-models.append(('AdaR',AdaBoostRegressor()))
+# models.append(('AdaR',AdaBoostRegressor()))
 models.append(('Cat',CatBoostRegressor(verbose=False)))
-models.append(('Xtree',ExtraTreesRegressor()))
+# models.append(('Xtree',ExtraTreesRegressor()))
 
 results =[]
 names = []
 for name, model in models:
   kfold = KFold(n_splits=10,random_state=66,shuffle = True)
   cv_results = cross_val_score(model,X_train,y_train
-                               ,cv= kfold,scoring=scoring)
+                               ,cv= kfold,scoring=scoring)#, n_jobs=-1)
   results.append(cv_results)
   names.append(name)
   msg = "%s : %f (%f) "%(name,cv_results.mean(),cv_results.std())
@@ -271,25 +271,25 @@ for name, model in models:
 #standardization
 
 pipelines = []
-pipelines.append(('ScaledLR',Pipeline([('Scaler',preprocessing.StandardScaler()),('LR',LinearRegression())])))
-pipelines.append(('ScaledLASSO',Pipeline([('Scaler',preprocessing.StandardScaler()),('LASSO',Lasso())])))
-pipelines.append(('ScaledKNN',Pipeline([('Scaler',preprocessing.StandardScaler()),('KNN',KNeighborsRegressor())])))
-pipelines.append(('ScaledCART',Pipeline([('Scaler',preprocessing.StandardScaler()),('CART',DecisionTreeRegressor())])))
-pipelines.append(('ScaledEN',Pipeline([('Scaler',preprocessing.StandardScaler()),('EN',ElasticNet())])))
-pipelines.append(('ScaledSVM',Pipeline([('Scaler',preprocessing.StandardScaler()),('SVM',SVR())])))
-pipelines.append(('ScaledRFR',Pipeline([('Scaler',preprocessing.StandardScaler()),('RFR',RandomForestRegressor())])))
+# pipelines.append(('ScaledLR',Pipeline([('Scaler',preprocessing.StandardScaler()),('LR',LinearRegression())])))
+# pipelines.append(('ScaledLASSO',Pipeline([('Scaler',preprocessing.StandardScaler()),('LASSO',Lasso())])))
+# pipelines.append(('ScaledKNN',Pipeline([('Scaler',preprocessing.StandardScaler()),('KNN',KNeighborsRegressor())])))
+# pipelines.append(('ScaledCART',Pipeline([('Scaler',preprocessing.StandardScaler()),('CART',DecisionTreeRegressor())])))
+# pipelines.append(('ScaledEN',Pipeline([('Scaler',preprocessing.StandardScaler()),('EN',ElasticNet())])))
+# pipelines.append(('ScaledSVM',Pipeline([('Scaler',preprocessing.StandardScaler()),('SVM',SVR())])))
+# pipelines.append(('ScaledRFR',Pipeline([('Scaler',preprocessing.StandardScaler()),('RFR',RandomForestRegressor())])))
 pipelines.append(('ScaledXGBR',Pipeline([('Scaler',preprocessing.StandardScaler()),('XGBR',XGBRegressor())])))
 pipelines.append(('ScaledLGBMR',Pipeline([('Scaler',preprocessing.StandardScaler()),('LGBMR',LGBMRegressor())])))
-pipelines.append(('ScaledAdaR',Pipeline([('Scaler',preprocessing.StandardScaler()),('AdaR',AdaBoostRegressor())])))
+# pipelines.append(('ScaledAdaR',Pipeline([('Scaler',preprocessing.StandardScaler()),('AdaR',AdaBoostRegressor())])))
 pipelines.append(('ScaledCat',Pipeline([('Scaler',preprocessing.StandardScaler()),('Cat',CatBoostRegressor(verbose=False))])))
-pipelines.append(('ScaledXtree',Pipeline([('Scaler',preprocessing.StandardScaler()),('Xtree',ExtraTreesRegressor())])))
+# pipelines.append(('ScaledXtree',Pipeline([('Scaler',preprocessing.StandardScaler()),('Xtree',ExtraTreesRegressor())])))
 
 results_scaled =[]
 names_scaled = []
 for name, model in pipelines:
   kfold = KFold(n_splits=10,random_state=66,shuffle = True)
   cv_results = cross_val_score(model,X_train,y_train
-                               ,cv= kfold,scoring=scoring)
+                               ,cv= kfold,scoring=scoring, n_jobs=-1)
   results_scaled.append(cv_results)
   names_scaled.append(name)
   msg = "%s : %f (%f) "%(name,cv_results.mean(),cv_results.std())
@@ -298,34 +298,35 @@ for name, model in pipelines:
   
 scaler = preprocessing.StandardScaler().fit(X_all)
 scaled_X = scaler.transform(X_all)
-params = { 'n_estimators' : [10, 50,100],
-           'max_depth' : [6, 12,18,24],
-           'min_samples_leaf' : [1, 6, 12, 18],
-           'min_samples_split' : [2, 8, 16, 20]
-            }
-model = RandomForestRegressor()
-kfold = KFold(n_splits= num_folds,random_state = 66 ,shuffle = True)
-grid = GridSearchCV(estimator= model, param_grid = params,scoring= 'neg_root_mean_squared_error',cv=kfold )
-grid_result = grid.fit(scaled_X,y_all)
 
-print("Best : %f using %s "%(grid_result.best_score_,grid_result.best_params_))  
+# params = { 'n_estimators' : [10, 50,100],
+#            'max_depth' : [6, 12,18,24],
+#            'min_samples_leaf' : [1, 6, 12, 18],
+#            'min_samples_split' : [2, 8, 16, 20]
+#             }
+# model = RandomForestRegressor()
+# kfold = KFold(n_splits= num_folds,random_state = 66 ,shuffle = True)
+# grid = GridSearchCV(estimator= model, param_grid = params,scoring= 'neg_root_mean_squared_error',cv=kfold )
+# grid_result = grid.fit(scaled_X,y_all)
+
+# print("Best : %f using %s "%(grid_result.best_score_,grid_result.best_params_))  
   
   
   
   
-params = { 'n_estimators' : [10, 50,100],
-           'max_depth' : [6,12,18,24],
-           'min_samples_leaf' : [1, 6, 12, 18],
-           'min_samples_split' : [2,4,8, 16]
-            }
-model =ExtraTreesRegressor()
-kfold = KFold(n_splits= num_folds,random_state = 66 ,shuffle = True)
-grid = GridSearchCV(estimator= model, param_grid = params, scoring= 'neg_root_mean_squared_error',cv=kfold )
-grid_result = grid.fit(X_all,y_all)  
+# params = { 'n_estimators' : [10, 50,100],
+#            'max_depth' : [6,12,18,24],
+#            'min_samples_leaf' : [1, 6, 12, 18],
+#            'min_samples_split' : [2,4,8, 16]
+#             }
+# model =ExtraTreesRegressor()
+# kfold = KFold(n_splits= num_folds,random_state = 66 ,shuffle = True)
+# grid = GridSearchCV(estimator= model, param_grid = params, scoring= 'neg_root_mean_squared_error',cv=kfold )
+# grid_result = grid.fit(X_all,y_all)  
   
   
 
-print("Best : %f using %s "%(grid_result.best_score_,grid_result.best_params_))
+# print("Best : %f using %s "%(grid_result.best_score_,grid_result.best_params_))
 
   
   
@@ -336,52 +337,52 @@ import math
 errors = []
 pred_valid=[]
 pred_test = []  
-test = y_train[tri]
+# test = y_train[tri]
   
 scaler = preprocessing.StandardScaler().fit(X_train)
 scaled_X_train = scaler.transform(X_train)
 scaled_X_valid = scaler.transform(X_valid)
-scaled_X_test = scaler.transform(test) 
+scaled_X_test = scaler.transform(y_train[tri]) 
   
   
   
-lasso = Lasso()
-lasso.fit(X_train,y_train)
-lasso_valid = lasso.predict(X_valid)
-rmse = math.sqrt(mean_squared_error(y_valid, lasso_valid))
-errors.append(('Lasso',rmse))
-pred_valid.append(('Lasso',lasso_valid))
-lasso_test = lasso.predict(test)
-pred_test.append(('Lasso',lasso_test))  
+# lasso = Lasso()
+# lasso.fit(X_train,y_train)
+# lasso_valid = lasso.predict(X_valid)
+# rmse = math.sqrt(mean_squared_error(y_valid, lasso_valid))
+# errors.append(('Lasso',rmse))
+# pred_valid.append(('Lasso',lasso_valid))
+# lasso_test = lasso.predict(test)
+# pred_test.append(('Lasso',lasso_test))  
   
   
-LR =LinearRegression()
-LR.fit(scaled_X_train,y_train)
-lr_valid = LR.predict(scaled_X_valid)
-rmse = math.sqrt(mean_squared_error(y_valid, lr_valid))
-errors.append(('LR',rmse))
-pred_valid.append(('LR',lr_valid))
-lr_test = LR.predict(scaled_X_test)
-pred_test.append(('LR',lr_test))  
+# LR =LinearRegression()
+# LR.fit(scaled_X_train,y_train)
+# lr_valid = LR.predict(scaled_X_valid)
+# rmse = math.sqrt(mean_squared_error(y_valid, lr_valid))
+# errors.append(('LR',rmse))
+# pred_valid.append(('LR',lr_valid))
+# lr_test = LR.predict(scaled_X_test)
+# pred_test.append(('LR',lr_test))  
   
   
-RF =RandomForestRegressor(max_depth= 24, min_samples_leaf= 12, min_samples_split= 16, n_estimators= 40)
-RF.fit(scaled_X_train,y_train)
-rf_valid = RF.predict(scaled_X_valid)
-rmse = math.sqrt(mean_squared_error(y_valid, rf_valid))
-errors.append(('RF',rmse))
-pred_valid.append(('RF',rf_valid))
-rf_test = RF.predict(scaled_X_test)
-pred_test.append(('RF',rf_test))  
+# RF =RandomForestRegressor(max_depth= 24, min_samples_leaf= 12, min_samples_split= 16, n_estimators= 40)
+# RF.fit(scaled_X_train,y_train)
+# rf_valid = RF.predict(scaled_X_valid)
+# rmse = math.sqrt(mean_squared_error(y_valid, rf_valid))
+# errors.append(('RF',rmse))
+# pred_valid.append(('RF',rf_valid))
+# rf_test = RF.predict(scaled_X_test)
+# pred_test.append(('RF',rf_test))  
   
-ET =ExtraTreesRegressor(max_depth=24, min_samples_leaf= 12, min_samples_split= 16, n_estimators= 40)
-ET.fit(X_train,y_train)
-et_valid = ET.predict(X_valid)
-rmse = math.sqrt(mean_squared_error(y_valid, et_valid))
-errors.append(('ET',rmse))
-pred_valid.append(('ET',et_valid))
-et_test = ET.predict(test)
-pred_test.append(('ET',et_test))  
+# ET =ExtraTreesRegressor(max_depth=24, min_samples_leaf= 12, min_samples_split= 16, n_estimators= 40)
+# ET.fit(X_train,y_train)
+# et_valid = ET.predict(X_valid)
+# rmse = math.sqrt(mean_squared_error(y_valid, et_valid))
+# errors.append(('ET',rmse))
+# pred_valid.append(('ET',et_valid))
+# et_test = ET.predict(test)
+# pred_test.append(('ET',et_test))  
   
 CAT = CatBoostRegressor(iterations=10000,random_state=66
            ,eval_metric="RMSE")
@@ -391,7 +392,7 @@ cat_valid = CAT.predict(X_valid)
 rmse = math.sqrt(mean_squared_error(y_valid, cat_valid))
 errors.append(('CAT',rmse))
 pred_valid.append(('CAT',cat_valid))
-cat_test = CAT.predict(test)
+cat_test = CAT.predict(y_train[tri])
 pred_test.append(('CAT',cat_test))
 
 
@@ -433,6 +434,6 @@ sample_submission.to_csv(DATA_PATH+"jobcare_0117_2.csv", index=False)
 # sample_submission.to_csv(DATA_PATH+"jobcare_0117_1.csv", index=False)
 
 '''
-person_prefer_h_1_attribute_h_p
-CatBoostClassifier
+
+
 '''
