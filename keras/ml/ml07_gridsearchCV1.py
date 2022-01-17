@@ -185,7 +185,7 @@ parameter=[
 ]   #총 42개
 
 #2. 모델구성
-model = GridSearchCV(SVC(), parameter, cv=kfold, verbose=1)
+model = GridSearchCV(SVC(), parameter, cv=kfold, verbose=1, refit=True)
 # model = SVC(C=1, kernel='linear',degree=3)
 # scores = cross_val_score(model, x, y, cv=kfold)
 # print("ACC : ", scores, "\n cross_val_score : ", round(np.mean(scores),4))
@@ -204,8 +204,8 @@ print("model.score: ", model.score(x_test, y_test)) #score는 evaluate 개념
 y_predict=model.predict(x_test)
 print("accuracy_score: ", accuracy_score(y_test, y_predict))
 
-
-
+y_pred_best = model.best_estimator_.predict(x_test)
+print("최적 튠 acc :", accuracy_score(y_test,y_pred_best))
 
 
 

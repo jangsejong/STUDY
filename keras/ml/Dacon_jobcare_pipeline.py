@@ -429,8 +429,8 @@ sample_submission['Body Mass (g)'] = test_val
 sample_submission.to_csv(DATA_PATH+"jobcare_0117_2.csv", index=False)
 
   
-sample_submission['Body Mass (g)'] = test_val
-sample_submission.to_csv(DATA_PATH+"jobcare_0117_1.csv", index=False)
+# sample_submission['Body Mass (g)'] = test_val
+# sample_submission.to_csv(DATA_PATH+"jobcare_0117_1.csv", index=False)
 
 '''
 person_prefer_h_1_attribute_h_p
