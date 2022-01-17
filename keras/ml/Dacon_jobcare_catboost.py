@@ -30,6 +30,7 @@ print(f"- sklearn: {sklearn.__version__}")
 
 train_data = pd.read_csv(f'{DATA_PATH}train.csv')
 test_data = pd.read_csv(f'{DATA_PATH}test.csv')
+sample_submission = pd.read_csv(f'{DATA_PATH}sample_submission.csv')
 
 code_d = pd.read_csv(f'{DATA_PATH}속성_D_코드.csv').iloc[:,:-1]
 code_h = pd.read_csv(f'{DATA_PATH}속성_H_코드.csv')
@@ -120,11 +121,11 @@ cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 
 
 is_holdout = False
-n_splits = 5
-iterations = 3000
-patience = 50
+n_splits = 10
+iterations = 10000
+patience = 30
 
-cv = KFold(n_splits=n_splits, shuffle=True, random_state=SEED)
+cv = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
 scores = []
 models = []
@@ -135,7 +136,7 @@ for tri, vai in cv.split(x_train):
     print("="*50)
     preds = []
 
-    model = CatBoostClassifier(iterations=iterations,random_state=SEED,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
+    model = CatBoostClassifier(iterations=iterations,random_state=66,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
     model.fit(x_train.iloc[tri], y_train[tri], 
             eval_set=[(x_train.iloc[vai], y_train[vai])], 
             early_stopping_rounds=patience ,
@@ -169,10 +170,10 @@ print(np.mean(scores))
 pred = np.mean( pred_list , axis = 0 )
 pred = np.where(pred >= threshold , 1, 0)
 
-sample_submission = pd.read_csv(f'{DATA_PATH}0114_2.csv')
+# sample_submission = pd.load_csv(f'{DATA_PATH}sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
-
+sample_submission.to_csv(DATA_PATH + "jobcare_0116_03.csv", index=False)  
 
 '''
 '''
