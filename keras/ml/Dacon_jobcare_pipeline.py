@@ -59,7 +59,7 @@ code_h = pd.read_csv(f'{DATA_PATH}속성_H_코드.csv')
 code_l = pd.read_csv(f'{DATA_PATH}속성_L_코드.csv')
 
 code_d.columns= ["attribute_d_d","attribute_d_s","attribute_d_m","attribute_d_l"]
-code_h.columns= ["attribute_h","attribute_h_m","attribute_h_l"]
+code_h.columns= ["attribute","attribute_h","attribute_h_p"]
 code_l.columns= ["attribute_l","attribute_l_d","attribute_l_s","attribute_l_m","attribute_l_l"]
 
 
@@ -424,12 +424,15 @@ for name, pred in pred_test:
 
 #model.save_weights("./_save/keras999_1_save_weights.h5")
 #model = load_model('./_ModelCheckPoint/ss_ki_1222_Trafevol5.hdf5')
-submission = pd.read_csv(DATA_PATH+'sample_submission.csv')
-submission['Body Mass (g)'] = test_val
-submission.to_csv(DATA_PATH+"jobcare_0117_2.csv", index=False)
+sample_submission = pd.read_csv(DATA_PATH+'sample_submission.csv')
+sample_submission['Body Mass (g)'] = test_val
+sample_submission.to_csv(DATA_PATH+"jobcare_0117_2.csv", index=False)
 
   
 sample_submission['Body Mass (g)'] = test_val
 sample_submission.to_csv(DATA_PATH+"jobcare_0117_1.csv", index=False)
 
-
+'''
+person_prefer_h_1_attribute_h_p
+CatBoostClassifier
+'''

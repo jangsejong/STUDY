@@ -74,6 +74,11 @@ y2 = kospi['현재지수']
 
 df4_x_train, df4_x_test, df4_y_train, df4_y_test=train_test_split(x2, y2, test_size=0.3, random_state=66, shuffle=True)
 xgb_model=xgboost.XGBRegressor(n_estimators=10000, learning_rate=0.08, gamma=0, subsampel=0.7, colsample_bytree=1, max_depth=7)
+'''
+n_estimators : like epoch
+learning_rate : like optimizer
+max_depth : tree 의 깊이
+'''
 
 print(len(df4_x_train), len(df4_x_test))
 xgb_model.fit(df4_x_train, df4_y_train)
