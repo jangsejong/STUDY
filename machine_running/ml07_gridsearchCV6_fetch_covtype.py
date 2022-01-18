@@ -21,10 +21,9 @@ params = { 'n_estimators' : [10, 50,100],
 
 
 import numpy as np
-from sklearn.datasets import load_iris
 from sklearn.svm import SVC
 import numpy as np
-from sklearn.datasets import load_iris
+from sklearn.datasets import fetch_covtype
 from tensorflow.keras.utils import to_categorical
 # from tensorflow.keras.models import Sequential
 # from tensorflow.keras.layers import Dense
@@ -38,7 +37,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, r2_score
 
-datasets = load_iris()
+datasets = fetch_covtype()
 
 x=datasets.data
 y=datasets.target

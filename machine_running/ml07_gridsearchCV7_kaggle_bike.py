@@ -1,29 +1,16 @@
 '''
-
-
-
-
-
-
-
 params = { 'n_estimators' : [10, 50,100],
            'max_depth' : [6, 12,18,24],
            'min_samples_leaf' : [1, 6, 12, 18],
            'min_samples_split' : [2, 8, 16, 20]
             }
-
-
-
-
-
-
 '''
 
 
 import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.svm import SVC
-import numpy as np
+import pandas as pd
 from sklearn.datasets import load_iris
 from tensorflow.keras.utils import to_categorical
 # from tensorflow.keras.models import Sequential
@@ -38,10 +25,16 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, r2_score
 
-datasets = load_iris()
+#1. 데이터 분석
+path = "D:\\Study\\_data\\kaggle\\bike\\"
+train = pd.read_csv(path + "train.csv") # (10886, 12)
+test_file = pd.read_csv(path + "test.csv") # (6493, 9)
+submit_file = pd.read_csv(path + "sampleSubmission.csv") # (6493, 2)
 
-x=datasets.data
-y=datasets.target
+x = train.drop(columns=['datetime', 'casual', 'registered', 'count'], axis=1) 
+y = train['count']
+# y = np.log1p(y) 
+test_file = test_file.drop(columns=['datetime'], axis=1)
 
 from sklearn.model_selection import train_test_split, KFold
 from sklearn.model_selection import cross_val_score, GridSearchCV
@@ -248,4 +241,16 @@ print("accuracy_score: ", accuracy_score(y_valid, y_predict))
 # bbb = aaa[['params',',meas_test_scores', 'rank_test_scores', 'split0_test_score']]
 # #, 'split0_test_score', 'split1_test_score', 'split2_test_score', 'split3_test_score', 'split4_test_score']]
 # print(bbb)
+# LR : -156.344957 (3.052806) 
+# LASSO : -156.303704 (3.110845) 
+# KNN : -161.818906 (5.009688) 
+# CART : -194.522685 (7.383074) 
+# EN : -156.471105 (3.255730) 
+# SVM : -163.052448 (4.412470) 
+# RFR : -152.323127 (3.837518) 
+# XGBR : -149.521058 (3.808292) 
+# LGBMR : -145.903385 (3.367678) 
+# AdaR : -161.094905 (3.020226) 
+# Cat : -145.421255 (2.938101) 
+# Xtree : -162.224324 (3.517630) 
 
