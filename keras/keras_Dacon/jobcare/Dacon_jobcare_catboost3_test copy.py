@@ -155,6 +155,50 @@ for tri, vai in cv.split(x_train):
 print(scores)
 print(np.mean(scores))
 
+
+from catboost import CatBoostClassifier, Pool, sum_models
+import shap
+import matplotlib.pyplot as plt
+from matplotlib.ticker import Formatter
+import plotly.graph_objects as go
+import xgboost
+import shap
+
+# train an XGBoost model
+X = x_train
+y = y_train
+model = xgboost.XGBRegressor().fit(X, y)
+
+# explain the model's predictions using SHAP
+# (same syntax works for LightGBM, CatBoost, scikit-learn, transformers, Spark, etc.)
+explainer = shap.Explainer(model)
+shap_values = explainer(X)
+
+# visualize the first prediction's explanation
+shap.plots.waterfall(shap_values[0])
+#############
+# get_feature_importance = get_feature_importance()
+# get_feature_importance(data=None,
+#                        reference_data=None,
+#                        type=EFstrType.FeatureImportance,
+#                        prettified=False,
+#                        thread_count=-1,
+#                        verbose=False,
+#                        log_cout=sys.stdout,
+#                        log_cerr=sys.stderr)
+###############
+# categorical_features_indices = np.where(x_train.dtypes != np.float)[0]
+
+# shap_values = model.get_feature_importance(Pool(x_train, label=y_train,cat_features=categorical_features_indices), 
+#                                                                      type="ShapValues")
+# expected_value = shap_values[0,-1]
+# shap_values = shap_values[:,:-1]
+
+# shap.initjs()
+# shap.force_plot(expected_value, shap_values[3,:], x_train.iloc[3,:])
+
+'''
+
 threshold = 0.35
 
 pred_list = []
@@ -179,7 +223,7 @@ sample_submission.to_csv(DATA_PATH + "jobcare_0118_7.csv", index=False)
 
 
 
-'''
+
 0.7008437991
 '''
 
