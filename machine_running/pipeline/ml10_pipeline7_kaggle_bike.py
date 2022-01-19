@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.svm import SVC
 import numpy as np
+from sklearn.preprocessing import *
 from tensorflow.keras.utils import to_categorical
 # from tensorflow.keras.models import Sequential
 # from tensorflow.keras.layers import Dense
@@ -14,7 +15,6 @@ from sklearn.linear_model import LogisticRegression  #regressor 지만 이건 �
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, r2_score
-
 
 #1. 데이터 분석
 path = "D:\\Study\\_data\\kaggle\\bike\\"
@@ -33,21 +33,28 @@ from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSea
 
 x_train, x_test,y_train,y_test=train_test_split(x,y, shuffle=True, random_state=66, train_size=0.8)
 
+
 n_splits=3
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
 parameter=[
-    {"C":[0.1,1,10,100,1000], "kernel":["linear"], "degree":[3,4,5]},     #15
-    {"C":[0.1,1,10,100], "kernel":["rbf"], "gamma":[0.001,0.0001]},         #8
-    {"C":[0.1,1,10,100,1000], "kernel":["sigmoid"], "gamma":[0.01,0.001,0.0001],"degree":[3,4]}   #30
+    {"C":[0.1,1,10,100,1000], "kernel":["linear"], "degree":[3,4,5]},     #12
+    {"C":[0.1,1,10,100], "kernel":["rbf"], "gamma":[0.001,0.0001]},         #6
+    {"C":[0.1,1,10,100,1000], "kernel":["sigmoid"], "gamma":[0.01,0.001,0.0001],"degree":[3,4]}   #24
 ]   #총 42개
 
 #2. 모델구성
-model = RandomizedSearchCV(SVC(), parameter, cv=kfold, verbose=1, refit=True, n_jobs=1)
+
+from sklearn.pipeline import make_pipeline, Pipeline
+
+# model = RandomizedSearchCV(SVC(), parameter, cv=kfold, verbose=1, refit=True, n_jobs=1)
 # model = HalvingGridSearchCV(SVC(), parameter, cv=kfold, verbose=1, refit=True, n_jobs=1)
 # model = SVC(C=1, kernel='linear',degree=3)
 # scores = cross_val_score(model, x, y, cv=kfold)
 # print("ACC : ", scores, "\n cross_val_score : ", round(np.mean(scores),4))
+
+# model = make_pipeline(StandardScaler(),SVC())
+model = make_pipeline(MinMaxScaler(),SVC())
 
 
 
@@ -57,19 +64,19 @@ model.fit(x_train, y_train)
 
 #4. 평가, 예측
 
-print("최적의 매개변수 : ", model.best_estimator_)
-print("최적의 파라미터 : ", model.best_params_)
+# print("최적의 매개변수 : ", model.best_estimator_)
+# print("최적의 파라미터 : ", model.best_params_)
 
-print("best_score_: ", model.best_score_)
-print("model.score: ", model.score(x_test, y_test)) #score는 evaluate 개념
+# print("best_score_: ", model.best_score_)
+# print("model.score: ", model.score(x_test, y_test)) #score는 evaluate 개념
 
 y_predict=model.predict(x_test)
 print("accuracy_score: ", accuracy_score(y_test, y_predict))
 
-y_pred_best = model.best_estimator_.predict(x_test)
-print("최적 튠 acc :", accuracy_score(y_test,y_pred_best))
+# y_pred_best = model.best_estimator_.predict(x_test)
+# print("최적 튠 acc :", accuracy_score(y_test,y_pred_best))
 
-import pandas as pd
+# import pandas as pd
 
 #########################################################################
 '''

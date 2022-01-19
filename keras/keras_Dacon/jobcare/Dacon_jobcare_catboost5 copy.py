@@ -40,7 +40,7 @@ train_data.shape , test_data.shape
 
 code_d.columns= ["attribute_d_d","attribute_d_s","attribute_d_m","attribute_d_l"]
 code_h.columns= ["attribute","attribute_h","attribute_h_p"]
-code_l.columns= ["attribute_l","attribute_l_d","attribute_l_s","attribute_l_m","attribute_l_l",]
+code_l.columns= ["attribute_l","attribute_l_d","attribute_l_s","attribute_l_m","attribute_l_l"]
 
 
 def merge_codes(df:pd.DataFrame,df_code:pd.DataFrame,col:str)->pd.DataFrame:
@@ -109,9 +109,11 @@ cols_equi = [
 ]
 
 # 학습에 필요없는 컬럼 리스트
-cols_drop = ["id","person_prefer_f","person_prefer_g" ,"contents_open_dt", "contents_rn", "contents_attribute_h", "person_attribute_a_1",]
+cols_drop = ["id","person_prefer_f","person_prefer_g" ,"contents_open_dt", "contents_rn", "contents_attribute_h", "person_attribute_a_1",
+             "person_attribute_b","person_prefer_c", "person_rn", ]
 
 
+# contents_open_dt 2020-01-17 12:09:36
 
 
 
@@ -125,7 +127,7 @@ cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 
 is_holdout = False
 n_splits = 5
-iterations = 6000
+iterations = 5500
 patience = 100
 
 cv = KFold(n_splits=n_splits, shuffle=True, random_state=66)
@@ -178,13 +180,13 @@ pred = np.where(pred >= threshold , 1, 0)
 # sample_submission = pd.load_csv(f'{DATA_PATH}sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
-sample_submission.to_csv(DATA_PATH + "jobcare_0118_7.csv", index=False)  
-
-
+sample_submission.to_csv(DATA_PATH + "jobcare_0118_9_1.csv", index=False)  
 
 '''
-0.7008437991
+
 '''
+
+
 
 
 

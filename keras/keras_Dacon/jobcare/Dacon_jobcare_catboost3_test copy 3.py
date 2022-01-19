@@ -124,7 +124,7 @@ cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 
 
 is_holdout = False
-n_splits = 5
+n_splits = 10
 iterations = 6000
 patience = 100
 
@@ -178,12 +178,12 @@ pred = np.where(pred >= threshold , 1, 0)
 # sample_submission = pd.load_csv(f'{DATA_PATH}sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
-sample_submission.to_csv(DATA_PATH + "jobcare_0118_7.csv", index=False)  
+sample_submission.to_csv(DATA_PATH + "jobcare_0118_7_3.csv", index=False)  
 
 
 
 '''
-0.7008437991
+
 '''
 
 

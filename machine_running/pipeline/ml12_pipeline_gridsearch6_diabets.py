@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_diabetes
 from sklearn.svm import SVC
 import numpy as np
 from sklearn.preprocessing import *
@@ -16,7 +16,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, r2_score
 
-datasets = load_iris()
+datasets = load_diabetes()
 
 x=datasets.data
 y=datasets.target
@@ -25,32 +25,33 @@ from sklearn.model_selection import train_test_split, KFold
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV, HalvingGridSearchCV
 
-x_train, x_test,y_train,y_test=train_test_split(x,y, shuffle=True, random_state=66, train_size=0.8)
+x_train, x_test, y_train, y_test=train_test_split(x, y, shuffle=True, random_state=66, train_size=0.8)
 
 
-n_splits=3
-kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+# n_splits=3
+# kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
-parameter=[
-    {"C":[0.1,1,10,100,1000], "kernel":["linear"], "degree":[3,4,5]},     #12
-    {"C":[0.1,1,10,100], "kernel":["rbf"], "gamma":[0.001,0.0001]},         #6
-    {"C":[0.1,1,10,100,1000], "kernel":["sigmoid"], "gamma":[0.01,0.001,0.0001],"degree":[3,4]}   #24
-]   #총 42개
+parameters=[
+    {"randomforestclassifier__max_depth":[6, 8, 10]}, #3
+    {"randomforestclassifier__min_samples_leaf":[3, 5, 7], "randomforestclassifier__min_samples_split":[3, 5, 10]},   #9
+]   #총  12개
+
+# parameters=[
+#     {"rf__max_depth":[6, 8, 10]}, #3
+#     {"rf__min_samples_leaf":[3, 5, 7], "rf__min_samples_split":[3, 5, 10]},   #9
+# ]   #총  12개
+
 
 #2. 모델구성
 
 from sklearn.pipeline import make_pipeline, Pipeline
 
-# model = RandomizedSearchCV(SVC(), parameter, cv=kfold, verbose=1, refit=True, n_jobs=1)
-# model = HalvingGridSearchCV(SVC(), parameter, cv=kfold, verbose=1, refit=True, n_jobs=1)
-# model = SVC(C=1, kernel='linear',degree=3)
-# scores = cross_val_score(model, x, y, cv=kfold)
-# print("ACC : ", scores, "\n cross_val_score : ", round(np.mean(scores),4))
+from sklearn.decomposition import PCA
 
-# model = make_pipeline(StandardScaler(),SVC())
-model = make_pipeline(MinMaxScaler(),SVC())
+pipe = make_pipeline(MinMaxScaler(),RandomForestClassifier()) 
+# pipe = Pipeline([("Scaler", MinMaxScaler()),("rf", RandomForestClassifier())])
 
-
+model = GridSearchCV(pipe, parameters, cv=5)
 
 #3. 훈련
 model.fit(x_train, y_train)
