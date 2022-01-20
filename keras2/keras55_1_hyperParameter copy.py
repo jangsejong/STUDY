@@ -78,6 +78,21 @@ end = time.time()
 model.save("./_save/keras2_1_save_model.h5")
 # model = load_model("./_save/keras25_save_model.h5")
 
+# from sklearn.externals import joblib
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# import numpy as np
+# import pandas as pd
+# from sklearn.externals import joblib
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.model_selection import train_test_split, cross_val_score
+# from sklearn.model_selection import GridSearchCV
+# from sklearn.pipeline import Pipeline
+# from gensim.utils import simple_preprocess
+# # Save model
+# #joblib.dump(grid.best_estimator_, 'best_tfidf.pkl', compress = 1) # this unfortunately includes the LogReg
+# joblib.dump(grid.best_params_, 'best_tfidf.pkl', compress = 1) # Only best parameters
+# link : https://stackoverflow.com/questions/54197831/gridsearch-for-best-model-save-and-load-parameters
 print("최적의 매개변수 : ", model.best_estimator_)
 print("최적의 파라미터 : ", model.best_params_)
 print("best_score_: ", model.best_score_)
