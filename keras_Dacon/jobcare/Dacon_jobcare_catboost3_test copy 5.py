@@ -126,7 +126,7 @@ cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 is_holdout = False
 n_splits = 10
 iterations = 6000
-patience = 40
+patience = 60
 
 cv = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
@@ -178,7 +178,7 @@ pred = np.where(pred >= threshold , 1, 0)
 # sample_submission = pd.load_csv(f'{DATA_PATH}sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
-sample_submission.to_csv(DATA_PATH + "jobcare_0118_7_7.csv", index=False)  
+sample_submission.to_csv(DATA_PATH + "jobcare_0118_7_8.csv", index=False)  
 
 
 
@@ -196,6 +196,18 @@ n_splits = 9
 iterations = 6000
 patience = 50
 0.6999221335
+
+jobcare_0118_7_7
+is_holdout = False
+n_splits = 10
+iterations = 6000
+patience = 40
+
+jobcare_0118_7_8
+is_holdout = False
+n_splits = 10
+iterations = 6000
+patience = 60
 
 '''
 
