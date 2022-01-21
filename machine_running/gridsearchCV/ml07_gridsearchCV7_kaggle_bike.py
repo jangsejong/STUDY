@@ -47,6 +47,8 @@ y_all =y
 
 X_train, X_valid, y_train, y_valid=train_test_split(X_all,y_all, shuffle=True, random_state=66, train_size=0.8)
 
+
+
 #2. 모델구성
 from sklearn.linear_model import *
 from sklearn.neighbors import *

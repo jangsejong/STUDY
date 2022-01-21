@@ -55,9 +55,9 @@ x_train = x_train.reshape(n,-1)/255.
 m = x_test.shape[0]
 x_test = x_test.reshape(m,-1)/255.
 
-scaler =MinMaxScaler()   
-x_train = scaler.fit_transform(x_train)     
-x_test = scaler.transform(x_test)
+# scaler =MinMaxScaler()   
+# x_train = scaler.fit_transform(x_train)     
+# x_test = scaler.transform(x_test)
 
 from tensorflow.keras.utils import to_categorical
 y_train = to_categorical(y_train)
@@ -67,11 +67,11 @@ model = Sequential()
 # model.add(Dense(128, input_shape = (28*28,)))
 model.add(Dense(256, input_dim = 784))
 model.add(Dense(64, activation='relu'))
-model.add(Dropout(0.4))
-model.add(Dense(32))
-# model.add(Dropout(0.2))
-model.add(Dense(16))
-model.add(Dropout(0.6))
+model.add(Dropout(0.2))
+model.add(Dense(32, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(16, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(10, activation='softmax'))
 
 
@@ -128,7 +128,8 @@ loss :  0.17632824182510376
 acc :  0.9563999772071838
 
 # 1.0 n_components 
-
+loss :  0.20199185609817505
+acc :  0.9502999782562256
 
 '''
 
