@@ -21,14 +21,14 @@ import warnings
 warnings.filterwarnings("ignore")
 
 #1. 데이터
-datasets= load_iris()
+# datasets= load_iris()
 # datasets= load_breast_cancer()
 # datasets= load_wine()
-# datasets= fetch_covtype()
+datasets= fetch_covtype()
 #print(datasets.DESCR)
 x = datasets.data
 y = datasets.target
-print("LDA 전:", x.shape)    #LDA 전: (150, 4)/////
+print("LDA 전:", x.shape)    #LDA 전: (150, 4)/(569, 30)/LDA 전: (178, 13)/(581012, 54)//
 #print(y) 0과 1로 수렴해서 셔플써야됨
 #print(np.unique(y))  # [0, 1, 2]
 
@@ -67,7 +67,7 @@ model.fit(x_train, y_train, eval_metric='error')
 results = model.score(x_test, y_test)
 print("결과 : ", results)
 
-print("LDA 후:", x.shape)    #LDA 후: (150, 2)/////
+print("LDA 후:", x_train.shape)    #LDA 후: (120, 4)/(455, 30)/(142, 13)/LDA 후: (464809, 54)//
 
 # import sklearn as sk
 # print(sk.__version__)
