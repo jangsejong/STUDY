@@ -3,13 +3,13 @@ from tensorflow.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn import datasets
-from sklearn.datasets import load_wine
+from sklearn.datasets import load_iris
 from tensorflow.keras.utils import to_categorical
 from tensorflow.python.keras.metrics import accuracy
 from tensorflow.python.keras.utils.metrics_utils import result_wrapper
 
 #1. 데이터
-datasets= load_wine()
+datasets= load_iris()
 #print(datasets.DESCR)
 x = datasets.data
 y = datasets.target
