@@ -109,7 +109,7 @@ cols_equi = [
 ]
 
 # 학습에 필요없는 컬럼 리스트
-cols_drop = ["id","person_prefer_f","person_prefer_g" ,"contents_open_dt", "contents_rn", "contents_attribute_h", "person_attribute_a_1",]
+cols_drop = ["id","person_prefer_f","person_prefer_g" ,"contents_open_dt", "contents_rn", "person_rn",]
 
 
 
@@ -125,8 +125,8 @@ cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 
 is_holdout = False
 n_splits = 5
-iterations = 3000
-patience = 45
+iterations = 3300
+patience = 50
 
 cv = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
@@ -178,7 +178,7 @@ pred = np.where(pred >= threshold , 1, 0)
 # sample_submission = pd.load_csv(f'{DATA_PATH}sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
-sample_submission.to_csv(DATA_PATH + "jobcare_0118_7_9.csv", index=False)  
+sample_submission.to_csv(DATA_PATH + "jobcare_0118_7_10.csv", index=False)  
 
 
 
