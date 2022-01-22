@@ -122,13 +122,13 @@ x_train.shape , y_train.shape , x_test.shape
 
 cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 
-
+random_state = 44
 is_holdout = False
-n_splits = 5
-iterations = 3200
-patience = 50
+n_splits = 10
+iterations = 6000
+patience = 30
 
-cv = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+cv = KFold(n_splits=n_splits, shuffle=True, random_state=random_state)
 
 scores = []
 models = []
@@ -139,11 +139,11 @@ for tri, vai in cv.split(x_train):
     print("="*50)
     preds = []
 
-    model = CatBoostClassifier(iterations=iterations,random_state=66,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
+    model = CatBoostClassifier(iterations=iterations,random_state=random_state,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
     model.fit(x_train.iloc[tri], y_train[tri], 
             eval_set=[(x_train.iloc[vai], y_train[vai])], 
             early_stopping_rounds=patience ,
-            verbose = 150
+            verbose = 1000
         )
     
     models.append(model)
@@ -158,7 +158,7 @@ print(np.mean(scores))
 
 
 
-threshold = 0.35
+threshold = 0.32
 
 pred_list = []
 scores = []
@@ -178,7 +178,7 @@ pred = np.where(pred >= threshold , 1, 0)
 # sample_submission = pd.load_csv(f'{DATA_PATH}sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
-sample_submission.to_csv(DATA_PATH + "jobcare_0118_10_1.csv", index=False)  
+sample_submission.to_csv(DATA_PATH + "jobcare_0118_10_5.csv", index=False)  
 
 
 
