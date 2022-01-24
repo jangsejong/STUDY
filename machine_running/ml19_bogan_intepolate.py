@@ -25,7 +25,7 @@ from datetime import datetime
 dates = []
 dates = pd.to_datetime(dates)
 
-ts = pd.Series([2, np.nan, np.nana, 8, 10], index=dates)
+ts = pd.Series([2, np.nan, np.nan, 8, 10], index=dates)
 
 ts = ts.interpolate()
 print(ts)
