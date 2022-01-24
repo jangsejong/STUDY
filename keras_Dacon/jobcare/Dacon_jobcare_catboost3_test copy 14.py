@@ -122,13 +122,13 @@ x_train.shape , y_train.shape , x_test.shape
 
 cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 
-random_state = 66
+
 is_holdout = False
-n_splits = 15
-iterations = 9000
+n_splits = 5
+iterations = 3200
 patience = 50
 
-cv = KFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+cv = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
 scores = []
 models = []
@@ -139,11 +139,11 @@ for tri, vai in cv.split(x_train):
     print("="*50)
     preds = []
 
-    model = CatBoostClassifier(iterations=iterations,random_state=random_state,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
+    model = CatBoostClassifier(iterations=iterations,random_state=66,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
     model.fit(x_train.iloc[tri], y_train[tri], 
             eval_set=[(x_train.iloc[vai], y_train[vai])], 
             early_stopping_rounds=patience ,
-            verbose = 100
+            verbose = 200
         )
     
     models.append(model)
@@ -178,30 +178,10 @@ pred = np.where(pred >= threshold , 1, 0)
 # sample_submission = pd.load_csv(f'{DATA_PATH}sample_submission.csv')
 sample_submission['target'] = pred
 sample_submission
-sample_submission.to_csv(DATA_PATH + "jobcare_0124_10_4.csv", index=False)  
+sample_submission.to_csv(DATA_PATH + "jobcare_0118_7_10_1.csv", index=False)  
 
 
 
-# from catboost import CatBoostClassifier, Pool, sum_models
-# import shap
-# import matplotlib.pyplot as plt
-# from matplotlib.ticker import Formatter
-# import plotly.graph_objects as go
-# import xgboost
-# import shap
-
-# # train an XGBoost model
-# X = x_train
-# y = y_train
-# model = xgboost.XGBRegressor().fit(X, y)
-
-# # explain the model's predictions using SHAP
-# # (same syntax works for LightGBM, CatBoost, scikit-learn, transformers, Spark, etc.)
-# explainer = shap.Explainer(model)
-# shap_values = explainer(X)
-
-# # visualize the first prediction's explanation
-# shap.plots.waterfall(shap_values[0])
 '''
 
 
