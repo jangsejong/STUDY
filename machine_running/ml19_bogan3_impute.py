@@ -23,6 +23,7 @@ fillna - 0, ffill, bfill, 중위값, 평균값,,, 76767
 '''
 
 data = pd.DataFrame([2, np.NaN, np.NaN, 8, 10], [2, 4, np.NaN, 8, np.NaN], [np.NaN, 4, np.NaN, 8, 10], [np.NaN, 4, np.nan, 8, np.NaN])
+data = pd.DataFrame([2, np.NaN, np.NaN, 8, 10], [2, 4, np.NaN, 8, np.NaN], [np.NaN, 4, np.NaN, 8, 10], [np.NaN, 4, np.nan, 8, np.NaN])
 
 data = data.transpose()
 data.colums = ["a", "b" ,"c", "d"]
