@@ -128,7 +128,7 @@ cat_features = x_train.columns[x_train.nunique() > 2].tolist()
 is_holdout = False
 n_splits = 5
 iterations = 6000
-patience = 100
+patience = 200
 
 cv = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
