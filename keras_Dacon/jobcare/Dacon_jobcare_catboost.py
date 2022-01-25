@@ -142,7 +142,7 @@ for tri, vai in cv.split(x_train):
     model = CatBoostClassifier(iterations=iterations,random_state=66,task_type="GPU",eval_metric="F1",cat_features=cat_features,one_hot_max_size=4)
     model.fit(x_train.iloc[tri], y_train[tri], 
             eval_set=[(x_train.iloc[vai], y_train[vai])], 
-            early_stopping_rounds=100 ,
+            early_stopping_rounds=30 ,
             verbose = 200
         )
     
