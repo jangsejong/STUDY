@@ -1,6 +1,3 @@
-
-
-
 DATA_PATH = 'D:\\Study\\_data\\dacon\\Jobcare\\'
 SUBMIT_PATH = 'D:\\Study\\_data\\dacon\\Jobcare\\'
 SEED = 66
