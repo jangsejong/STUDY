@@ -22,8 +22,11 @@ warnings.filterwarnings("ignore")
 # datasets = load_wine()
 # datasets = fetch_covtype()
 
-x, y = load_diabetes(return_X_y=True)
+x, y = load_boston(return_X_y=True)
 print(x.shape, y.shape)
+
+
+
 
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -65,7 +68,7 @@ start = time.time()
 model.fit(x_train, y_train, verbose=100,
           eval_set=[(x_test, y_test)],
           eval_metric='rmse',           #logloss, error, rmse, mse
-          early_stopping_rounds=20
+          early_stopping_rounds=100
           )
 end = time.time()
 
@@ -82,13 +85,14 @@ score = model.score(x_test, y_test)
 print("score :", score)
 
 
-
 #####################
 # hist = model.evals_result()  #히스토리
 # print(hist)
 model.feature_importances_
 print(np.sort(model.feature_importances_))
 aaa = np.sort(model.feature_importances_)
+print(aaa)
+
 print("==============================================")
 
 for thresh in aaa:
