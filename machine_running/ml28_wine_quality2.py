@@ -47,7 +47,7 @@ def boxplot_vis(data, target_name):
         # 그래프 타이틀: feature name
         plt.title("Feature" + "(" + target_name + "):" + data.columns[col_idx], fontsize = 20)
     # plt.savefig('../figure/boxplot_' + target_name + '.png')
-    plt.show()
+    # plt.show()
 boxplot_vis(datasets,'white_wine')
 
 def remove_outlier(input_data):
@@ -94,7 +94,19 @@ y = prep['quality']
 
 print(x.shape, y.shape) #(3841, 12) (3841,)
 
-scaler = StandardScaler()
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import RobustScaler, MaxAbsScaler
+from sklearn.preprocessing import QuantileTransformer  # https://tensorflow.blog/2018/01/14/quantiletransformer/
+from sklearn.preprocessing import PowerTransformer      #https://wikidocs.net/83559
+from sklearn.preprocessing import PolynomialFeatures
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+# scaler = RobustScaler()
+# scaler = MaxAbsScaler()
+# scaler = QuantileTransformer()
+scaler = PowerTransformer()
+# scaler = PolynomialFeatures()
 scaler.fit(x)
 x1 = scaler.transform(x)
 # y =scaler.transform(y)
@@ -156,6 +168,26 @@ print("acc :", acc)
 print('f1_score :', f1_score(y_test, y_pred, average='micro'))
 # print('f1_score :', f1_score(y_test, y_pred, average='macro'))
 
+
 #####################
 # hist = model.evals_result()  #히스토리
 # print(hist)
+'''
+QuantileTransformer
+걸린시간 : 4.878950357437134
+results : 0.7087126137841352
+acc : 0.7087126137841352
+f1_score : 0.7087126137841352
+
+PowerTransformer
+걸린시간 : 4.435138463973999
+results : 0.717815344603381
+acc : 0.717815344603381
+f1_score : 0.7178153446033811
+
+PolynomialFeatures
+걸린시간 : 4.668515205383301
+results : 0.6983094928478544
+acc : 0.6983094928478544
+f1_score : 0.6983094928478544
+'''
