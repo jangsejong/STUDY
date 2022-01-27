@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
-from sklearn.datasets import fetch_california_housing, fetch_covtype, load_boston, load_wine, load_diabetes
+from sklearn.datasets import load_diabetes, load_boston
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, PowerTransformer
 from sklearn.metrics import *
@@ -10,44 +10,65 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-#1.데이터 로드
-# datasets = fetch_california_housing()
-# datasets = load_boston()
-# datasets = load_wine()
-# datasets = fetch_covtype()
+#1. 데이터
+path = 'D:\\Study\\_data\\dacon\\whitewine\\'
+datasets = pd.read_csv(path + 'winequality-white.csv',sep=';', header = 0)
+datasets = datasets.values
 
-x, y = load_wine(return_X_y=True)
-print(x.shape, y.shape)
+x = datasets[:,:11]  
+y = datasets[:, 11]
 
 
-print("============SMOTE 적용==============")
-from imblearn.over_sampling import SMOTE
-smote = SMOTE(random_state=66,k_neighbors=1)
-x, y = smote.fit_resample(x, y)
+for index, value in enumerate(y):
+    if value == 9 :
+        y[index]==8
+    elif value == 8 :
+        y[index]==8
+    elif value == 7 :
+        y[index]==6
+    elif value == 6 :
+        y[index]==6
+    elif value == 5 :
+        y[index]==1
+    elif value == 4 :
+        y[index]==1
+    elif value == 3 :
+        y[index]==1
+    elif value == 2 :
+        y[index]==1
 
-newlist = []
-
-for i in y:
-    # print(i)
-    if i <= 4 :
-        newlist +=[0]
-    elif i <= 7 :
-        newlist +=[1]
     else:
-        newlist +=[2]
+        y[index] ==1
+
+
+
+# newlist = []
+# for i in y:
+#     # print(i)
+#     if i < 4 :
+#         newlist +=[0]
+#     elif i <= 5 :
+#         newlist +=[1]
+#     elif i <= 7 :
+#         newlist +=[2]        
+#     else:
+#         newlist +=[3]
         
-y = np.array(newlist)
-print(np.unique(y, return_counts=True))
+# y = np.array(newlist)
+# print(np.unique(y, return_counts=True))
 #print(type(x)) # numpy
 x = np.delete(x,[0,6],axis=1)
 
 x_train, x_test, y_train, y_test = train_test_split (x, y, shuffle=True, random_state=66, train_size=0.8)
 
+print("============SMOTE 적용==============")
+from imblearn.over_sampling import SMOTE
+smote = SMOTE(random_state=66,k_neighbors=1)
+x_train, y_train = smote.fit_resample(x_train, y_train)
 
-
-# scaler = StandardScaler()
-# x_train = scaler.fit_transform(x_train)
-# x_test = scaler.transform(x_test)
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 
 from sklearn.model_selection import train_test_split, KFold
 from sklearn.experimental import enable_halving_search_cv
@@ -138,4 +159,7 @@ k_neighbors=2
 model.score:  0.9295918367346939
 k_neighbors=1
 model.score:  0.936734693877551
+
+라벨링4개
+model.score:  0.8122448979591836
 """
