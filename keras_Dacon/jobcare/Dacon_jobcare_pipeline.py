@@ -268,7 +268,7 @@ for name, model in models:
 
 
 
-#standardization
+#standardization/CatBoostClassifier
 
 pipelines = []
 # pipelines.append(('ScaledLR',Pipeline([('Scaler',preprocessing.StandardScaler()),('LR',LinearRegression())])))
