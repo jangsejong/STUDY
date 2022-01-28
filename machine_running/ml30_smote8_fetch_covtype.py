@@ -54,7 +54,6 @@ print(x.shape, y.shape) #(581012, 54) (581012,)
 # y = np.array(newlist)
 # print(np.unique(y, return_counts=True))
 #print(type(x)) # numpy
-x = np.delete(x,[0,6],axis=1)
 
 x_train, x_test, y_train, y_test = train_test_split (x, y, shuffle=True, random_state=66, train_size=0.8)
 
@@ -64,12 +63,13 @@ smote = SMOTE(random_state=66,k_neighbors=1)
 x_train, y_train = smote.fit_resample(x_train, y_train)
 
 #data save
-import pickle
-pickle.dump(x_train, open('./_save/m30_x_train_save.dat', 'wb'))
-pickle.dump(x_test, open('./_save/m30_x_test_save.dat', 'wb'))
-pickle.dump(y_train, open('./_save/m30_y_train_save.dat', 'wb'))
-pickle.dump(y_test, open('./_save/m30_y_test_save.dat', 'wb'))
+import joblib
+joblib.dump(x_train, open('../_save/m30_x_train_save.dat', 'wb'))
+joblib.dump(x_test, open('../_save/m30_x_test_save.dat', 'wb'))
+joblib.dump(y_train, open('../_save/m30_y_train_save.dat', 'wb'))
+joblib.dump(y_test, open('../_save/m30_y_test_save.dat', 'wb'))
 
+print(x_train.shape, x_test.shape, y_train.shape, y_test.shape) #(581012, 54) (581012,)
 
 # scaler = StandardScaler()
 # x_train = scaler.fit_transform(x_train)
