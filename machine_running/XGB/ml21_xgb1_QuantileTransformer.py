@@ -8,12 +8,13 @@ from sklearn.preprocessing import PolynomialFeatures
 
 from sklearn.model_selection import learning_curve, train_test_split
 from sklearn.metrics import r2_score, accuracy_score
-import time
+import time 
 
 #1.데이타
+
 # datasets = fetch_california_housing()
 datasets = load_boston()
-
+#
 x = datasets.data
 y = datasets['target']
 print(x.shape, y.shape) #(20640, 8) (20640,)
