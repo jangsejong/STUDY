@@ -20,4 +20,4 @@ y_predict = model.predict(x_test)
 results = model.evaluate(x_test, y_test)
 print(results)
 
-model.summury()
+# model.summury()
