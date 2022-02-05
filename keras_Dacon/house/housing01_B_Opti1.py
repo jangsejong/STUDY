@@ -101,6 +101,9 @@ x_train, x_test, y_train, y_test = train_test_split(
 print(x_train.shape, y_train.shape)#(1080, 22) (1080,)
 print(x_test.shape, y_test.shape)#(270, 22) (270,)
 
+
+from sklearn.preprocessing import MaxAbsScaler, MinMaxScaler, PowerTransformer, QuantileTransformer, RobustScaler, StandardScaler
+
 scaler = StandardScaler()
 scaler = MinMaxScaler()
 scaler = MaxAbsScaler()

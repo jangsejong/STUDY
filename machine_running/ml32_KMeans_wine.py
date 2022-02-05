@@ -15,7 +15,7 @@ x=pd.DataFrame(datasets.data, columns=[datasets.feature_names])
 #print(type(x))
 print(x)
 
-kmeans = KMeans(n_clusters=4)  #분류에서만 가능
+kmeans = KMeans(n_clusters=3)  #분류에서만 가능
 kmeans.fit(x)
 
 y_predict = kmeans.predict(x)
@@ -58,7 +58,7 @@ x['target'] = datasets.target
 # iris_result = x.groupby(['target', 'cluster']).count()
 # print(iris_result)
 
-print(accuracy_score(datasets.target,kmeans.labels_))#0.42696629213483145
+print(accuracy_score(datasets.target,kmeans.labels_))#0.702247191011236
 
 
 from sklearn.metrics import silhouette_score
@@ -72,13 +72,13 @@ from sklearn.metrics import normalized_mutual_info_score
 from sklearn.metrics import v_measure_score
 
 
-print(silhouette_score(x['cluster'], x['target']))  #0.09347066504674141
+print(silhouette_score(x['cluster'], x['target']))  #0.21488627804841787
 #0.6322939531368102 #실루엣 계수: 군집간 거리는 멀고 군집내 거리는 가까울수록 점수 높음 (0~1), 0.5 보다 크면 클러스터링이 잘 된거라 평가
-print(adjusted_mutual_info_score(datasets.target, y_predict)) #0.37946604935299766
-print(adjusted_rand_score(datasets.target, y_predict)) #0.303442531578347
-print(completeness_score(datasets.target, y_predict)) #0.3557931783115363
-print(fowlkes_mallows_score(datasets.target, y_predict)) #0.5207343245323419
-print(homogeneity_score(datasets.target, y_predict)) #0.42766704377065784
-print(mutual_info_score(datasets.target, y_predict)) #0.4644628506130969
-print(normalized_mutual_info_score(datasets.target, y_predict)) #00.3884332923957888
-print(v_measure_score(datasets.target, y_predict)) #0.3884332923957888
+print(adjusted_mutual_info_score(datasets.target, y_predict)) #0.42268666427661217
+print(adjusted_rand_score(datasets.target, y_predict)) #0.37111371823084754
+print(completeness_score(datasets.target, y_predict)) #0.42870141389448585
+print(fowlkes_mallows_score(datasets.target, y_predict)) #0.5835370218944976
+print(homogeneity_score(datasets.target, y_predict)) #0.42881231997856467
+print(mutual_info_score(datasets.target, y_predict)) #.4657066646034707
+print(normalized_mutual_info_score(datasets.target, y_predict)) #0.4287568597645354
+print(v_measure_score(datasets.target, y_predict)) #0.4287568597645355

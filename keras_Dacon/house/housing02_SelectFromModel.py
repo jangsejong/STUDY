@@ -61,6 +61,9 @@ print("이상치의 위치 : ", outliers_loc)
 print( datasets.loc[[255], 'Garage Yr Blt'] ) # 행, 열          #이상
 # 2207년의 행 하나 드랍
 datasets.drop( datasets[datasets['Garage Yr Blt']==2207].index, inplace=True )
+
+#train.loc[254, 'Garage Yr Blt'] = 2007
+
 print(datasets.shape)#확인 (1348, 14)       (=> duplicate와 2207년이 제거됨)
 print(datasets['Exter Qual'].value_counts() )
 print(datasets['Bsmt Qual'].value_counts() )

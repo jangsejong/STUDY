@@ -2,13 +2,43 @@ SEED = 66
 
 
 import pandas as pd
-train_data=pd.read_csv('../_data/dacon/house/train.csv')
-test_data=pd.read_csv('../_data/dacon/house/test.csv')
+train_data=pd.read_csv('./././_data/dacon/house/train.csv')
+test_data=pd.read_csv('./././_data/dacon/house/test.csv')
 
 print('train_data shape : ', train_data.shape)
 print('test_data shape : ', test_data.shape)
 # train_data shape :  (1350, 15)
 # test_data shape :  (1350, 14)
+
+
+#이상치 제거
+def cut_outlier(df2, columns):
+    df=df2.copy()
+    for column in columns:
+        q1=df[column].quantile(.25)
+        q3=df[column].quantile(.75)
+        iqr=q3-q1
+        low=q1-1.5*iqr
+        high=q3+1.5*iqr
+        df.loc[df[column]<low, column]=low
+        df.loc[df[column]>high, column]=high
+    return df
+
+train_data=cut_outlier(train_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
+test_data=cut_outlier(test_data, ['Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area'])
+
+
+# 중복값 제거
+print("제거 전 :", train_data.shape)
+train_data = train_data.drop_duplicates()
+print("제거 후 :", train_data.shape)
+
+
+
+# train[train['Garage Yr Blt']> 2050] # 254
+# train.loc[254, 'Garage Yr Blt'] = 2007
+train_data.drop(train_data[train_data['Garage Yr Blt']==2207].index, inplace=True)
+
 
 #데이터 변수 순서 정리해 줌
 cols1=['id', 'Year Built', 'Year Remod/Add', 'Garage Yr Blt',  'Overall Qual', 'Exter Qual', 'Bsmt Qual', 'Kitchen Qual', 'Gr Liv Area', 'Total Bsmt SF', '1st Flr SF', 'Garage Area', 'Full Bath', 'Garage Cars', 'target']
@@ -76,7 +106,7 @@ from lightgbm import LGBMRegressor #LGB회귀
 # rf_reg=RandomForestRegressor(random_state=SEED, n_estimators=15000, criterion="mae")
 # gb_reg=GradientBoostingRegressor(random_state=SEED, n_estimators=10000)
 # dt_reg=DecisionTreeRegressor(random_state=SEED, max_depth=4)
-xgb_reg=XGBRegressor(n_estimators=1000)
+xgb_reg=XGBRegressor(n_estimators=15000)
 # lgb_reg=LGBMRegressor(n_estimators=1000)
 
 # dt_reg.fit(X_train,y_train)
@@ -123,13 +153,13 @@ result['score_xgb']=NMAE(result['target'], result['prediction_xgb'])
 print('XGB 의 score :', np.mean(result['score_xgb']))
 # print('LGB 의 score :', np.mean(result['score_lgb']))
 
-model = XGBRegressor(max_depth = 4.45,
+model = XGBRegressor(max_depth = 4,
         learning_rate = 0.035,
-        n_estimators = 5972,
-        min_child_weight = 2.03,
-        subsample =  0.879,
-        colsample_bytree = 0.32343006250502065,
-        reg_lambda = 2.512
+        n_estimators = 6000,
+        min_child_weight = 2,
+        subsample =  0.87,
+        colsample_bytree = 0.32,
+        reg_lambda = 2.51
     
 )
 model.fit(X_data, Y_data) # train data로 학습
@@ -150,7 +180,7 @@ id_sub=test_data[['id']]
 
 submission=pd.concat([id_sub, result_sub], axis=1)
 
-submission.to_csv('../_data/dacon/house/house_0203_03.csv', index=False)
+submission.to_csv('./././_data/dacon/house/house_0204_001.csv', index=False)
 
 
 
