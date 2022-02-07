@@ -67,7 +67,7 @@ def NMAE(true, pred) -> float:
 
 nmae_score = make_scorer(NMAE, greater_is_better=False)
 
-random_state = 77
+random_state = 66
 
 kf = KFold(n_splits = 10, random_state = random_state, shuffle = True)
 
