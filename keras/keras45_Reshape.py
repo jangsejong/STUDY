@@ -7,16 +7,25 @@ from tensorflow.python.keras.layers.core import Dropout
 
 model = Sequential()
 ##model.add(Conv2D(10, (2, 2), strides=1, padding='valid', input_shape=(10, 10, 1), activation='relu')) 
-model.add(Conv2D(10 ,kernel_size=(2,2), padding='same', input_shape=(28, 28, 1)))                          
+model.add(Conv2D(128 ,kernel_size=(2,2), padding='vaild', input_shape=(28, 28, 1)))     
+model.add(Dropout(0.2))                     
+model.add(Conv2D(128,kernel_size=(2,2), padding='same', activation='relu'))  #     (None, 13, 13, 5)                          
 model.add(MaxPooling2D())
-model.add(Conv2D(5,kernel_size=(2,2), activation='relu'))  #     (None, 13, 13, 5)                          
-model.add(Conv2D(7,kernel_size=(2,2), activation='relu'))  #     (None, 12, 12, 7)  
-model.add(Conv2D(7,kernel_size=(2,2), activation='relu'))  #     (None, 11, 11, 7)                           
-model.add(Conv2D(10,kernel_size=(2,2), activation='relu')) #     (None, 10, 10, 10)                                                              
+
+model.add(Conv2D(64,kernel_size=(2,2), activation='relu'))  #     (None, 12, 12, 7) 
+model.add(Dropout(0.2))                     
+ 
+model.add(Conv2D(64,kernel_size=(2,2), activation='relu'))  #     (None, 11, 11, 7)  
+model.add(Dropout(0.2))     
+model.add(Conv2D(64,kernel_size=(2,2), activation='relu'))  #     (None, 11, 11, 7)  
+model.add(Dropout(0.2))                     
+
+                         
+# model.add(Conv2D(10,kernel_size=(2,2), activation='relu')) #     (None, 10, 10, 10)                                                              
 model.add(Flatten())                                       #     (None, 1000) 
-model.add(Reshape(target_shape=(100,10)))                  #     (None, 100, 10) 
-model.add(Conv1D(5, 2))                                    #     (None, 99, 5)  
-model.add(LSTM(15))
+# model.add(Reshape(target_shape=(100,10)))                  #     (None, 100, 10) 
+# model.add(Conv1D(5, 2))                                    #     (None, 99, 5)  
+# model.add(LSTM(15))
 model.add(Dense(10, activation='softmax'))
 # model.add(Dense(2, activation='linear'))
 # model.add(Dense(1, activation='softmax'))
