@@ -6,11 +6,19 @@ tf.compat.v1.set_random_seed(66)
 x_train = [1,2,3] # x_train = np.array([1,2,3])
 y_train = [1,2,3] # y_train = np.array([1,2,3])
 
-w = tf.Variable(1 , name='weight', dtype= tf.float32) #초기값을 1로 설정
-b = tf.Variable(1 , name='bias', dtype= tf.float32) #초기값을 1로 설정
+# w = tf.Variable(1 , name='weight', dtype= tf.float32) #초기값을 1로 설정
+# b = tf.Variable(1 , name='bias', dtype= tf.float32) #초기값을 1로 설정
+w = tf.Variable(tf.random_normal([1]), name='weight', dtype = tf.float32) #초기값을 1로 설정
+b = tf.Variable(tf.random_normal([1]), name='bias', dtype = tf.float32) #초기값을 1로 설정
+
+sess = tf.compat.v1.Session()
+sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+
+print(sess.run(w))  #[0.06524777]
 
 
-#2. Model
+
+# 2. Model
 
 hypothesis = x_train * w + b # y = xw + b
 
@@ -25,16 +33,24 @@ train = optimizer.minimize(loss) # 최적화 함수
 
 #3-2. run
 
-sess = tf.compat.v1.Session() # 세션 생성
-sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+with tf.compat.v1.Session() as sess:
+    sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+    for step in range(2001): # 학습 횟수
+        sess.run(train) # train 실행
+        if step % 100 == 0: # 학습 횟수마다 출력
+            print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력    
 
-for step in range(2001): # 학습 횟수
-    sess.run(train) # train 실행
-    if step % 100 == 0: # 학습 횟수마다 출력
-        print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력
-sess.close() # 세션 닫기        
-        
+# sess = tf.compat.v1.Session() # 세션 생성
+# sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+# for step in range(2001): # 학습 횟수
+#     sess.run(train) # train 실행
+#     if step % 100 == 0: # 학습 횟수마다 출력
+#         print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력
+# sess.close() # 세션 닫기        
+
 #4. Evaluate
+
+
 
 '''
 import tensorflow as tf

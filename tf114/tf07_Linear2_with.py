@@ -25,16 +25,24 @@ train = optimizer.minimize(loss) # 최적화 함수
 
 #3-2. run
 
-sess = tf.compat.v1.Session() # 세션 생성
-sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+with tf.compat.v1.Session() as sess:
+    sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+    for step in range(2001): # 학습 횟수
+        sess.run(train) # train 실행
+        if step % 100 == 0: # 학습 횟수마다 출력
+            print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력    
 
-for step in range(2001): # 학습 횟수
-    sess.run(train) # train 실행
-    if step % 100 == 0: # 학습 횟수마다 출력
-        print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력
-sess.close() # 세션 닫기        
-        
+# sess = tf.compat.v1.Session() # 세션 생성
+# sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+# for step in range(2001): # 학습 횟수
+#     sess.run(train) # train 실행
+#     if step % 100 == 0: # 학습 횟수마다 출력
+#         print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력
+# sess.close() # 세션 닫기        
+
 #4. Evaluate
+
+
 
 '''
 import tensorflow as tf
