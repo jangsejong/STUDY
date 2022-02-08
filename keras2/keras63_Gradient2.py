@@ -14,7 +14,7 @@ def gradient3(x):
 
 x = 10
 epochs = 20
-learning_rate = 0.2
+learning_rate = 0.25
 
 
 

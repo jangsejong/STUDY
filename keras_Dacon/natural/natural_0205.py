@@ -21,7 +21,7 @@ y_preds = np.array(y_preds)
 
 df_test["label"] = y_preds
 df_submission = df_test.loc[:, ["index", "label"]]
-df_submission.to_csv(path+ "natural_0205_1.csv", index=False)
+df_submission.to_csv(path+ "natural_0205_01.csv", index=False)
 
 
 
