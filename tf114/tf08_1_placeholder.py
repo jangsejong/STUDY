@@ -47,7 +47,9 @@ train = optimizer.minimize(loss) # 최적화 함수
 sess = tf.compat.v1.Session() # 세션 생성
 sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
 for step in range(2001): # 학습 횟수
-    sess.run(train) # train 실행
+    # sess.run(train) # train 실행
+    _, loss_val, W_val, b_val = sess.run([train, loss, w, b], feed_dict={x_train:[1,2,3], y_train:[1,2,3]}) # train 실행
+    
     if step % 100 == 0: # 학습 횟수마다 출력
         print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력
 
