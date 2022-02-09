@@ -72,29 +72,10 @@ with tf.compat.v1.Session() as sess:        # tf.~~~Session()을 sess로써 실�
             print(predict)
             break
         
-# wb = []
-# with tf.compat.v1.Session() as sess:
-#     sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
-#     for step in range(2001): # 학습 횟수
-#         # sess.run(train) # train 실행
-#         _, loss_val, W_val, b_val = sess.run([train, loss, w, b], feed_dict={x_train:[1,2,3], y_train:[1,2,3]}) # train 실행
-#         if step % 100 == 0: # 학습 횟수마다 출력
-#             # print(step, sess.run(loss), sess.run(w), sess.run(b)) # 각 반복마다 출력   
-#             print(step, loss_val, W_val, b_val) # 각 반복마다 출력
-#             wb.append(sess.run([w, b]))
-#     #4. Test
-#     print("예측값:", sess.run(hypothesis, feed_dict={x_train:[4]})) # [3.995577]
-#     print("예측값:", sess.run(hypothesis, feed_dict={x_train:[5,6]})) # 예측값: [4.993016 5.990454]
-#     print("예측값:", sess.run(hypothesis, feed_dict={x_train:[6,7,8]})) #예측값: [5.990454  6.9878926 7.985331 ]
-    
-    
-
-# #5. 결과 확인
-# sess = tf.InteractiveSession() # 자동으로 default session을 지정해줌 
-# sess.run(tf.global_variables_initializer())
-# c = sess.run([4])
-# print(c.eval()) # 제대로 작동 
-# print(sess.run(c)) 
-# sess.close()
 
     
+# x_test = tf.compat.v1.placeholder(tf.float32, shape=[None])
+
+# y_predict = x_test * w_val + b_val # y_predict = model.predict(x_test)
+
+# print("[6,7,8]의 예측값:", sess.run(y_predict, feed_dict={x_test:[6,7,8]})) # [5.990454  6.9878926 7.985331 ]
