@@ -54,7 +54,7 @@ print("loss_history : ", loss_history)
 print("w : ", sess.run(w))
 
 sess.close()
-print(f"{step:04d}\t{update_val:.5f} \t{descent_val:.5f} \t{gradient_val:.5f} \t{loss_val:.5f} \t{w_val:.5f}")
+# print(f"{step:04d}\t{update_val:.5f} \t{descent_val:.5f} \t{gradient_val:.5f} \t{loss_val:.5f} \t{w_val:.5f}")
 # plt.plot(w_history, loss_history)
 # plt.xlabel('w')
 # plt.ylabel('loss')
