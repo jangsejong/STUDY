@@ -94,7 +94,7 @@ trainer = Trainer(
     train_dataset=train_data,
     eval_dataset=eval_data,
     tokenizer=tokenizer,
-    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)]
+    callbacks=[EarlyStoppingCallback(early_stopping_patience=5)]
 )
 
 # Training.
@@ -110,7 +110,7 @@ outputs = trainer.predict(test_data)
 # Transform the test outputs for the submission.
 df_sub = pd.DataFrame({"index":test_data['index'], "label":np.argmax(outputs.predictions, axis=-1)})
 df_sub['label'] = df_sub['label'].apply(lambda x: {v:k for k,v in map_dict.items()}[x])
-df_sub.to_csv("0207_01.csv", index=False)
+df_sub.to_csv("0209_01.csv", index=False)
 
 
 
