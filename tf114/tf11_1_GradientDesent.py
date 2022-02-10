@@ -45,7 +45,7 @@ for step in range(21):
     w_history.append(w_v) # w_v 값을 저장
     loss_history.append(loss_v) # loss_v 값을 저장
     
-# sess.close()
+sess.close()
 
 print("========================================================")
 print("w_history : ", w_history)

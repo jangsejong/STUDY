@@ -12,8 +12,9 @@ x_data = datasets.data # 열로 저장된 데이터
 y_data = datasets.target # 실제값
 print(x_data.shape) # (506, 13)
 print(y_data.shape) # (506,)
-x_data = tf.expand_dims(x_data, axis=1)
-y_data = tf.expand_dims(y_data, axis=1)
+y_data = y_data.reshape(-1,1) # (506,1)
+# x_data = tf.expand_dims(x_data, axis=1)
+# y_data = tf.expand_dims(y_data, axis=1)
 
 x_train = x_data[:-100]
 y_train = y_data[:-100]
@@ -24,7 +25,7 @@ INPUT_SIZE = 13
 HIDDEN1_SIZE = 10
 HIDDEN2_SIZE = 8
 CLASSES = 1
-Learning_Rate = 0.05
+Learning_Rate = 0.001
 
 x = tf.compat.v1.placeholder(tf.float32, shape=[None, INPUT_SIZE])
 y_ = tf.compat.v1.placeholder(tf.float32, shape=[None, CLASSES])
@@ -50,14 +51,20 @@ cost = tf.reduce_mean(tf.square(y - y_))
 train = tf.compat.v1.train.GradientDescentOptimizer(Learning_Rate).minimize(cost)
 
 comp_pred = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
-accuracy = tf.reduce_mean(tf.cast(comp_pred, tf.float32))
+r2 = tf.reduce_mean(tf.cast(comp_pred, tf.float32))
 
 sess = tf.compat.v1.Session()
 init = tf.compat.v1.global_variables_initializer()
 sess.run(init)
 
-for i in range(1000):
-    _, loss, acc = sess.run([train,cost,accuracy], feed_dict=feed_dict)
+for i in range(2600):
+    sess.run(train, feed_dict={x: x_train, y_: y_train})
     if i % 100 == 0:
-        # saver.save(sess, './model/boston1.ckpt')
-        print("step : {}, loss : {}, acc : {}".format(i, loss, acc))
+        print(i, sess.run(cost, feed_dict={x: x_train, y_: y_train}))
+        
+print("r2 :", sess.run(r2, feed_dict={x: x_test, y_: y_test}))
+print("loss :", sess.run(cost, feed_dict={x: x_train, y_: y_train}))
+sess.close()
+
+# r2 : 1.0
+# loss : 1.3215341e+16

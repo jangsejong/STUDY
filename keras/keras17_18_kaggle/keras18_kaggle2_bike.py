@@ -13,7 +13,7 @@ def RMSE(y_test,y_pred):
 
 
 #1. 데이터
-path = "./_data/bike/"
+path = "D:\\Study\\_data\\kaggle\\bike\\"
 train = pd.read_csv(path + "train.csv")# index_col=0,  header=0) # 인덱스 조절하여 1열 삭제, 헤드 조절하여 행 선정
 #print(train)
 #print(train.shape) #(10886, 12)
