@@ -45,15 +45,15 @@ train = optimizer.minimize(loss)
 
 #4. 훈련
 
-sess = tf.compat.v1.Session()
-sess.run(tf.compat.v1.global_variables_initializer())
+# sess = tf.compat.v1.Session()
+# sess.run(tf.compat.v1.global_variables_initializer())
 
 feed_dicts= {x:x_data, y:y_data}
 
-for epoch in range(70001):
-    sess.run(train, feed_dict=feed_dicts)
-    if epoch % 2000 == 0:
-        print(epoch, sess.run(loss, feed_dict=feed_dicts))
+# for epoch in range(70001):
+#     sess.run(train, feed_dict=feed_dicts)
+#     if epoch % 2000 == 0:
+#         print(epoch, sess.run(loss, feed_dict=feed_dicts))
     
 
 #5. 평가
@@ -68,13 +68,11 @@ y_predict = tf.cast(hypothesis > 0.5, dtype=tf.float32) # 확률값이 0.5 이�
 accuracy = tf.reduce_mean(tf.cast(tf.equal(y, y_predict), dtype=tf.float32)) # 예측값과 실제값이 같으면 1, 아니면 0
 # accuracy = tf.reduce_mean(tf.cast(y!=y_predict, dtype=tf.float32)) # link : https://velog.io/@jangsejong/%EA%B3%BC-equals-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90
 
-loss = sess.run(loss, feed_dict=feed_dicts)
-print('loss : ', loss)
-
-with tf.compat.v1.Session() as sess:
-    sess.run(tf.global_variables_initializer())
+with tf.Session() as sess:
+    sess.run(tf.compat.v1.global_variables_initializer()) # 초기화
+    # sess.run(tf.global_variables_initializer())
     for step in range(70001):
-        _, loss_val = sess.run([optimizer, loss], feed_dict={x:x_data, y:y_data})
+        _, loss_val = sess.run([optimizer, loss], feed_dict=feed_dicts)
         if step % 2000 == 0:
             print(step, loss_val)
     #predict
@@ -85,6 +83,11 @@ pred, acc = sess.run([y_predict, accuracy], feed_dict=feed_dicts)
 
 print("예측결과 :", pred, "\n", "ACC :", acc)
 
+
+
+
+loss = sess.run(loss, feed_dict=feed_dicts)
+print('loss : ', loss)
 # loss :  0.025958158
 # accuracy :  1.0
 
