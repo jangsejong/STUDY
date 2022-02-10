@@ -35,13 +35,14 @@ sess.run(tf.compat.v1.global_variables_initializer())
 feed_dicts= {x:x_data, y:y_data}
 
 for epoch in range(70001):
-    sess.run(train, feed_dict=feed_dicts)
+    # sess.run(train, feed_dict=feed_dicts)
+    loss_val, hy_val, _ = sess.run([loss, hypothesis, train], feed_dict=feed_dicts)
     if epoch % 1000 == 0:
-        print(epoch, sess.run(loss, feed_dict=feed_dicts))
+        print(epoch, "loss:", loss_val, "\n", hy_val)
     
 
 #5. 평가
-predict = sess.run(hypothesis, feed_dict=feed_dicts) 
+y_predict = tf.cast(hypothesis > 0.5, dtype=tf.float32) # 확률값이 0.5 이상이면 1, 아니면 0
 
 #6. 예측
 
@@ -49,25 +50,8 @@ predict = sess.run(hypothesis, feed_dict=feed_dicts)
 
 #8. 성능평가
 
-from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-r2 = r2_score(y_data, predict)
-print("R2 : ", r2)
+accuracy = tf.reduce_mean(tf.cast(tf.equal(y, y_predict), dtype=tf.float32))
 
-mse = mean_squared_error(y_data, predict)
-print("MSE : ", mse)
+pred, acc = sess.run([y_predict, accuracy], feed_dict=feed_dicts)
 
-sess.close()
-
-'''
-R2 :  0.8837209038883364
-MSE :  0.029069774027915923
-
-시그모이드 함수를 사용
-R2 :  0.9904949148924321
-MSE :  0.0023762712768919743
-
-binary_crossentropy 함수를 사용
-R2 :  0.9995551708547561
-MSE :  0.00011120728631097377
-
-'''
+print("예측결과 :", pred, "\n", "ACC :", acc)
