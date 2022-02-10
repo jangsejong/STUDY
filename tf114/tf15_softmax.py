@@ -1,29 +1,43 @@
-from pickletools import optimize
 import tensorflow as tf
 tf.set_random_seed(66)
 
-#1. 데이터
+x_data =[[1,2,1,1],
+         [2,1,3,2],
+         [3,1,3,4],
+         [4,1,5,5],
+         [1,7,5,5],
+         [1,2,5,6],
+         [1,6,6,6],
+         [1,7,6,7]]
 
-x_data = [[1,2],[2,3],[3,1],[4,3],[5,3],[6,2]]
-y_data = [[0],[0],[0],[1],[1],[1]]
+y_data =[[0,0,1],
+         [0,0,1],
+         [0,0,1],
+         [0,1,0],
+         [0,1,0],
+         [0,1,0],
+         [1,0,0],
+         [1,0,0]]
 
-x = tf.compat.v1.placeholder(tf.float32, shape=[None, 2])
-y = tf.compat.v1.placeholder(tf.float32, shape=[None, 1])
 
-w = tf.compat.v1.Variable(tf.random.normal([2,1]), name='weight')
-b = tf.compat.v1.Variable(tf.random.normal([1]), name='bias') 
+
+x = tf.compat.v1.placeholder(tf.float32, shape=[None, 4])
+y = tf.compat.v1.placeholder(tf.float32, shape=[None, 3])
+
+w = tf.compat.v1.Variable(tf.random.normal([4,3]), name='weight')
+b = tf.compat.v1.Variable(tf.random.normal([1,3]), name='bias') 
 
 #2. 모델구성
 
-# hypothesis = tf.matmul(x, w) + b
-# hypothesis = tf.compat.v1.sigmoid(hypothesis)
-hypothesis = tf.compat.v1.sigmoid(tf.matmul(x, w) + b) # 시그모이드 함수를 사용하면 더 좋은 결과를 낼 수 있다.
-# model.add(Dense(1, activation='sigmoid'))
+hypothesis = tf.nn.softmax(tf.matmul(x, w) + b) #
+# model.add = Dense(3, activation='softmax')
 
 #3. 최적화
 
 # loss = tf.reduce_mean(tf.square(hypothesis - y))
-loss = -tf.reduce_mean(y * tf.math.log(hypothesis) + (1 - y) * tf.math.log(1 - hypothesis)) # binary_crossentropy
+# loss = -tf.reduce_mean(y * tf.math.log(hypothesis) + (1 - y) * tf.math.log(1 - hypothesis)) # binary_crossentropy
+loss = tf.reduce_mean(-tf.reduce_sum(y*tf.log(hypothesis), axis=1)) # categorical_crossentropy
+
 optimizer = tf.compat.v1.train.GradientDescentOptimizer(learning_rate=4e-2)
 train = optimizer.minimize(loss)
 
