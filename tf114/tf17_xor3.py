@@ -16,25 +16,20 @@ w1 = tf.compat.v1.Variable(tf.compat.v1.random.normal([2,8]), name='weight1')
 b1 = tf.compat.v1.Variable(tf.compat.v1.random.normal([8]), name = 'bias1')
 
 
-
 #2. 모델구성
 #h-1
 hedden_layer1 = tf.sigmoid(tf.matmul(x , w1) + b1)
 # hedden_layer1 = tf.matmul(x , w1) + b1
 # hedden_layer1 = tf.nn.relu(tf.sigmoid(tf.matmul(x , w1) + b1))
-
 w2 = tf.compat.v1.Variable(tf.compat.v1.random.normal([8,2]), name='weight2')
 b2 = tf.compat.v1.Variable(tf.compat.v1.random.normal([2]), name = 'bias2')
-
-
 
 #h-2
 hedden_layer2 = tf.sigmoid(tf.matmul(hedden_layer1, w2) + b2)
 w3 = tf.compat.v1.Variable(tf.compat.v1.random.normal([2,1]), name='weight3')
 b3 = tf.compat.v1.Variable(tf.compat.v1.random.normal([1]), name = 'bias3')
 
-
-output_layer = tf.sigmoid(tf.matmul(hedden_layer1, w3) + b3)
+output_layer = tf.sigmoid(tf.matmul(hedden_layer2, w3) + b3)
 
 #3 - 1. 컴파일
 # loss = tf.reduce_mean(tf.square(hypothesis - y)) # mse
