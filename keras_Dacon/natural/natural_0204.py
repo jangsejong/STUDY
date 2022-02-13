@@ -23,6 +23,7 @@ from tqdm import tqdm, tqdm_notebook
 
 from konlpy.tag import Okt
 from collections import Counter
+
 from wordcloud import WordCloud
 
 from google import colab
