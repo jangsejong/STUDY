@@ -1,7 +1,7 @@
 from pickletools import optimize
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.models import Sequential
+from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, BatchNormalization
 
 tf.compat.v1.set_random_seed(66)
