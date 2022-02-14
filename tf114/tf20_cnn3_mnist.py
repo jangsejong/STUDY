@@ -87,7 +87,7 @@ sess = tf.compat.v1.Session()
 sess.run(tf.compat.v1.global_variables_initializer())
 
 #4. 훈련
-for epochs in range(10):
+for epochs in range(20):
     avg_loss = 0
     total_batch = int(x_train.shape[0] / 100) # 60000 / 100 = 600
     for i in range(total_batch): # 600번 반복
@@ -95,11 +95,23 @@ for epochs in range(10):
         feed_dict = {x: batch_xs, y: batch_ys} 
         batch_loss, _ = sess.run([loss, optimizer], feed_dict=feed_dict) # 훈련
         avg_loss += batch_loss / total_batch # 평균 손실값
-    print('Epoch:', '%04d' % (epochs + 1), 'loss =', '{:.9f}'.format(avg_loss)) # 손실함수 값 출력
+
+        correct_prediction = tf.equal(tf.math.argmax(hypothesis, 1), tf.math.argmax(y, 1))        
+        accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+        print('Epoch:', '%04d' % (epochs + 1), 'loss =', '{:.9f}'.format(avg_loss), 'accuracy', accuracy.eval(session=sess, feed_dict={x: x_test, y: y_test}))
 
 #5. 평가
-accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(hypothesis, 1), tf.argmax(y, 1)), tf.float32)) # 정확도
-predict = tf.math.argmax(hypothesis, 1) # 예측값
-print('Accuracy:', sess.run(accuracy, feed_dict={x: x_test, y: y_test}))
-loss = tf.reduce_mean(-tf.reduce_sum(y * tf.math.log(hypothesis), axis=1)) # 손실함수
-print('Loss:', sess.run(loss, feed_dict={x: x_test, y: y_test}))
+
+print = sess.run(accuracy, feed_dict={x: x_test, y: y_test})
+print('Accuracy:', accuracy)
+
+
+# accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(hypothesis, 1), tf.argmax(y, 1)), tf.float32)) # 정확도
+# predict = tf.math.argmax(hypothesis, 1) # 예측값
+# print('Accuracy:', sess.run(accuracy, feed_dict={x: x_test, y: y_test}))
+# loss = tf.reduce_mean(-tf.reduce_sum(y * tf.math.log(hypothesis), axis=1)) # 손실함수
+# print('Loss:', sess.run(loss, feed_dict={x: x_test, y: y_test}))
+'''
+Accuracy: 0.9758
+
+'''
