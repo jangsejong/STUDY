@@ -12,11 +12,11 @@ path = 'D:\\Study\\_data\\dacon\\natural\\'
 # tokenizer = AutoTokenizer.from_pretrained("Huffon/klue-roberta-base-nli")
 # model = pipeline("text-classification", model="Huffon/klue-roberta-base-nli", return_all_scores=False)
 
-# tokenizer = AutoTokenizer.from_pretrained("Huffon/sentiment-analysis-roberta-base")
-# model = pipeline("text-classification", model="Huffon/sentiment-analysis-roberta-base", return_all_scores=False)
+tokenizer = AutoTokenizer.from_pretrained("fleek/wav2vec-large-xlsr-korean")
+model = pipeline("text-classification", model="fleek/wav2vec-large-xlsr-korean", return_all_scores=False)
 
-tokenizer = AutoTokenizer.from_pretrained("Huffon/klue-roberta-pretrain-nli")
-model = pipeline("text-classification", model="Huffon/klue-roberta-pretrain-nli", return_all_scores=False)
+# tokenizer = AutoTokenizer.from_pretrained("Huffon/klue-roberta-pretrain-nli")
+# model = pipeline("text-classification", model="Huffon/klue-roberta-pretrain-nli", return_all_scores=False)
 
 df_test = pd.read_csv(path +"test_data.csv")
 X_test = df_test["premise"] + " " + tokenizer.sep_token + " " + df_test["hypothesis"]
@@ -30,7 +30,7 @@ y_preds = np.array(y_preds)
 
 df_test["label"] = y_preds
 df_submission = df_test.loc[:, ["index", "label"]]
-df_submission.to_csv(path+ "natural_0211_01.csv", index=False)
+df_submission.to_csv(path+ "natural_0214_01.csv", index=False)
 
 
 
