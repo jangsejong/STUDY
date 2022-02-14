@@ -6,14 +6,14 @@ from tqdm import tqdm
 
 path = 'D:\\Study\\_data\\dacon\\natural\\'
 
-# tokenizer = AutoTokenizer.from_pretrained("Huffon/qnli-model")
-# model = pipeline("text-classification", model="Huffon/qnli-model", return_all_scores=False)
+tokenizer = AutoTokenizer.from_pretrained("hyyoka/wav2vec2-xlsr-korean-senior")
+model = pipeline("text-classification", model="hyyoka/wav2vec2-xlsr-korean-senior", return_all_scores=False)
 
 # tokenizer = AutoTokenizer.from_pretrained("Huffon/klue-roberta-base-nli")
 # model = pipeline("text-classification", model="Huffon/klue-roberta-base-nli", return_all_scores=False)
 
-tokenizer = AutoTokenizer.from_pretrained("fleek/wav2vec-large-xlsr-korean")
-model = pipeline("text-classification", model="fleek/wav2vec-large-xlsr-korean", return_all_scores=False)
+# tokenizer = AutoTokenizer.from_pretrained("beomi/korean-hatespeech-multilabel")
+# model = pipeline("text-classification", model="beomi/korean-hatespeech-multilabel", return_all_scores=False)
 
 # tokenizer = AutoTokenizer.from_pretrained("Huffon/klue-roberta-pretrain-nli")
 # model = pipeline("text-classification", model="Huffon/klue-roberta-pretrain-nli", return_all_scores=False)
@@ -31,6 +31,11 @@ y_preds = np.array(y_preds)
 df_test["label"] = y_preds
 df_submission = df_test.loc[:, ["index", "label"]]
 df_submission.to_csv(path+ "natural_0214_01.csv", index=False)
+
+'''
+beomi/korean-hatespeech-multilabel
+
+'''
 
 
 

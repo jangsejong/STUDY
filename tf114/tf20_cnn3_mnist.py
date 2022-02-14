@@ -25,9 +25,13 @@ y = tf.placeholder(tf.float32, shape=[None, 10])
 
 w1 = tf.get_variable("w1", shape=[2, 2, 1, 64], initializer=tf.contrib.layers.xavier_initializer())
 #<tf.Variable 'w1:0' shape=(2, 2, 1, 64) dtype=float32_ref>
-b = tf.Variable(tf.random_normal([64]))
-
 L1 = tf.nn.conv2d(x, w1, strides=[1, 1, 1, 1], padding='SAME')
 #<tf.Tensor 'Conv2D_1:0' shape=(?, 28, 28, 64) dtype=float32>
-print(L1)
+#print(L1)
+L1 = tf.nn.relu(L1)
+L1_maxpool = tf.nn.max_pool(L1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
+
+
+sess = tf.compat.v1.Session()
+ouput1 = sess.run(L1, feed_dict={x: x_train})
