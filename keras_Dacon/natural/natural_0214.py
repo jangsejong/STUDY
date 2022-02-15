@@ -68,8 +68,6 @@ import random
 from tqdm import tqdm
 
 import torch
-USE_CUDA = torch.cuda.is_available()
-print(USE_CUDA)
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from sklearn.metrics import accuracy_score
@@ -88,7 +86,7 @@ def seed_everything(seed:int = 66):
 
 seed_everything(42)
 
-device = torch.device('cuda' if USE_CUDA  else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print(device)
 
 MODEL_NAME = 'klue/roberta-large'
@@ -104,7 +102,7 @@ print(model)
 print(config)
 
 
-train_dataset, eval_dataset = train_test_split(train, test_size=0.1, shuffle=True, stratify=train['label'])
+train_dataset, eval_dataset = train_test_split(train, test_size=0.2, shuffle=True, stratify=train['label'])
 
 tokenized_train = tokenizer(
     list(train_dataset['premise']),
@@ -199,9 +197,9 @@ trainer = Trainer(
 )
 
 trainer.train()
-model.save_pretrained('./result/best_model') # 최적의 모델을 저장합니다.
+model.save_pretrained('./result/best_model')
 
-device = torch.device('cuda' if USE_CUDA  else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 Tokenizer_NAME = "klue/roberta-large"
 tokenizer = AutoTokenizer.from_pretrained(Tokenizer_NAME)
@@ -271,7 +269,7 @@ print(answer)
 
 df = pd.DataFrame(answer, columns=['index', 'label'])
 
-df.to_csv(path + '0214_1.csv', index=False)
+df.to_csv(path + '0215_1.csv', index=False)
 
 print(df)
 
