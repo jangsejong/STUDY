@@ -4,9 +4,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-path = 'D:\\Study\\_data\\dacon\\natural\\'
-train = pd.read_csv(os.path.join(path, 'train_data.csv'), encoding='utf-8')
-test = pd.read_csv(os.path.join(path, 'test_data.csv'), encoding='utf-8')
+PATH = 'D:\\Study\\_data\\dacon\\natural\\'
+# PATH =  '/content/drive/MyDrive/dataset/Sentece_Relation'
+
+train = pd.read_csv(os.path.join(PATH, 'train_data.csv'), encoding='utf-8')
+test = pd.read_csv(os.path.join(PATH, 'test_data.csv'), encoding='utf-8')
 
 train.head(5)
 
@@ -16,44 +18,6 @@ print(test.info())
 
 feature = train['label']
 
-plt.figure(figsize=(10,7.5))
-plt.title('Label Count', fontsize=20)
-
-temp = feature.value_counts()
-plt.bar(temp.keys(), temp.values, width=0.5, color='b', alpha=0.5)
-plt.text(-0.05, temp.values[0]+20, s=temp.values[0])
-plt.text(0.95, temp.values[1]+20, s=temp.values[1])
-plt.text(1.95, temp.values[2]+20, s=temp.values[2])
-
-plt.xticks(temp.keys(), fontsize=12) # x축 값, 폰트 크기 설정
-plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # 레이아웃 설정
-# plt.show() # 그래프 나타내기
-
-max_len = np.max(train['premise'].str.len())
-min_len = np.min(train['premise'].str.len())
-mean_len = np.mean(train['premise'].str.len())
-
-print('Max Premise Length: ', max_len)
-print('Min Premise Length: ', min_len)
-print('Mean Premise Lenght: ', mean_len, '\n')
-
-max_len = np.max(train['hypothesis'].str.len())
-min_len = np.min(train['hypothesis'].str.len())
-mean_len = np.mean(train['hypothesis'].str.len())
-
-print('Max Hypothesis Length: ', max_len)
-print('Min Hypothesis Length: ', min_len)
-print('Mean Hypothesis Lenght: ', mean_len)
-
-from collections import Counter
-
-plt.figure(figsize=(10,7.5))
-plt.title('Premise Length', fontsize=20)
-
-plt.hist(train['premise'].str.len(), alpha=0.5, color='orange')
-plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # 레이아웃 설정
-
-# plt.show()
 
 train['premise'] = train['premise'].str.replace('[^ㄱ-ㅎㅏ-ㅣ가-힣 0-9]', '')
 test['premise'] = test['premise'].str.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣 0-9]", "")
@@ -75,7 +39,7 @@ from sklearn.model_selection import train_test_split
 from transformers import TrainingArguments, Trainer
 from transformers import AutoModelForSequenceClassification, AutoConfig, AutoTokenizer
 
-def seed_everything(seed:int = 66):
+def seed_everything(seed:int = 1004):
     random.seed(seed)
     np.random.seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
@@ -84,7 +48,7 @@ def seed_everything(seed:int = 66):
     torch.backends.cudnn.deterministic = True  # type: ignore
     torch.backends.cudnn.benchmark = True  # type: ignore
 
-seed_everything(42)
+seed_everything(1004)
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print(device)
@@ -98,9 +62,8 @@ config.num_labels = 3
 
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, config=config)
 
-print(model)
-print(config)
-
+# print(model)
+# print(config)
 
 train_dataset, eval_dataset = train_test_split(train, test_size=0.2, shuffle=True, stratify=train['label'])
 
@@ -124,8 +87,8 @@ tokenized_eval = tokenizer(
     add_special_tokens=True
 )
 
-print(tokenized_train['input_ids'][0])
-print(tokenizer.decode(tokenized_train['input_ids'][0]))
+tokenized_train['input_ids'][0] # input_ids
+tokenized_train = tokenizer.decode(tokenized_train['input_ids'][0]) # 토큰을 문자로 변환
 
 class BERTDataset(torch.utils.data.Dataset):
     def __init__(self, pair_dataset, label):
@@ -140,7 +103,7 @@ class BERTDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.label)
-
+    
 def label_to_num(label):
     label_dict = {"entailment": 0, "contradiction": 1, "neutral": 2, "answer": 3}
     num_label = []
@@ -152,64 +115,56 @@ def label_to_num(label):
 
 
 train_label = label_to_num(train_dataset['label'].values)
-eval_label = label_to_num(eval_dataset['label'].values)
-
+eval_label = label_to_num(eval_dataset['label'].values)    
+    
 train_dataset = BERTDataset(tokenized_train, train_label)
 eval_dataset = BERTDataset(tokenized_eval, eval_label)
 
-print(train_dataset.__len__())
-print(train_dataset.__getitem__(19997))
-print(tokenizer.decode(train_dataset.__getitem__(19997)['input_ids']))
+# train_dataset.__len__() # 각 데이터셋의 길이
+# train_dataset.__getitem__(19997) # 특정 인덱스의 데이터를 가져오는 것
+# tokenizer.decode(train_dataset.__getitem__(19997)['input_ids']) # 특정 인덱스의 데이터를 가져오는 것
 
-
-def compute_metrics(pred): #validation을 위한 metrics function
-        
-        labels = pred.label_ids
-        preds = pred.predictions.argmax(-1)
-        probs = pred.predictions
-
-  # calculate accuracy using sklearn's function
-        acc = accuracy_score(labels, preds) # 리더보드 평가에는 포함되지 않습니다.
-
-        return {
-      'accuracy': acc,
-  }
+# def compute_metrics(pred):
+#     labels = pred.label_ids
+#     preds = pred.predictions.argmax(-1)
+#     probs = pred.predictions
+#     acc = accuracy_score(labels, preds) 
+#     return {'accuracy': acc}
   
-  
-training_ars = TrainingArguments(
-    output_dir='./result',
-    num_train_epochs=7,
-    per_device_train_batch_size=32,
-    save_total_limit=5,
-    save_steps=500,
-    evaluation_strategy='steps',
-    eval_steps = 500,
-    load_best_model_at_end = True,
-)
+# training_ars = TrainingArguments(
+#     output_dir='./result',
+#     num_train_epochs=7,
+#     per_device_train_batch_size=32,
+#     save_total_limit=5,
+#     save_steps=500,
+#     evaluation_strategy='steps',
+#     eval_steps = 500,
+#     load_best_model_at_end = True,
+# )
 
-trainer = Trainer(
-    model=model,
-    args=training_ars,
-    train_dataset=train_dataset,
-    eval_dataset=eval_dataset,
-    tokenizer=tokenizer,
-    compute_metrics=compute_metrics,
-)
-
-trainer.train()
-model.save_pretrained('./result/best_model')
+# trainer = Trainer(
+#     model=model,
+#     args=training_ars,
+#     train_dataset=train_dataset,
+#     eval_dataset=eval_dataset,
+#     tokenizer=tokenizer,
+#     compute_metrics=compute_metrics,
+# )
+# trainer.train()
+# model.save_pretrained('./result/best_model')
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 Tokenizer_NAME = "klue/roberta-large"
 tokenizer = AutoTokenizer.from_pretrained(Tokenizer_NAME)
 
-MODEL_NAME = './result/checkpoint-4000'
+MODEL_NAME = './result/checkpoint-500'
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
 model.resize_token_embeddings(tokenizer.vocab_size)
 model.to(device)
 
-print(tokenizer)
+# print(tokenizer)
+
 
 test_label = label_to_num(test['label'].values)
 
@@ -217,17 +172,13 @@ tokenized_test = tokenizer(
     list(test['premise']),
     list(test['hypothesis']),
     return_tensors="pt",
-    max_length=128,
+    max_length=258,
     padding=True,
     truncation=True,
     add_special_tokens=True
 )
 
 test_dataset = BERTDataset(tokenized_test, test_label)
-
-print(test_dataset.__len__())
-print(test_dataset.__getitem__(1665))
-print(tokenizer.decode(test_dataset.__getitem__(6)['input_ids']))
 
 dataloader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
@@ -253,6 +204,8 @@ for i, data in enumerate(tqdm(dataloader)):
 pred_answer, output_prob = np.concatenate(output_pred).tolist(), np.concatenate(output_prob, axis=0).tolist()
 print(pred_answer)
 
+
+
 def num_to_label(label):
     label_dict = {0: "entailment", 1: "contradiction", 2: "neutral"}
     str_label = []
@@ -265,15 +218,10 @@ def num_to_label(label):
 answer = num_to_label(pred_answer)
 print(answer)
 
-
-
 df = pd.DataFrame(answer, columns=['index', 'label'])
 
-df.to_csv(path + '0215_1.csv', index=False)
+df.to_csv(PATH + '0216_1111.csv', index=False)
 
 print(df)
-
-
-
 
 
