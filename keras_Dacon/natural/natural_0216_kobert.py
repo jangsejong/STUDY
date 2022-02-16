@@ -158,7 +158,7 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 Tokenizer_NAME = "klue/roberta-large"
 tokenizer = AutoTokenizer.from_pretrained(Tokenizer_NAME)
 
-MODEL_NAME = './result/checkpoint-500'
+MODEL_NAME = 'D:\\Study\\results\\checkpoint-500'
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
 model.resize_token_embeddings(tokenizer.vocab_size)
 model.to(device)
