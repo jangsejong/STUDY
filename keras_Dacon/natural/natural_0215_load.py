@@ -77,7 +77,7 @@ from sklearn.model_selection import train_test_split
 from transformers import TrainingArguments, Trainer
 from transformers import AutoModelForSequenceClassification, AutoConfig, AutoTokenizer
 
-def seed_everything(seed:int = 1004):
+def seed_everything(seed:int = 66):
     random.seed(seed)
     np.random.seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
@@ -86,7 +86,7 @@ def seed_everything(seed:int = 1004):
     torch.backends.cudnn.deterministic = True  # type: ignore
     torch.backends.cudnn.benchmark = True  # type: ignore
 
-seed_everything(42)
+seed_everything(66)
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print(device)
@@ -189,82 +189,82 @@ trainer = Trainer(
     tokenizer=tokenizer,
     compute_metrics=compute_metrics,
 )
-trainer.train()
-model.save_pretrained('./result/best_model')
+# trainer.train()
+# model.save_pretrained('./result/best_model')
 
-# device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-# Tokenizer_NAME = "./result/checkpoint-4000"
-# tokenizer = AutoTokenizer.from_pretrained(Tokenizer_NAME)
+Tokenizer_NAME = "klue/roberta-base"
+tokenizer = AutoTokenizer.from_pretrained(Tokenizer_NAME)
 
-# MODEL_NAME = './result/checkpoint-4000'
-# model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
-# model.resize_token_embeddings(tokenizer.vocab_size)
-# model.to(device)
+MODEL_NAME = 'D:\\Study\\results\\checkpoint-900'
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+model.resize_token_embeddings(tokenizer.vocab_size)
+model.to(device)
 
-# print(tokenizer)
+print(tokenizer)
 
 
-# test_label = label_to_num(test['label'].values)
+test_label = label_to_num(test['label'].values)
 
-# tokenized_test = tokenizer(
-#     list(test['premise']),
-#     list(test['hypothesis']),
-#     return_tensors="pt",
-#     max_length=128,
-#     padding=True,
-#     truncation=True,
-#     add_special_tokens=True
-# )
+tokenized_test = tokenizer(
+    list(test['premise']),
+    list(test['hypothesis']),
+    return_tensors="pt",
+    max_length=128,
+    padding=True,
+    truncation=True,
+    add_special_tokens=True
+)
 
-# test_dataset = BERTDataset(tokenized_test, test_label)
+test_dataset = BERTDataset(tokenized_test, test_label)
 
-# print(test_dataset.__len__())
-# print(test_dataset.__getitem__(1665))
-# print(tokenizer.decode(test_dataset.__getitem__(6)['input_ids']))
+print(test_dataset.__len__())
+print(test_dataset.__getitem__(1665))
+print(tokenizer.decode(test_dataset.__getitem__(6)['input_ids']))
 
-# dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False)
+dataloader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
-# model.eval()
-# output_pred = []
-# output_prob = []
+model.eval()
+output_pred = []
+output_prob = []
 
-# for i, data in enumerate(tqdm(dataloader)):
-#     with torch.no_grad():
-#         outputs = model(
-#             input_ids=data['input_ids'].to(device),
-#             attention_mask=data['attention_mask'].to(device),
-#             token_type_ids=data['token_type_ids'].to(device)
-#         )
-#     logits = outputs[0]
-#     prob = F.softmax(logits, dim=-1).detach().cpu().numpy()
-#     logits = logits.detach().cpu().numpy()
-#     result = np.argmax(logits, axis=-1)
+for i, data in enumerate(tqdm(dataloader)):
+    with torch.no_grad():
+        outputs = model(
+            input_ids=data['input_ids'].to(device),
+            attention_mask=data['attention_mask'].to(device),
+            token_type_ids=data['token_type_ids'].to(device)
+        )
+    logits = outputs[0]
+    prob = F.softmax(logits, dim=-1).detach().cpu().numpy()
+    logits = logits.detach().cpu().numpy()
+    result = np.argmax(logits, axis=-1)
 
-#     output_pred.append(result)
-#     output_prob.append(prob)
+    output_pred.append(result)
+    output_prob.append(prob)
   
-# pred_answer, output_prob = np.concatenate(output_pred).tolist(), np.concatenate(output_prob, axis=0).tolist()
-# print(pred_answer)
+pred_answer, output_prob = np.concatenate(output_pred).tolist(), np.concatenate(output_prob, axis=0).tolist()
+print(pred_answer)
 
 
 
-# def num_to_label(label):
-#     label_dict = {0: "entailment", 1: "contradiction", 2: "neutral"}
-#     str_label = []
+def num_to_label(label):
+    label_dict = {0: "entailment", 1: "contradiction", 2: "neutral"}
+    str_label = []
 
-#     for i, v in enumerate(label):
-#         str_label.append([i,label_dict[v]])
+    for i, v in enumerate(label):
+        str_label.append([i,label_dict[v]])
     
-#     return str_label
+    return str_label
 
-# answer = num_to_label(pred_answer)
-# print(answer)
+answer = num_to_label(pred_answer)
+print(answer)
 
-# df = pd.DataFrame(answer, columns=['index', 'label'])
+df = pd.DataFrame(answer, columns=['index', 'label'])
 
-# df.to_csv(PATH + '0216_1.csv', index=False)
+df.to_csv(PATH + '0217_1.csv', index=False)
 
-# print(df)
+print(df)
 
 
