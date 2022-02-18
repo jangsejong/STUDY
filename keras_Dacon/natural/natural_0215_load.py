@@ -197,7 +197,7 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 Tokenizer_NAME = "klue/roberta-base"
 tokenizer = AutoTokenizer.from_pretrained(Tokenizer_NAME)
 
-MODEL_NAME = 'D:\\Study\\results\\checkpoint-900'
+MODEL_NAME = 'D:\\Study\\results\\checkpoint-2500'
 model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
 model.resize_token_embeddings(tokenizer.vocab_size)
 model.to(device)
@@ -263,7 +263,7 @@ print(answer)
 
 df = pd.DataFrame(answer, columns=['index', 'label'])
 
-df.to_csv(PATH + '0217_1.csv', index=False)
+df.to_csv(PATH + '0217_2500.csv', index=False)
 
 print(df)
 
