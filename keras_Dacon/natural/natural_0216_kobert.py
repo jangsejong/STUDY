@@ -53,6 +53,9 @@ seed_everything(1004)
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print(device)
 
+from kobert.utils import get_tokenizer
+from kobert.pytorch_kobert import get_pytorch_kobert_model
+
 MODEL_NAME = 'klue/roberta-large'
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
