@@ -12,8 +12,8 @@ model.add(Dense(1))
 for layer in model.layers:
     print(layer.name, layer.trainable)
 
-# model.layers[0].trainable = False
-model.layers[1].trainable = False
-# model.layers[2].trainable = False
+# model.layers[0].trainable = False # 첫번째 레이어를 학습하지 않는다.
+model.layers[1].trainable = False # 두번째 레이어를 학습하지 않는다.
+# model.layers[2].trainable = False # 세번째 레이어를 학습하지 않는다.
 
 model.summary()
