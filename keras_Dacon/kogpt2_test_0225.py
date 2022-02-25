@@ -1,23 +1,33 @@
-import torch
-from transformers import GPT2LMHeadModel
+'''
+가상환경 tf114 에서 cmd 관리자 모드로 실행
+git clone --recurse-submodules https://github.com/haven-jeon/KoGPT2-chatbot.git
+cd KoGPT2-chatbot
+pip install -r requirements.txt 
+'''
+# GPT2LMHeadModel test
 
-from transformers import PreTrainedTokenizerFast
-tokenizer = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2", bos_token='</s>', eos_token='</s>', unk_token='<unk>', pad_token='<pad>', mask_token='<mask>') 
-tokenizer.tokenize("안녕하세요. 한국어 GPT-2 입니다.😤:)l^o")
+# import torch
+# from transformers import GPT2LMHeadModel
 
-model = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2')
+# from transformers import PreTrainedTokenizerFast
+# tokenizer = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2", bos_token='</s>', eos_token='</s>', unk_token='<unk>', pad_token='<pad>', mask_token='<mask>') 
+# tokenizer.tokenize("안녕하세요. 한국어 GPT-2 입니다.😤:)l^o")
 
-text = '피곤해서 집에 가고 싶어'
-input_ids = tokenizer.encode(text)
-gen_ids = model.generate(torch.tensor([input_ids]),
-                           max_length=128,
-                           repetition_penalty=2.0,
-                           pad_token_id=tokenizer.pad_token_id,
-                           eos_token_id=tokenizer.eos_token_id,
-                           bos_token_id=tokenizer.bos_token_id,
-                           use_cache=True)
-generated = tokenizer.decode(gen_ids[0,:].tolist())
-# print(generated)
+# model = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2')
+
+# text = '피곤해서 집에 가고 싶어'
+# input_ids = tokenizer.encode(text)
+# gen_ids = model.generate(torch.tensor([input_ids]),
+#                            max_length=128,
+#                            repetition_penalty=2.0,
+#                            pad_token_id=tokenizer.pad_token_id,
+#                            eos_token_id=tokenizer.eos_token_id,
+#                            bos_token_id=tokenizer.bos_token_id,
+#                            use_cache=True)
+# generated = tokenizer.decode(gen_ids[0,:].tolist())
+# # print(generated)
+
+
 
 import numpy as np
 import pandas as pd
@@ -41,7 +51,7 @@ PAD = '<pad>'
 koGPT2_TOKENIZER = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2",
             bos_token=BOS, eos_token=EOS, unk_token='<unk>',
             pad_token=PAD, mask_token=MASK) 
-model = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2')
+model = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2') # 
 
 
 import urllib.request
@@ -66,13 +76,14 @@ koGPT2_TOKENIZER = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2",
 # 챗봇 데이터를 처리하는 클래스를 만든다.
 class ChatbotDataset(Dataset):
     def __init__(self, chats, max_len=40):  # 데이터셋의 전처리를 해주는 부분
-        self._data = chats
+        self._data = chats # 챗봇 데이터
+        self.first = True 
         self.max_len = max_len
         self.q_token = Q_TKN
         self.a_token = A_TKN
-        self.sent_token = SENT
-        self.eos = EOS
-        self.mask = MASK
+        self.sent_token = SENT # 세미콜론
+        self.eos = EOS # 끝맺음
+        self.mask = MASK # 이모티콘을 위한 마스크
         self.tokenizer = koGPT2_TOKENIZER
 
     def __len__(self):  # chatbotdata 의 길이를 리턴한다.
@@ -151,7 +162,14 @@ for batch_idx, samples in enumerate(train_dataloader):
     print("mask =====> ", mask)
     print("label =====> ", label)
 print("end")
-    
+
+# class KoGPT2Chat(LightningModule):  # 이거 안됨
+#     def __init__(self, hparams, **kwargs):
+#         super(KoGPT2Chat, self).__init__()
+#         self.hparams = hparams
+#         self.neg = -1e18
+#         self.kogpt2 = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2')
+#         self.loss_function = torch.nn.CrossEntropyLoss(reduction='none')    
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 train_set = ChatbotDataset(Chatbot_Data, max_len=40)
@@ -171,8 +189,8 @@ Sneg = -1e18
 
 
 print ("start")
-for epoch in range(epoch):
-    for batch_idx, samples in enumerate(train_dataloader):
+for epoch in range(epoch): # epoch 만큼 반복
+    for batch_idx, samples in enumerate(train_dataloader): # batch 만큼 반복
         optimizer.zero_grad()
         token_ids, mask, label = samples
         out = model(token_ids)
@@ -186,19 +204,23 @@ for epoch in range(epoch):
         # 학습 끝
         optimizer.step()
 print ("end")
-sent = Chatbot_Data
-with torch.no_grad():
+
+
+sent = '나는 너와 친구가 되고 싶어'  # 입력 문장
+
+with torch.no_grad(): #오버피팅 방지
     while 1:
         q = input("user > ").strip()
         if q == "quit":
             break
         a = ""
         while 1:
-            input_ids = torch.LongTensor(koGPT2_TOKENIZER.encode(Q_TKN + q + SENT + sent + A_TKN + a)).unsqueeze(dim=0)
-            pred = model(input_ids)
-            pred = pred.logits
-            gen = koGPT2_TOKENIZER.convert_ids_to_tokens(torch.argmax(pred, dim=-1).squeeze().numpy().tolist())[-1]
-            if gen == EOS:
-                break
-            a += gen.replace("▁", " ")
-        print("Chatbot > {}".format(a.strip()))
+            input_ids = torch.LongTensor(koGPT2_TOKENIZER.encode(Q_TKN + q + A_TKN + a)).unsqueeze(dim=0) #질문과 답변을 합친다.
+            pred = model(input_ids) # 예측
+            pred = pred.logits # 예측값을 logits로 변환
+            gen = koGPT2_TOKENIZER.convert_ids_to_tokens(torch.argmax(pred, dim=-1).squeeze().numpy().tolist())[-1] #예측한 토큰을 다시 받아온다.
+            if gen == EOS: # 마지막 토큰이 EOS이면 반복문 탈출
+                break # 답변이 끝나면 다시 질문을 받는다.
+            a += gen.replace("▁", " ") # 공백을 넣어준다.
+        print("Chatbot > {}".format(a.strip())) # 출력
+
