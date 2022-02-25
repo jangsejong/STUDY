@@ -186,7 +186,7 @@ for epoch in range(epoch):
         # 학습 끝
         optimizer.step()
 print ("end")
-sent = '나는 너무 피곤해서 자고 싶어'
+sent = Chatbot_Data
 with torch.no_grad():
     while 1:
         q = input("user > ").strip()
