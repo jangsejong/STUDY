@@ -22,12 +22,12 @@ SENT = '<unused1>'
 class ChatDataset(gluon.data.Dataset):
     def __init__(self, chats, tok_path, vocab, max_len=64):
         self._data = chats
-        self._tok_path = tok_path
+        self._tok_path = tok_path # kogpt2/tokenizer/korean/mecab.ko.100k.sp
         self.tokenizer = None
         self.first = True
         self.q_token = U_TKN
         self.a_token = S_TKN
-        self.sent_token = SENT
+        self.sent_token = SENT # sentiment
         self.bos = BOS
         self.eos = EOS
         self.maskt = MASK
