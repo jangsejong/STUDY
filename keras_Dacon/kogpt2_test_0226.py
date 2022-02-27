@@ -205,43 +205,43 @@ for epoch in range(epoch): # epoch 만큼 반복
         optimizer.step()
 print ("end")
 
-tokenizer = koGPT2_TOKENIZER
-def chat(utterance,maxlen,numbeams,sampling,topk,ngramsize,temp):
-    with torch.no_grad():
-            qs=[]
-            q = utterance
-            qs.append(q) # history 저장
+# tokenizer = koGPT2_TOKENIZER
+# def chat(utterance,maxlen,numbeams,sampling,topk,ngramsize,temp):
+#     with torch.no_grad():
+#             qs=[]
+#             q = utterance
+#             qs.append(q) # history 저장
 
-            a=''
-            user = Q_TKN + q + SENT + a
-            encoded = tokenizer.encode(user)
-            input_ids = torch.LongTensor(encoded).unsqueeze(dim=0)
-            output = model.generate(input_ids,max_length=maxlen,
-                                         num_beams=numbeams, do_sample=sampling, 
-                                         top_k=topk, no_repeat_ngram_size=ngramsize,
-                                        temperature=temp)
-            a=tokenizer.decode(output[0])
-            idx = torch.where(output[0]==tokenizer.encode('<sys>')[0])
-            chatbot = tokenizer.decode(output[0][int(idx[0])+1:], skip_special_tokens=True)
+#             a=''
+#             user = Q_TKN + q + SENT + a
+#             encoded = tokenizer.encode(user)
+#             input_ids = torch.LongTensor(encoded).unsqueeze(dim=0)
+#             output = model.generate(input_ids,max_length=maxlen,
+#                                          num_beams=numbeams, do_sample=sampling, 
+#                                          top_k=topk, no_repeat_ngram_size=ngramsize,
+#                                         temperature=temp)
+#             a=tokenizer.decode(output[0])
+#             idx = torch.where(output[0]==tokenizer.encode('<sys>')[0])
+#             chatbot = tokenizer.decode(output[0][int(idx[0])+1:], skip_special_tokens=True)
  
-            if '답변' in a: # 응, 아니 등이 input으로 들어왔을 때
-                a_new = ''
-                user = Q_TKN + ''.join(qs[-2:]) + SENT + a_new # 직전 history 가지고 와서 sentiment 고려해주기
-                encoded = tokenizer.encode(user)
-                input_ids = torch.LongTensor(encoded).unsqueeze(dim=0)
-                output = model.generate(input_ids,max_length=maxlen,
-                                         num_beams=numbeams, do_sample=sampling, 
-                                         top_k=topk, no_repeat_ngram_size=ngramsize,
-                                        temperature=temp)
-                a_new = tokenizer.decode(output[0], skip_special_tokens=True)
-                idx = torch.where(output[0]==tokenizer.encode('<sys>')[0])
-                chatbot = tokenizer.decode(output[0][int(idx[0])+1:], skip_special_tokens=True)
+#             if '답변' in a: # 응, 아니 등이 input으로 들어왔을 때
+#                 a_new = ''
+#                 user = Q_TKN + ''.join(qs[-2:]) + SENT + a_new # 직전 history 가지고 와서 sentiment 고려해주기
+#                 encoded = tokenizer.encode(user)
+#                 input_ids = torch.LongTensor(encoded).unsqueeze(dim=0)
+#                 output = model.generate(input_ids,max_length=maxlen,
+#                                          num_beams=numbeams, do_sample=sampling, 
+#                                          top_k=topk, no_repeat_ngram_size=ngramsize,
+#                                         temperature=temp)
+#                 a_new = tokenizer.decode(output[0], skip_special_tokens=True)
+#                 idx = torch.where(output[0]==tokenizer.encode('<sys>')[0])
+#                 chatbot = tokenizer.decode(output[0][int(idx[0])+1:], skip_special_tokens=True)
                 
-                result = chatbot.strip()
+#                 result = chatbot.strip()
             
-            else: 
-                result = chatbot.strip()
+#             else: 
+#                 result = chatbot.strip()
                 
             
 
-    return result
+#     return result
