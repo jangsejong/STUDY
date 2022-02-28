@@ -13,12 +13,12 @@ import numpy as np
 import PIL
 from PIL import Image
 
-path = 'D:\\Study\\_data\\dacon\\사물이미지분류\\train\\*'
+path = 'D:\\Study\\_data\\dacon\\사물이미지분류\\train\\*' # 모든 이미지를 불러오는 함수
 
 training_images = []
 training_labels = []
 
-for filename in glob(path +"*"): # 모든 파일을 불러옴
+for filename in glob(path +"*"): # 함수를 통해 모든 파일을 불러옴
     for img in glob(filename + "/*.jpg"): # "/*.jpg"로 파일명을 찾는다.
         an_img = Image.open(img) 
         img_array = np.array(an_img) # img to array
@@ -26,14 +26,14 @@ for filename in glob(path +"*"): # 모든 파일을 불러옴
         label = filename.split('\\')[-1] #get label
         training_labels.append(label) #append label
         
-training_images = np.array(training_images)
-training_labels = np.array(training_labels)
+training_images = np.array(training_images) # 범위를 지정해서 이미지를 불러옴
+training_labels = np.array(training_labels) 
 
 from sklearn.preprocessing import LabelEncoder
 
 le = LabelEncoder()
-training_labels= le.fit_transform(training_labels)
-training_labels = training_labels.reshape(-1,1)
+training_labels= le.fit_transform(training_labels) # fit_transform : 인코딩을 하고 정규화를 한다.
+training_labels = training_labels.reshape(-1,1) # reshape(-1,1) : 이미지를 1차원으로 만들어줌
 
 
 print(training_images.shape) # Create a dataset
@@ -48,7 +48,7 @@ test_idx = []
 
 flist = sorted(glob(path + '*.jpg'))
 
-for filename in flist:
+for filename in flist: # 함수를 통해 모든 파일을 불러옴
     an_img = Image.open(filename) #read img
     img_array = np.array(an_img) #img to array
     test_images.append(img_array) #append array to training_images 
@@ -60,17 +60,17 @@ test_images = np.array(test_images)
 print(test_images.shape)
 print(test_idx[0:5])
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt # 이미지를 불러오고 정규화를 하는 함수
 # %matplotlib inline
 
 for i in range(20):
     plt.subplot(4, 5, i + 1)
-    plt.imshow(training_images[i*2500])
-    print(training_labels[i*2500], end=",")
-plt.show()
+    plt.imshow(training_images[i*2500]) # training_images[i*2500] : i번째 이미지를 불러옴
+    print(training_labels[i*2500], end=",") # training_labels[i*2500] : i번째 이미지의 label을 불러옴
+plt.show() # show image
 
-label_num = [0,1,2,3,4,5,6,7,8,9] # 
-label_name = le.inverse_transform(label_num) 
+label_num = [0,1,2,3,4,5,6,7,8,9] # label을 인코딩하는 함수
+label_name = le.inverse_transform(label_num) # inverse_transform : 정규화를 풀어줌
 
 for i in range(10):
     print(label_num[i], label_name[i])
@@ -80,7 +80,7 @@ import tensorflow as tf
 
 tf.random.set_seed(42)
 
-image_generator = ImageDataGenerator(
+image_generator = ImageDataGenerator( # 이미지를 생성하는 함수(증폭?과 비슷한 개념)
     rotation_range=30,
     brightness_range = [0.8, 1.0],
     zoom_range=0.3,
@@ -115,7 +115,7 @@ training_labels_aug = training_labels[random_mask].copy()
 training_image_aug = image_generator.flow(training_image_aug, np.zeros(augment_size), batch_size=augment_size, shuffle=False, seed = 42).next()[0]
 
 training_images = np.concatenate((training_images, training_image_aug)) #training에 생성한 데이터 추가
-training_labels = np.concatenate((training_labels, training_labels_aug))
+training_labels = np.concatenate((training_labels, training_labels_aug)) #concatenate : 두 배열을 합침
 
 print(training_images.shape)
 print(training_labels.shape)
@@ -181,12 +181,12 @@ training_labels = tf.one_hot(training_labels, 10) #mixup을 적용하기 위해 
 mix_training_images = []
 mix_training_labels = []
 
-for i in range(2):
+for i in range(2): #2번 반복
     random_num = random.sample(range(0,50000), 50000) #augmentation을 적용한 데이터를 제외하고 mix해보겠습니다
-    print("\nAttempt", i)
-    progress_before = 0
+    print("\nAttempt", i) # 반복 횟수 출력
+    progress_before = 0 # 진행률 출력
 
-    for i in range(0,50000,2):
+    for i in range(0,50000,2): #2개씩 배치를 진행합니다
         image_1 = training_images[random_num[i]]
         label_1 = training_labels[random_num[i]]
 
@@ -208,7 +208,7 @@ for i in range(2):
 mix_training_images = np.array(mix_training_images)
 mix_training_labels = np.array(mix_training_labels)
 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split #train_test_split : train과 test를 나누는 함수
 
 training_labels = np.array(training_labels)
 training_labels = training_labels.reshape(-1,10) #mixup에서 one-hot 기법을 적용했다면, shape을 바꿔줍니다.
@@ -220,7 +220,7 @@ X_train, X_valid, y_train, y_valid = train_test_split(training_images,
                                                       random_state=42)
 
 X_train = np.concatenate((X_train, mix_training_images)) #mixup한 75000개의 데이터를 train set에 추가해줍니다
-y_train = np.concatenate((y_train, mix_training_labels))
+y_train = np.concatenate((y_train, mix_training_labels)) # concatenate : 배열을 이어붙이는 함수
 
 X_test = test_images
 
@@ -271,7 +271,8 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(10, activation = 'softmax') # ouput layer
 ])
 
-model.compile(optimizer='adam', loss = 'categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss = 'categorical_crossentropy', metrics=['accuracy']) 
+# categorical_crossentropy : 여러개의 레이블을 가진 데이터에서 각 레이블을 정확히 추출하는 방법
 
 data = model.fit(X_train, 
                  y_train, 
