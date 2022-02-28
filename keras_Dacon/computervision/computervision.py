@@ -20,7 +20,7 @@ training_labels = []
 
 for filename in glob(path +"*"): # 파일명을 읽어온다.
     for img in glob(filename + "/*.jpg"): # "/*.jpg"로 파일명을 찾는다.
-        an_img = PIL.Image.open(img) # read img 
+        an_img = PIL.Image.open(img) 
         img_array = np.array(an_img) # img to array
         training_images.append(img_array) #append array to training_images
         label = filename.split('\\')[-1] #get label
