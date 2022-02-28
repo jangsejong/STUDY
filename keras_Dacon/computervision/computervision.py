@@ -13,15 +13,15 @@ import numpy as np
 import PIL
 from PIL import Image
 
-path = 'D:\\Study\\_data\\dacon\\computervision\\train'
+path = 'D:\\Study\\_data\\dacon\\사물이미지분류\\train'
 
 training_images = []
 training_labels = []
 
-for filename in glob(path +"*"):
-    for img in glob(filename + "/*.jpg"):
-        an_img = PIL.Image.open(img) #read img
-        img_array = np.array(an_img) #img to array
+for filename in glob(path +"*"): # 파일명을 읽어온다.
+    for img in glob(filename + "/*.jpg"): # "/*.jpg"로 파일명을 찾는다.
+        an_img = PIL.Image.open(img) # read img 
+        img_array = np.array(an_img) # img to array
         training_images.append(img_array) #append array to training_images
         label = filename.split('\\')[-1] #get label
         training_labels.append(label) #append label
@@ -35,12 +35,13 @@ le = LabelEncoder()
 training_labels= le.fit_transform(training_labels)
 training_labels = training_labels.reshape(-1,1)
 
-print(training_images.shape)
-print(training_labels.shape)
+
+print(training_images.shape) # Create a dataset
+print(training_labels.shape) # Create a dataset
 
 #create test dataset
 
-path = 'D:\\Study\\_data\\dacon\\computervision\\test'
+path = 'D:\\Study\\_data\\dacon\\사물이미지분류\\test'
 
 test_images = []
 test_idx = []
@@ -62,17 +63,17 @@ print(test_idx[0:5])
 import matplotlib.pyplot as plt
 # %matplotlib inline
 
-for i in range(20):
-    plt.subplot(4, 5, i + 1)
-    plt.imshow(training_images[i*2500])
-    print(training_labels[i*2500], end=",")
-plt.show()
+# for i in range(20):
+#     plt.subplot(4, 5, i + 1)
+#     plt.imshow(training_images[i*2500])
+#     print(training_labels[i*2500], end=",")
+# plt.show()
 
-label_num = [0,1,2,3,4,5,6,7,8,9]
-label_name = le.inverse_transform(label_num)
+# label_num = [0,1,2,3,4,5,6,7,8,9] # 
+# label_name = le.inverse_transform(label_num) 
 
-for i in range(10):
-    print(label_num[i], label_name[i])
+# for i in range(10):
+#     print(label_num[i], label_name[i])
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
@@ -89,18 +90,18 @@ image_generator = ImageDataGenerator(
     vertical_flip=False
 )
 
-sample_image = training_images[1]
-plt.imshow(sample_image.astype('uint8'))
-sample_image = np.expand_dims(sample_image, 0)
+# sample_image = training_images[1]
+# plt.imshow(sample_image.astype('uint8'))
+# sample_image = np.expand_dims(sample_image, 0)
 
-sample_image_it = image_generator.flow(sample_image, batch_size=1, seed = 42)
+# sample_image_it = image_generator.flow(sample_image, batch_size=1, seed = 42)
 
-fig = plt.figure(figsize = (10,10))
-for i in range(9):
-    plt.subplot(3, 3, 1+i)
-    batch = sample_image_it.next()
-    image = batch[0].astype('uint8')
-    plt.imshow(image)
+# fig = plt.figure(figsize = (10,10))
+# for i in range(9):
+#     plt.subplot(3, 3, 1+i)
+#     batch = sample_image_it.next()
+#     image = batch[0].astype('uint8')
+#     plt.imshow(image)
 # plt.show()
 
 augment_size=150000 #15만개 생성
