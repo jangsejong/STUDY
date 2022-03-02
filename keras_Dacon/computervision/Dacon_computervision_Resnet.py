@@ -38,10 +38,10 @@ def seed_everything(seed = 66):
     
 seed_everything(66)
 
-submission = pd.read_csv('D:\\Study\\_data\dacon\\computervision\\sample_submission.csv')
+submission = pd.read_csv('D:\\Study\\_data\dacon\\사물이미지분류\\sample_submission.csv')
 
 
-path = 'D:/Study/_data/dacon/computervision/' # 모든 이미지를 불러오는 함수
+path = 'D:/Study/_data/dacon/사물이미지분류/' # 모든 이미지를 불러오는 함수
 train_imgs = glob(path +"train/*/*")
 train_labels = [path.split('\\')[1] for path in train_imgs]
 
@@ -71,7 +71,7 @@ train_labels = [path.split('\\')[1] for path in train_imgs]
 
 #create test dataset
 
-path = 'D:/Study/_data/dacon/computervision/'
+path = 'D:/Study/_data/dacon/사물이미지분류/'
 test_imgs = glob(path +'test/*')
 
 # test_images = []
@@ -257,7 +257,7 @@ class ResNet34(nn.Module):
         outputs = self.classifier(x)
         return outputs
 
-N_EPOCH = 30
+N_EPOCH = 60
 LR = 1e-3
 BATCH_SIZE = 128
 N_TTA = 5
@@ -288,13 +288,13 @@ train_transform = Compose([
         ], p = 0.3),
     A.HueSaturationValue(p = 0.3),
     Normalize(),
-    ToTensorV2(),
+    ToTensor(),
 ])
 
 val_transform = Compose([
     Resize(224, 224),
     Normalize(),
-    ToTensorV2(),
+    ToTensor(),
 ])
 
 def display_aug(imgs, transform, labels = None, n_aug = 5, cols = 5):
@@ -385,7 +385,7 @@ pred = np.argmax(np.concatenate(np.array(preds)), axis = 1)
 pred.shape
 
 submission['target'] = [list(label_map.keys())[i] for i in pred]
-save_path = 'D:\\Study\\_data\dacon\\computervision\\vision_0228_3.csv'
+save_path = 'D:\\Study\\_data\dacon\\사물이미지분류\\vision_0302_1.csv'
 submission.to_csv(save_path, index = False)
 pd.read_csv(save_path)
 
