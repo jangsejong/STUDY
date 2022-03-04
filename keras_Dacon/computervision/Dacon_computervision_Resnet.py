@@ -21,7 +21,7 @@ from torch.utils.data import DataLoader, Dataset
 
 import albumentations as A
 from albumentations import Compose, OneOf, Resize, Normalize
-from albumentations.pytorch import ToTensor
+from albumentations.pytorch import ToTensorV2
 
 DEVICE = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 print(f'Device = {DEVICE}')
@@ -38,59 +38,15 @@ def seed_everything(seed = 66):
     
 seed_everything(66)
 
-submission = pd.read_csv('D:\\Study\\_data\dacon\\사물이미지분류\\sample_submission.csv')
+submission = pd.read_csv('D:/Study/_data/dacon/vision/sample_submission.csv')
 
 
-path = 'D:/Study/_data/dacon/사물이미지분류/' # 모든 이미지를 불러오는 함수
+path = 'D:/Study/_data/dacon/vision/'
 train_imgs = glob(path +"train/*/*")
 train_labels = [path.split('\\')[1] for path in train_imgs]
 
-# training_images = []
-# training_labels = []
-
-# for filename in glob(path +"*"): # 함수를 통해 모든 파일을 불러옴
-#     for img in glob(filename + "/*.jpg"): # "/*.jpg"로 파일명을 찾는다.
-#         an_img = Image.open(img) 
-#         img_array = np.array(an_img) # img to array
-#         training_images.append(img_array) #append array to training_images
-#         label = filename.split('\\')[-1] #get label
-#         training_labels.append(label) #append label
-        
-# train_imgs = np.array(training_images) # 범위를 지정해서 이미지를 불러옴
-# train_labels = np.array(training_labels) 
-
-# from sklearn.preprocessing import LabelEncoder
-
-# le = LabelEncoder()
-# training_labels= le.fit_transform(training_labels) # fit_transform : 인코딩을 하고 정규화를 한다.
-# training_labels = training_labels.reshape(-1,1) # reshape(-1,1) : 이미지를 1차원으로 만들어줌
-
-
-# print(train_imgs.shape) # Create a dataset
-# print(train_labels.shape) # Create a dataset
-
-#create test dataset
-
-path = 'D:/Study/_data/dacon/사물이미지분류/'
+path = 'D:/Study/_data/dacon/vision/'
 test_imgs = glob(path +'test/*')
-
-# test_images = []
-# test_idx = []
-
-# flist = sorted(glob(path + '*.jpg'))
-
-# for filename in flist: # 함수를 통해 모든 파일을 불러옴
-#     an_img = Image.open(filename) #read img
-#     img_array = np.array(an_img) #img to array
-#     test_images.append(img_array) #append array to training_images 
-#     label = filename.split('\\')[-1] #get id 
-#     test_idx.append(label) #append id
-    
-# test_imgs = np.array(test_images)
-
-# print(test_imgs.shape)
-# print(test_idx[0:5])
-
 
 
 label_map = {
@@ -288,13 +244,13 @@ train_transform = Compose([
         ], p = 0.3),
     A.HueSaturationValue(p = 0.3),
     Normalize(),
-    ToTensor(),
+    ToTensorV2(),
 ])
 
 val_transform = Compose([
     Resize(224, 224),
     Normalize(),
-    ToTensor(),
+    ToTensorV2(),
 ])
 
 def display_aug(imgs, transform, labels = None, n_aug = 5, cols = 5):
@@ -385,13 +341,9 @@ pred = np.argmax(np.concatenate(np.array(preds)), axis = 1)
 pred.shape
 
 submission['target'] = [list(label_map.keys())[i] for i in pred]
-save_path = 'D:\\Study\\_data\dacon\\사물이미지분류\\vision_0302_1.csv'
+save_path = 'D:/Study/_data/dacon/사물이미지분류/vision_0303_1.csv'
 submission.to_csv(save_path, index = False)
 pd.read_csv(save_path)
-
-# sample_submission = pd.read_csv("D:\\Study\\_data\dacon\\computervision\\sample_submission.csv")
-# sample_submission.target = pred_class
-# sample_submission.to_csv("D:\\Study\\_data\dacon\\computervision\\vision_0228_1.csv",index=False)
 
 display_aug(test_imgs, train_transform, list(submission['target']))
 
