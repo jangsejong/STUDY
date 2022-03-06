@@ -105,6 +105,7 @@ def solution_model():
     model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=1e-6, momentum=0.9), loss=tf.keras.losses.Huber())
     model.compile_metrics = [tf.keras.metrics.MeanAbsoluteError()]
     # YOUR CODE HERE TO COMPILE AND TRAIN THE MODEL
+    
     return model
 
 
