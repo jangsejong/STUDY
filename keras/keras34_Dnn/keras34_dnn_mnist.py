@@ -17,9 +17,7 @@ x_train = x_train.reshape(n,-1)/255.
 m = x_test.shape[0]
 x_test = x_test.reshape(m,-1)/255.
 
-from tensorflow.keras.utils import to_categorical
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
+c
 
 model = Sequential()
 # model.add(Dense(128, input_shape = (28*28,)))
@@ -58,6 +56,7 @@ print('시간 : ', round(end,2) ,'초')
 
 #4 평가예측
 loss = model.evaluate(x_test,y_test)
+y_predict = model.predict(x_test)
 y_predict = model.predict(x_test)
 print("loss : ",loss[0])
 print("acc : ",loss[1])
