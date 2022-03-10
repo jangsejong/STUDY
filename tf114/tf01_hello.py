@@ -15,6 +15,8 @@ print(hello1)
 # placeholder는 실제 값을 넣어주는 것이 아니라 값을 정의하는 것이다.
 # 이런 차이를 이용해서 실제 값을 넣어주는 것을 이해하는 것이 중요하다.
 
+
+
 sess = tf.Session()
 print(sess.run(hello1))
 
