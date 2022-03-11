@@ -7,7 +7,6 @@ def solution_model():
   
   
   
-  
   return model
   
   if __name__ == '__main__':
