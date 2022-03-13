@@ -6,7 +6,6 @@ def solution_model():
   ys = np.array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0], dtype=np.float32)
   
   
-  
   return model
   
   if __name__ == '__main__':
