@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import os
+# import missingno as msno # missing value visualization
 
 # Preprocessing
 from sklearn.preprocessing import OneHotEncoder
@@ -24,11 +25,12 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-train = pd.read_csv("D:\Study\_data\dacon\hand_gesture\data\train.csv")
-test = pd.read_csv("D:\Study\_data\dacon\hand_gesturedata\test.csv")
-submission = pd.read_csv("D:\Study\_data\dacon\hand_gesture\data\sample_submission.csv")
+path = "D:/Study/_data/dacon/hand_gesture/"
+train = pd.read_csv(path + 'train.csv')
+test = pd.read_csv(path + "test.csv")
+submission = pd.read_csv(path + "sample_submission.csv")
 
-train_x = train.iloc[:, 1:-1]
+train_x = train.iloc[:, 1:-1] # iloc에서 인덱스를 지정하여 원하는 값을 가져올 수 있다. 
 test_x = test.iloc[:, 1:]
 
 train_x = np.array(train_x).reshape(-1, 8, 4, 1)
@@ -37,17 +39,18 @@ test_x = np.array(test_x).reshape(-1, 8, 4, 1)
 ohe = OneHotEncoder(sparse = False)
 train_y = ohe.fit_transform(train[['target']])
 
-def create_model(num_layer, mid_units, num_filters):
+def create_model(num_layer, mid_units, num_filters): 
     
     model = Sequential()
     model.add(Conv2D(filters=num_filters[0], kernel_size=(2, 2),
                  activation="elu",
                  input_shape=(8, 4, 1)))
     model.add(BatchNormalization())
-    #model.add(Dropout(dropout_rate[0]))
+    #model.add(Dropout(dropout_rate[0])) # dropout 은 이미지 크기를 줄이는 것이 아니라 각 이미지를 줄이는 것이다.
     for i in range(1,num_layer):
         model.add(Conv2D(filters=num_filters[i], kernel_size=(2, 2), padding="same", activation="elu"))
-        model.add(BatchNormalization())
+        # elu를 사용하면 이전 레이어의 값이 0이면 안되기 때문에 이전 레이어에서 제공하는 값을 넣어준다.
+        model.add(BatchNormalization()) # Batch Normalization 는 이미지의 특성을 정규화하는 것이다.
         #model.add(Dropout(dropout_rate[i+1]))
             
     model.add(GlobalAveragePooling2D())
@@ -75,10 +78,9 @@ def cnn_objective(trial: Trial) -> float:
     #dropout_rate = trial.suggest_uniform('dropout_rate', 0.0, 0.5)
     #dropout_rate = [int(trial.suggest_uniform("dropout_rate"+str(ii), 0.0, 0.5)) for ii in range(num_layer+1)]
     
-        
-    seed = 42
+    seed = 66
     kfold = StratifiedKFold(n_splits=5, random_state = seed, shuffle = True) # Cross-validation cv=5
-    es = EarlyStopping(monitor="val_acc", patience=5, mode="max", verbose=0)
+    es = EarlyStopping(monitor="val_acc", patience=20, mode="max", verbose=0)
     cv = np.zeros((train_x.shape[0], 4))
 
     for n, (train_idx, val_idx) in enumerate(kfold.split(train_x, train.target)):
@@ -95,7 +97,7 @@ def cnn_objective(trial: Trial) -> float:
         model.compile(optimizer=optimizer,
                       loss="categorical_crossentropy",
                       metrics=["acc"])
-        model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100, batch_size=32, 
+        model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=1000, batch_size=32, 
                   callbacks=[es,mc], verbose=None)
         
         best = load_model(f"model_{n+1}.h5")
@@ -108,7 +110,7 @@ def cnn_objective(trial: Trial) -> float:
     
     return accuracy_score(np.argmax(train_y, axis=1), np.argmax(cv, axis=1))
 
-sampler = TPESampler(seed=42)
+sampler = TPESampler(seed=66)
 cnn_study = optuna.create_study(study_name="cnn_parameter_opt", direction="maximize", sampler=sampler)
 cnn_study.optimize(cnn_objective, n_trials=20)
 
@@ -119,9 +121,9 @@ optuna.visualization.matplotlib.plot_slice(cnn_study);
 
 cnn_acc = []
 cnn_pred = np.zeros((test_x.shape[0], 4))
-seed = 42
-skf = StratifiedKFold(n_splits=5, random_state=42, shuffle=True)
-es = EarlyStopping(monitor="val_acc", patience=5, mode="max", verbose=0)
+seed = 66
+skf = StratifiedKFold(n_splits=5, random_state=66, shuffle=True)
+es = EarlyStopping(monitor="val_acc", patience=20, mode="max", verbose=0)
 
 for i, (train_idx, val_idx) in enumerate(skf.split(train_x, train.target)):
     print(f"{i+1} Fold Training.....")
@@ -137,7 +139,7 @@ for i, (train_idx, val_idx) in enumerate(skf.split(train_x, train.target)):
     # 모델 Complie
     optimizer = Adam(learning_rate=cnn_study.best_params['learning_rate'])
     cnn.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["acc"])
-    cnn.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100, batch_size=32, callbacks=[es,mc], verbose=0)
+    cnn.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=1000, batch_size=32, callbacks=[es,mc], verbose=0)
     
     # 최고 성능 기록 모델
     best = load_model(f"model_{i+1}.h5")
@@ -156,5 +158,5 @@ for i, (train_idx, val_idx) in enumerate(skf.split(train_x, train.target)):
 np.mean(cnn_acc)
 
 submission['target'] = np.argmax(cnn_pred, axis = 1)
-submission.to_csv('D:\Study\_data\dacon\hand_gesture\hand_0314_1.csv', index = False)
+submission.to_csv('D:/Study/_data/dacon/hand_gesture/hand_0314_4.csv', index = False)
 submission.target.value_counts()
