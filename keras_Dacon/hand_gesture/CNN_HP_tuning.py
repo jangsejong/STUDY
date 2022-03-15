@@ -80,7 +80,7 @@ def cnn_objective(trial: Trial) -> float:
     
     seed = 66
     kfold = StratifiedKFold(n_splits=5, random_state = seed, shuffle = True) # Cross-validation cv=5
-    es = EarlyStopping(monitor="val_acc", patience=20, mode="max", verbose=0)
+    es = EarlyStopping(monitor="val_acc", patience=5, mode="max", verbose=0)
     cv = np.zeros((train_x.shape[0], 4))
 
     for n, (train_idx, val_idx) in enumerate(kfold.split(train_x, train.target)):
@@ -97,7 +97,7 @@ def cnn_objective(trial: Trial) -> float:
         model.compile(optimizer=optimizer,
                       loss="categorical_crossentropy",
                       metrics=["acc"])
-        model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=1000, batch_size=32, 
+        model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=1000, batch_size=64, 
                   callbacks=[es,mc], verbose=None)
         
         best = load_model(f"model_{n+1}.h5")
@@ -123,7 +123,7 @@ cnn_acc = []
 cnn_pred = np.zeros((test_x.shape[0], 4))
 seed = 66
 skf = StratifiedKFold(n_splits=5, random_state=66, shuffle=True)
-es = EarlyStopping(monitor="val_acc", patience=20, mode="max", verbose=0)
+es = EarlyStopping(monitor="val_acc", patience=5, mode="max", verbose=0)
 
 for i, (train_idx, val_idx) in enumerate(skf.split(train_x, train.target)):
     print(f"{i+1} Fold Training.....")
@@ -139,7 +139,7 @@ for i, (train_idx, val_idx) in enumerate(skf.split(train_x, train.target)):
     # 모델 Complie
     optimizer = Adam(learning_rate=cnn_study.best_params['learning_rate'])
     cnn.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["acc"])
-    cnn.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=1000, batch_size=32, callbacks=[es,mc], verbose=0)
+    cnn.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=1000, batch_size=64, callbacks=[es,mc], verbose=0)
     
     # 최고 성능 기록 모델
     best = load_model(f"model_{i+1}.h5")
