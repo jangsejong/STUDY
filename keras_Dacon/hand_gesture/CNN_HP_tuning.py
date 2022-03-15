@@ -46,16 +46,16 @@ def create_model(num_layer, mid_units, num_filters):
                  activation="elu",
                  input_shape=(8, 4, 1)))
     model.add(BatchNormalization())
-    #model.add(Dropout(dropout_rate[0])) # dropout 은 이미지 크기를 줄이는 것이 아니라 각 이미지를 줄이는 것이다.
+    # model.add(Dropout(0.1)) # dropout 은 이미지 크기를 줄이는 것이 아니라 각 이미지를 줄이는 것이다.
     for i in range(1,num_layer):
         model.add(Conv2D(filters=num_filters[i], kernel_size=(2, 2), padding="same", activation="elu"))
         # elu를 사용하면 이전 레이어의 값이 0이면 안되기 때문에 이전 레이어에서 제공하는 값을 넣어준다.
         model.add(BatchNormalization()) # Batch Normalization 는 이미지의 특성을 정규화하는 것이다.
-        #model.add(Dropout(dropout_rate[i+1]))
+        # model.add(Dropout(0.1))
             
     model.add(GlobalAveragePooling2D())
     model.add(Dense(mid_units, activation='relu'))
-    #model.add(Dropout(dropout_rate[-1]))
+    # model.add(Dropout(0.1))
     model.add(Dense(4, activation='softmax'))
     
     return model
@@ -158,5 +158,5 @@ for i, (train_idx, val_idx) in enumerate(skf.split(train_x, train.target)):
 np.mean(cnn_acc)
 
 submission['target'] = np.argmax(cnn_pred, axis = 1)
-submission.to_csv('D:/Study/_data/dacon/hand_gesture/hand_0314_4.csv', index = False)
+submission.to_csv('D:/Study/_data/dacon/hand_gesture/hand_0315_1.csv', index = False)
 submission.target.value_counts()
