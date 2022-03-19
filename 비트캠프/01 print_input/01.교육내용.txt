@@ -1,0 +1,15 @@
+01 교육내용.txt
+
+언어                 AI - JAVA - 
+- C (절차지향)  game, stock, CT
+- Java (객체지향)
+- 파이썬 (AI)
+- 비주얼베이직 (GUI)
+- www.tiobe.com/tiobe-index
+
+웹프로그래밍
+- HTML/CSS/자바스크립트
+서버
+-SQL/ JSP/ SPRING
+APP
+- 안드로이드/IOS
