@@ -15,8 +15,10 @@ from tensorflow.keras.models import Sequential, Model
 input_shape = Input(shape=(784, ))
 
 # encoded = Dense(units=16, activation='relu')(input_shape)
-encoded = Dense(units=64, activation='relu')(input_shape)
+# encoded = Dense(units=64, activation='relu')(input_shape)
 # encoded = Dense(units=128, activation='relu')(input_shape)
+encoded = Dense(units=154, activation='relu')(input_shape)
+# encoded = Dense(units=256, activation='relu')(input_shape)
 
 decoded = Dense(units=784, activation='sigmoid')(encoded)
 

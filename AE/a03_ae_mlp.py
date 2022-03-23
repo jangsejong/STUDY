@@ -32,7 +32,19 @@ def autoencoder(hidden_layer_size):
     ])
     return model
 
-model = autoencoder(hidden_layer_size=32)
+def autoencoder1(hidden1, hidden2, hidden3, hidden4, hidden5):
+    model = Sequential()
+    model.add(Dense(units=hidden1, activation='relu', input_shape=(784,)))
+    model.add(Dense(units=hidden2, activation='relu'))
+    model.add(Dense(units=hidden3, activation='relu'))
+    model.add(Dense(units=hidden4, activation='relu'))
+    model.add(Dense(units=hidden5, activation='relu'))
+    model.add(Dense(units=784, activation='sigmoid'))
+    return model
+
+
+
+model = autoencoder1(16, 64, 128, 256, 512)
 
 model.compile(optimizer='adam', loss='mse')
 model.fit(x_train, x_train, epochs=20, batch_size=128, shuffle=True, validation_split=0.2)
