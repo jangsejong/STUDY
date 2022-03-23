@@ -251,7 +251,7 @@ sample_submission = pd.read_csv('sample_submission.csv')
 submission_df(pred, sample_submission)
 
 
-data/stock_list.csv
+# data/stock_list.csv
 
 
 
