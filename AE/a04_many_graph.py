@@ -1,4 +1,5 @@
 import numpy as np
+from sympy import public
 from tensorflow.keras.datasets import mnist
 from tensorflow.python.keras import activations
 
@@ -62,13 +63,38 @@ import random
 
 fig, axes = plt.subplots(7, 5, figsize=(15, 15))
 
-random_images = random.sample(range(output_01.shape[0]), 5)
+random_image = random.randint(0, len(x_test))
 outputs = [output_01, output_02, output_04, output_08, output_16, output_32]
 
 for row_num, row in enumerate(axes):
     for col_num, ax in enumerate(row):
-        ax.imshow(outputs[row_num][random_images[col_num]].reshape(28, 28), cmap='gray')
+        ax.imshow(x_test[random_image].reshape(28, 28), cmap='gray')
+        ax.set_title(f'{row_num} * {col_num}')
         ax.grid(False)
         ax.set_xticks([])
         ax.set_yticks([])
+        ax.imshow(outputs[row_num][random_image].reshape(28, 28), cmap='gray')
 plt.show()
+
+# fig, axes = plt.subplots(2, 5, figsize=(20, 7))
+
+# random_images = random.sample(range(output_01.shape[0]), 10)
+# outputs = [output_01, output_02, output_04, output_08, output_16, output_32]
+
+# for row_num, row in enumerate(axes):
+#     for col_num, ax in enumerate(row):
+#         ax.imshow(outputs[row_num][random_images[col_num]].reshape(28, 28), cmap='gray')
+#         ax.grid(False)
+#         ax.set_xticks([])
+#         ax.set_yticks([])
+# plt.show()
+
+# public class OverridingTest(object):
+#     def __init__(self, name):
+#         self.name = name
+#         self.name_changed = False
+
+#     def change_name(self, new_name):
+#         self.name = new_name
+#         self.name_changed = True
+        
