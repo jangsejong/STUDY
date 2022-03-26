@@ -63,8 +63,6 @@ kospi = pd.read_csv(path +"코스피지수(202001~202112).csv", thousands=",", e
 covid_19 = covid_19.drop(covid_19.columns[range(5,8)], axis=1)
 # covid_19 = covid_19.replace("-","0")
 
-
-
 #covid_19 데이터와 상관 관계를 위하여 날짜를 맞추기 위해 kospi 데이터 1월19일까지의 데이터를 삭제 해주었다.
 kospi = kospi.drop(kospi.index[range(0,12)] ,axis=0)
 
