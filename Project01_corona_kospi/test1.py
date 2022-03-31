@@ -44,6 +44,7 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
+
 #데이터 로드
 
 path = 'D:\\Study\\개인프로젝트\\데이터자료\\csv\\'
