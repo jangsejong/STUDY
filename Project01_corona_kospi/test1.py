@@ -47,7 +47,6 @@ warnings.filterwarnings('ignore')
 
 #데이터 로드
 
-
 path = 'D:\\Study\\개인프로젝트\\데이터자료\\csv\\'
 
 covid_19 = pd.read_csv(path +"코로나바이러스감염증-19_확진환자_발생현황_220110.csv", thousands=",", encoding='cp949')
