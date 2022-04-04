@@ -5,8 +5,8 @@ from tensorflow.python.keras import activations
 #1. data
 (x_train, _), (x_test, _) = mnist.load_data()
 
-x_train = x_train.reshape(60000 , 784).astype('float32') / 255.
-x_test = x_test.reshape(10000 , 784).astype('float32') / 255.
+x_train = x_train.reshape(60000 , 28, 28, 1).astype('float32') / 255.
+x_test = x_test.reshape(10000 , 28, 28, 1).astype('float32') / 255.
 
 #2. model
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Dropout, Input
@@ -31,6 +31,7 @@ def autoencoder(hidden_layer_size):
     Dense(units=784, activation='sigmoid'),
     ])
     return model
+
 
 model = autoencoder(hidden_layer_size=32)
 
