@@ -9,7 +9,7 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 # For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
 
 import os
-print(os.listdir("../input"))
+print(os.listdir("D:\\Study\\_data\\bit\\"))
 
 # Any results you write to the current directory are saved as output.
 
@@ -31,9 +31,9 @@ from keras.models import Model
 from keras import backend as K
 from keras.engine.topology import Layer
 from keras import initializers, regularizers, constraints, optimizers, layers
-
-train_df = pd.read_csv("../input/train.csv")
-test_df = pd.read_csv("../input/test.csv")
+path = "D:\\Study\\_data\\bit\\quora\\"
+train_df = pd.read_csv("train.csv")
+test_df = pd.read_csv("test.csv")
 print("Train shape : ",train_df.shape)
 print("Test shape : ",test_df.shape)
 
@@ -74,7 +74,7 @@ train_X = train_X[trn_idx]
 val_X = val_X[val_idx]
 train_y = train_y[trn_idx]
 val_y = val_y[val_idx]
-EMBEDDING_FILE = '../input/embeddings/glove.840B.300d/glove.840B.300d.txt'
+EMBEDDING_FILE = 'D:\\Study\\_data\\bit\\quora\\embeddings\\GoogleNews-vectors-negative300.bin'
 def get_coefs(word,*arr): return word, np.asarray(arr, dtype='float32')
 embeddings_index = dict(get_coefs(*o.split(" ")) for o in open(EMBEDDING_FILE))
 
@@ -322,7 +322,7 @@ pred_test_y = model.predict([test_X], batch_size=1024, verbose=1)
 pred_test_y = (pred_test_y > best_thresh).astype(int)
 out_df = pd.DataFrame({"qid":test_df["qid"].values})
 out_df['prediction'] = pred_test_y
-out_df.to_csv("submission.csv", index=False)
+out_df.to_csv(path +"submission.csv", index=False)
 
 
 
