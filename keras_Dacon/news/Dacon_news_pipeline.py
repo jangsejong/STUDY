@@ -53,7 +53,7 @@ models = [
     ("ada", AdaBoostClassifier(random_state=42))
 ]
 
-model_pipes = [(name, get_pipe(model, name)) for name, model in models]
+model_pipes = [(name, get_pi++pe(model, name)) for name, model in models]
 
 from tqdm.auto import tqdm  # 진행바 라이브러리
 
