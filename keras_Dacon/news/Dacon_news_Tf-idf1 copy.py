@@ -7,92 +7,6 @@ test = pd.read_csv(path +"test.csv") #파일 읽기
 test.text = test.text.str.replace(r"\s+", " ", regex=True)
 train.text = train.text.str.replace(r"\s+", " ", regex=True)
 
-#데이터 살펴보기 위해 데이터 최상단의 5줄을 표시합니다.
-# train.head() 
-# print(train.shape)
-
-# import re
-# import string
-# import nltk
-# from nltk.tokenize import word_tokenize
-# from nltk.corpus import stopwords  
-# from tensorflow.keras.preprocessing.text import Tokenizer
-# from tensorflow.keras.preprocessing.sequence import pad_sequences
-
-# train["length"] = train.text.map(len)
-# test["length"] = test.text.map(len)
-
-# STOP_WORDS = stopwords.words('english')
-# print("stop words", STOP_WORDS)
-
-# def remove_stop_words(s):
-#       return " ".join([x for x in word_tokenize(s)])
-
-# def preprocess_data(train, test, 
-#                     no_number=False,
-#                     no_stopwords=False,
-#                     no_punctuation=False,
-#                     min_len=0,
-#                     lowercase=False):
-#   train, test = train.copy(), test.copy()
-
-#   for df in [train, test]:
-#     # 띄어쓰기나 공백이 연속된 경우 공백 하나로 바꿈
-#     df.text = df.text.str.replace(r"\s+", " ", regex=True)
-
-#     if lowercase: # 소문자로 변경
-#       df.text = df.text.str.lower()
-#     if no_number: # 숫자 제거
-#       df.text = df.text.str.replace(r"\d+", "", regex=True)
-#     if no_punctuation: # punctuation 제거
-#       df.text = df.text.str.translate(str.maketrans('', '', string.punctuation))
-#     if no_stopwords: # 불용어 제거
-#       df.text = df.text.map(remove_stop_words)
-    
-#     df["length"] = df.text.map(len)
-    
-#     # 길이가 min_len 미만인 문자열은 학습 데이터에서 제거한다
-#     if min_len > 0 and "target" in df.columns:
-#       df.drop(df[df.length < min_len].index, inplace=True)
-
-#   return train, test
-
-
-# def tokenize_data(train, test, vocab_size, max_len):
-#   """
-#     Keras Tokenizer를 이용해 토큰화한 뒤 pad_sequences를 이용해 패딩을 추가함.
-#   """
-#   tokenizer = Tokenizer(num_words=vocab_size, oov_token="<OOV>")
-#   tokenizer.fit_on_texts(train.text)
-
-#   for df in [train, test]:
-#     df["encoded"] = pad_sequences(
-#          tokenizer.texts_to_sequences(df.text),
-#          maxlen=max_len,
-#          padding="post"
-#          ).tolist()
-
-# vocab_size = 10000
-# max_len = 512
-# preprocess_params = {
-#   "no_number" : True,
-#   "no_stopwords" : True,
-#   "no_punctuation" : True,
-#   "lowercase" : True,
-#   "min_len" : 30
-# }
-# tokenization_params = {
-#     "vocab_size": vocab_size,
-#     "max_len": max_len
-# }
-
-# train, test = preprocess_data(
-#     train, 
-#     test,
-#     **preprocess_params
-#     )
-# tokenize_data(train, test, **tokenization_params)
-
 
 
 def check_missing_col(dataframe):
@@ -112,8 +26,30 @@ missing_col = check_missing_col(train)
 
 X = train.text #training 데이터에서 문서 추출
 y = train.target #training 데이터에서 라벨 추출
-X.head() #데이터 살펴보기
-y.head() #데이터 살펴보기
+test_email = test.data
+test_label = test.target
+
+vocab_size = 10000
+num_classes = 20
+
+from tensorflow.keras.preprocessing.text import Tokenizer
+
+def prepare_data(train_data, test_data, mode): # 전처리 함수
+    tokenizer = Tokenizer(num_words = vocab_size) # vocab_size 개수만큼의 단어만 사용한다.
+    tokenizer.fit_on_texts(train_data)
+    X_train = tokenizer.texts_to_matrix(train_data, mode=mode) # 샘플 수 × vocab_size 크기의 행렬 생성
+    X_test = tokenizer.texts_to_matrix(test_data, mode=mode) # 샘플 수 × vocab_size 크기의 행렬 생성
+    return X_train, X_test, tokenizer.index_word
+
+from tensorflow.keras.utils import to_categorical
+
+X_train, X_test, index_to_word = prepare_data(X, test_email, 'binary') # binary 모드로 변환
+y_train = to_categorical(y, num_classes) # 원-핫 인코딩
+y_test = to_categorical(test_label, num_classes) # 원-핫 인코딩
+
+
+
+
 
 
 
@@ -141,33 +77,32 @@ print(sample_vector2.toarray())
 import numpy as np
 
 
-vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+vectorizer = TfidfVectorizer()
 
-vectorizer.fit(np.array(train["text"]))
+vectorizer.fit(X)
 
-train_vec = vectorizer.transform(train["text"])
-train_y = train["target"]
+train_vec = vectorizer.transform(X)
+train_y = y
 
-test_vec = vectorizer.transform(test["text"])
+test_vec = vectorizer.transform(test_email)
 
 
 
 
 from sklearn.neural_network import MLPClassifier
-model = MLPClassifier()
+model = MLPClassifier(activation='tanh', solver='adam', alpha=0.0001, hidden_layer_sizes=(100,), random_state=66)
 model.fit(train_vec, train_y)
 
 
 
-from sklearn.metrics import accuracy_score
 
 #run model
-y_pred = model.predict(X)
+y_pred = model.predict(test_vec)
 # print('예측 라벨 : ', y_pred)
 # print('실제 라벨 : ', train.target[0])
 
 from sklearn.metrics import accuracy_score
-acc = accuracy_score(y, y_pred)
+acc = accuracy_score(y_test, y_pred)
 print('accuracy : ', acc)
 
 

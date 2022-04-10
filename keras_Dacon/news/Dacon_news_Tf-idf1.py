@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 #csv 형식의 training 데이터를 로드합니다.
 path = "D:\\Study\\_data\\dacon\\news\\"
@@ -118,25 +119,17 @@ y.head() #데이터 살펴보기
 
 
 # from sklearn.feature_extraction.text import CountVectorizer #sklearn 패키지의 CountVectorizer import
-from sklearn.feature_extraction.text import TfidfVectorizer
 
-sample_vectorizer = TfidfVectorizer(analyzer ='char_wb') #객체 생성
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
-sample_text1 = ["hello, my name is dacon and I am a data scientist!"]
+vectorizer = TfidfVectorizer(ngram_range=(1, 2))
 
-sample_vectorizer.fit(sample_text1) # 
+vectorizer.fit(np.array(train["text"]))
 
-print(sample_vectorizer.vocabulary_) #
+train_vec = vectorizer.transform(train["text"])
+train_y = train["target"]
 
-sample_text2 = ["you are learning dacon data science"]
-
-sample_vector = sample_vectorizer.transform(sample_text2)
-print(sample_vector.toarray())
-
-sample_text3 = ["you are learning dacon data science with news data"]
-
-sample_vector2 = sample_vectorizer.transform(sample_text3)
-print(sample_vector2.toarray())
+test_vec = vectorizer.transform(test["text"])
 
 
 
@@ -181,5 +174,5 @@ submission.head() # 데이터가 잘 들어갔는지 확인합니다.
 # submission을 csv 파일로 저장합니다.
 # index=False란 추가적인 id를 부여할 필요가 없다는 뜻입니다. 
 # 정확한 채점을 위해 꼭 index=False를 넣어주세요.
-submission.to_csv(path +"0406_07.csv",index=False)
+submission.to_csv(path +"0406_08.csv",index=False)
 
