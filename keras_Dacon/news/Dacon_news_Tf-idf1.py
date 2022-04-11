@@ -174,5 +174,5 @@ submission.head() # 데이터가 잘 들어갔는지 확인합니다.
 # submission을 csv 파일로 저장합니다.
 # index=False란 추가적인 id를 부여할 필요가 없다는 뜻입니다. 
 # 정확한 채점을 위해 꼭 index=False를 넣어주세요.
-submission.to_csv(path +"0406_08.csv",index=False)
+submission.to_csv(path +"0411_01.csv",index=False)
 
