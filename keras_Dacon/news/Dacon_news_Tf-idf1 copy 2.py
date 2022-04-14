@@ -64,7 +64,7 @@ from sklearn.neural_network import MLPClassifier
 # model = MLPClassifier()
 # model.fit(train_vec, train_y)
 
-model = MLPClassifier(solver='adam', alpha=1e-5, hidden_layer_sizes=(100,), random_state=66)
+model = MLPClassifier(solver='adam', alpha=1e-5, hidden_layer_sizes=(200,), random_state=66)
 model.fit(train_vec, train_y)
 
 pred = model.predict(test_vec)
@@ -72,6 +72,6 @@ pred = model.predict(test_vec)
 
 submission["target"] = pred
 
-submission.to_csv(path+ "0411_01.csv", index = False)
+submission.to_csv(path+ "0411_02.csv", index = False)
 
 

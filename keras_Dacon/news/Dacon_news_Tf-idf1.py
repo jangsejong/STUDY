@@ -141,7 +141,7 @@ X = vectorizer.transform(X) #transform
 vectorizer.inverse_transform(X[0]) #역변환하여 첫번째 문장의 단어들 확인
 
 from sklearn.linear_model import LogisticRegression #모델 불러오기
-model = LogisticRegression( max_iter=250, random_state= 66) #객체에 모델 할당
+model = LogisticRegression( max_iter=1000, random_state= 66) #객체에 모델 할당
 model.fit(X, y) #모델 학습
 
 from sklearn.metrics import accuracy_score
