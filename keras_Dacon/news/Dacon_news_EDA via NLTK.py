@@ -8,12 +8,10 @@ import warnings
 warnings.filterwarnings(action='ignore')
 
 from sklearn.metrics import accuracy_score
-
 import nltk  
 from nltk import tokenize
 from nltk.corpus import names, stopwords, words
 from nltk.stem import WordNetLemmatizer
-
 import re
 
 from wordcloud import WordCloud
