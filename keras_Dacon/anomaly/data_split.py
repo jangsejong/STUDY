@@ -16,9 +16,9 @@ def createFolder(directory):
         print ('Error: Creating directory. ' +  directory)
  
 for i in range(len(label_list)):  # 레이블 개수 만큼 
-    createFolder(f'./train/{label_list[i]}')  # 레이블 폴더를 생성 
+    createFolder(f'.../_data/dacon/anomaly/train/{label_list[i]}')  # 레이블 폴더를 생성 
     
-train_folder = os.listdir('./train/')
+train_folder = os.listdir(path + 'train')
 len(train_folder)  # -폴더개수 88 , 사진개수 = 4277개    
 
 import shutil
@@ -27,43 +27,43 @@ for i in range(len(train_folder) - 88):  # 폴더 생성한것 88개 뺴주는 �
     
     if train_folder[i][-3:] == "png":   # 확장자가 png면 
         label = train_df.loc[train_df["file_name"] == f"{train_folder[i]}"]["label"][i]  # train_df에서 이미지 이름에 맞는 label을 불러와 저장
-        file_source = f'./train/{train_folder[i]}'  # train 폴더에 있는 해당 이미지를
-        file_destination = f'./train/{label}/'  # 해당 label 폴더로 이동 
+        file_source = f'.../_data/dacon/anomaly/train/{train_folder[i]}'  # train 폴더에 있는 해당 이미지를
+        file_destination = f'.../_data/dacon/anomaly/train/{label}/'  # 해당 label 폴더로 이동 
         shutil.move(file_source, file_destination)  # 이동 실행
 
-import numpy as np
-import torchvision.transforms as transforms
-from torchvision import datasets
+# import numpy as np
+# import torchvision.transforms as transforms
+# from torchvision import datasets
 
-def get_mean_std(data_dir):
-    '''
-    이미지 정규화 시 성능 향상 , 평균과 표준편차로 정규화 실행
-    data_dir = 이미지 들어있는 폴더 path
-    '''
-    transform = transforms.Compose([
-        transforms.Resize((1024, 1024)),
-        transforms.ToTensor()
-    ])
+# def get_mean_std(data_dir):
+#     # '''
+#     # 이미지 정규화 시 성능 향상 , 평균과 표준편차로 정규화 실행
+#     # data_dir = 이미지 들어있는 폴더 path
+#     # '''
+#     transform = transforms.Compose([
+#         transforms.Resize((1024, 1024)),
+#         transforms.ToTensor()
+#     ])
 
-    dataset = datasets.ImageFolder(os.path.join(f'./{data_dir}'), transform)
-    print("데이터 정보", dataset)
+#     dataset = datasets.ImageFolder(os.path.join(f'./{data_dir}'), transform)
+#     print("데이터 정보", dataset)
 
-    meanRGB = [np.mean(x.numpy(), axis=(1,2)) for x,_ in dataset]
-    stdRGB = [np.std(x.numpy(), axis=(1,2)) for x,_ in dataset]
+#     meanRGB = [np.mean(x.numpy(), axis=(1,2)) for x,_ in dataset]
+#     stdRGB = [np.std(x.numpy(), axis=(1,2)) for x,_ in dataset]
 
-    meanR = np.mean([m[0] for m in meanRGB])
-    meanG = np.mean([m[1] for m in meanRGB])
-    meanB = np.mean([m[2] for m in meanRGB])
+#     meanR = np.mean([m[0] for m in meanRGB])
+#     meanG = np.mean([m[1] for m in meanRGB])
+#     meanB = np.mean([m[2] for m in meanRGB])
 
-    stdR = np.mean([s[0] for s in stdRGB])
-    stdG = np.mean([s[1] for s in stdRGB])
-    stdB = np.mean([s[2] for s in stdRGB])
-    print("평균",meanR, meanG, meanB)
-    print("표준편차",stdR, stdG, stdB)
+#     stdR = np.mean([s[0] for s in stdRGB])
+#     stdG = np.mean([s[1] for s in stdRGB])
+#     stdB = np.mean([s[2] for s in stdRGB])
+#     print("평균",meanR, meanG, meanB)
+#     print("표준편차",stdR, stdG, stdB)
 
-# train data, test data 다르게 nomalization 적용하려면 data_dir 바꾸세요.
-data_dir = "train"
-get_mean_std(data_dir)
+# # train data, test data 다르게 nomalization 적용하려면 data_dir 바꾸세요.
+# data_dir = "D:\\Study\\_data\\dacon\\anomaly\\train"
+# get_mean_std(data_dir)
 # 1024x1024 resize train / meanR=0.43303847, meanG=0.4034577, meanB=0.39415097  / stdR=0.18344551, stdG=0.17549995, stdB=0.1647388   
 # 128x128 resize train / meanR=0.43305725, meanG=0.40347522, meanB=0.3941705  / stdR=0.17281055, stdG=0.16584247, stdB=0.15571058 
 
