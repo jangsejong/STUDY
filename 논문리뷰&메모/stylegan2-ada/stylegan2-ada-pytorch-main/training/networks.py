@@ -37,16 +37,20 @@ def modulated_conv2d(
     flip_weight     = True,     # False = convolution, True = correlation (matches torch.nn.functional.conv2d).
     fused_modconv   = True,     # Perform modulation, convolution, and demodulation as a single fused operation?
 ):
-    batch_size = x.shape[0]
-    out_channels, in_channels, kh, kw = weight.shape
-    misc.assert_shape(weight, [out_channels, in_channels, kh, kw]) # [OIkk]
-    misc.assert_shape(x, [batch_size, in_channels, None, None]) # [NIHW]
-    misc.assert_shape(styles, [batch_size, in_channels]) # [NI]
+    batch_size = x.shape[0] # 입력데이터의 batch_size
+    out_channels, in_channels, kh, kw = weight.shape # 가중치의 shape
+    misc.assert_shape(weight, [out_channels, in_channels, kh, kw]) # [OIkk] # O: out_channels, I: in_channels, k: kernel_size
+    misc.assert_shape(x, [batch_size, in_channels, None, None]) # [NIHW] # N: batch_size, I: in_channels, H: in_height, W: in_width
+    misc.assert_shape(styles, [batch_size, in_channels]) # [NI] # N: batch_size, I: in_channels
 
-    # Pre-normalize inputs to avoid FP16 overflow.
-    if x.dtype == torch.float16 and demodulate:
-        weight = weight * (1 / np.sqrt(in_channels * kh * kw) / weight.norm(float('inf'), dim=[1,2,3], keepdim=True)) # max_Ikk
-        styles = styles / styles.norm(float('inf'), dim=1, keepdim=True) # max_I
+    # Pre-normalize inputs to avoid FP16 overflow
+    if x.dtype == torch.float16 and demodulate: # [NIHW]
+        weight = weight * (1 / np.sqrt(in_channels * kh * kw) / weight.norm(float('inf'), dim=[1,2,3], keepdim=True)) 
+        # weight를 Normalization 해줌으로써 데이터의 범위를 사용자가 원하는 범위로 제한하는 것으로 오버플로우를 방지하기 위해 사용한다.
+        
+        styles = styles / styles.norm(float('inf'), dim=1, keepdim=True) 
+        # styles / styles.norm(float('inf'), dim=1, keepdim=True) 는 스타일링 을 정규화 하는 코드입니다.
+        
 
     # Calculate per-sample weights and demodulation coefficients.
     w = None
@@ -60,7 +64,7 @@ def modulated_conv2d(
         w = w * dcoefs.reshape(batch_size, -1, 1, 1, 1) # [NOIkk]
 
     # Execute by scaling the activations before and after the convolution.
-    if not fused_modconv:
+    if not fused_modconv: 
         x = x * styles.to(x.dtype).reshape(batch_size, -1, 1, 1)
         x = conv2d_resample.conv2d_resample(x=x, w=weight.to(x.dtype), f=resample_filter, up=up, down=down, padding=padding, flip_weight=flip_weight)
         if demodulate and noise is not None:
