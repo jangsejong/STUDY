@@ -26,6 +26,13 @@ import gc
 gc.collect()
 torch.cuda.empty_cache()
 
+
+
+from pyod.models.ecod import ECOD
+clf = ECOD()
+clf.fit(X_train)
+
+
 #1. 데이터 전처리
 path= "D:\\Study\\_data\\dacon\\anomaly\\"
 
@@ -157,4 +164,4 @@ submission["label"] = f_result
 submission
 
 
-submission.to_csv(path + "0422_01.csv", index = False)
+submission.to_csv(path + "0422_11.csv", index = False)
