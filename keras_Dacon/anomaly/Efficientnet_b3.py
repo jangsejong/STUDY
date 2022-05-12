@@ -143,11 +143,11 @@ def main(seed = 2022):
 main(2022)
 
 import gc
-a =16
+a =24
 
 cv = StratifiedKFold(n_splits = 5, random_state = 66, shuffle=True)
 batch_size = a
-epochs = 70
+epochs = 80
 pred_ensemble = []
 print(np.array(train_labels).shape)
 print(train_imgs.shape)
@@ -365,4 +365,4 @@ submission["label"] = f_result
 
 submission
 
-submission.to_csv(path + " 0510_01.csv", index = False)
+submission.to_csv(path + " 0512_01.csv", index = False)

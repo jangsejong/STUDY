@@ -49,4 +49,5 @@ def evaluate(model, criterion, x, y):
 loss2 = evaluate(model, criterion, x, y)
 print('최종 loss: ', loss2)
 
-result = model(torch.Tensor[[4]])
+result = model(torch.FloatTensor([[4]]))
+print('result: ', result)

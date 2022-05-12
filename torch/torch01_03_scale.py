@@ -1,6 +1,4 @@
-from turtle import shape
-import numpy as np
-from sklearn.linear_model import SGDClassifier 
+import numpy as np 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -13,28 +11,27 @@ print('torch :', torch.__version__, ' 사용DEVICE :', DEVICE)
 # torch : 1.9.0+cu111  사용DEVICE : cuda
 
 #1. 데이터
-x = np.array([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],[1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.5, 1.4, 1.3],[10,9,8,7,6,5,4,3,2,1]]) #(3,10)
+x = np.array([1,2,3])
+y = np.array([1,2,3])
 
-y = np.array([11,12,13,14,15,16,17,18,19,20])
-x = np.transpose(x)
-x = torch.FloatTensor(x)#.to(DEVICE)
-y = torch.FloatTensor(y).unsqueeze(1)#.to(DEVICE)
+x = torch.FloatTensor(x).unsqueeze(1)#.to(DEVICE)
+y = torch.FloatTensor(y)#.to(DEVICE)
+print(x)
+# x = (x - x.mean()) / x.std()
+x = (x - torch.mean(x)) / torch.std(x)
+print(x)
+
+x = torch.FloatTensor(x).unsqueeze(1)#.to(DEVICE)
 
 print(x,y)
-print(x.shape,y.shape)
 
 
-# model = nn.Linear(1,1).to(DEVICE)  #인풋, 아웃풋
-model = nn.Sequential(
-    nn.Linear(3,2),
-    nn.Linear(2,3),
-    nn.Linear(3,4),
-    nn.Linear(4,2),
-    nn.Linear(2,3),
-)#.to(DEVICE)
+model = nn.Linear(1,1)#.to(DEVICE)  #인풋, 아웃풋
+
 
 criterion = nn.MSELoss() # MSELoss : mean squared error
-optimizer = optim.SGD(model.parameters(), lr=0.001)
+optimizer = optim.AdamW(model.parameters(), lr=0.01)
+
 # model.fit(x, y, epochs=100, batch_size=1)
 def train(model, criterion, optimizer, x, y, batch_size=1, epochs=1):
     # model.train()
@@ -67,5 +64,5 @@ def evaluate(model, criterion, x, y):
 loss2 = evaluate(model, criterion, x, y)
 print('최종 loss: ', loss2)
 
-result = model(torch.Tensor([[10, 1.3, 1]]))
+result = model(torch.FloatTensor([[4]]))
 print('result: ', result)

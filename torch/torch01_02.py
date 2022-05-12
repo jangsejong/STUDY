@@ -17,13 +17,13 @@ print('torch :', torch.__version__, ' 사용DEVICE :', DEVICE)
 x = np.array([1,2,3])
 y = np.array([1,2,3])
 
-x = torch.FloatTensor(x).unsqueeze(1).to(DEVICE)
-y = torch.FloatTensor(y).unsqueeze(1).to(DEVICE)
+x = torch.FloatTensor(x).unsqueeze(1)#.to(DEVICE)
+y = torch.FloatTensor(y).unsqueeze(1)#.to(DEVICE)
 
 print(x,y)
 
 
-model = nn.Linear(1,1).to(DEVICE)  #인풋, 아웃풋
+model = nn.Linear(1,1)#.to(DEVICE)  #인풋, 아웃풋
 
 
 criterion = nn.MSELoss() # MSELoss : mean squared error
@@ -61,5 +61,5 @@ def evaluate(model, criterion, x, y):
 loss2 = evaluate(model, criterion, x, y)
 print('최종 loss: ', loss2)
 
-result = model(torch.Tensor([[4]])).to(DEVICE)
-print('result :', result.item())
+result = model(torch.FloatTensor([[1.5]]))
+print('result: ', result)

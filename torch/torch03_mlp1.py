@@ -67,4 +67,4 @@ loss2 = evaluate(model, criterion, x, y)
 print('최종 loss: ', loss2)
 
 result = model(torch.Tensor([[10, 1.3]]))
-print('result :', result.item())
+print('result: ', result)
