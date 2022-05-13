@@ -143,7 +143,7 @@ def main(seed = 2022):
 main(2022)
 
 import gc
-a =22
+a =20
 
 cv = StratifiedKFold(n_splits = 5, random_state = 66, shuffle=True)
 batch_size = a
@@ -282,7 +282,7 @@ submission["label"] = f_result
 
 submission
 
-submission.to_csv(path + "b3_norm_epoch70_5_2.csv", index = False)
+submission.to_csv(path + "b3_norm_epoch70_4_2.csv", index = False)
 
 batch_size = a
 epochs = 30
@@ -365,4 +365,4 @@ submission["label"] = f_result
 
 submission
 
-submission.to_csv(path + " 0512_01.csv", index = False)
+submission.to_csv(path + " 0512_03.csv", index = False)

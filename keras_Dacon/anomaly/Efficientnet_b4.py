@@ -119,9 +119,9 @@ class Network(nn.Module):
         super(Network, self).__init__()
         self.mode = mode
         if self.mode == 'train':
-          self.model = timm.create_model('efficientnet_b3', pretrained=True, num_classes=88, drop_path_rate = 0.2)
+          self.model = timm.create_model('efficientnet_b4', pretrained=True, num_classes=88, drop_path_rate = 0.2)
         if self.mode == 'test':
-          self.model = timm.create_model('efficientnet_b3', pretrained=True, num_classes=88, drop_path_rate = 0)
+          self.model = timm.create_model('efficientnet_b4', pretrained=True, num_classes=88, drop_path_rate = 0)
         
     def forward(self, x):
         x = self.model(x)
@@ -143,7 +143,7 @@ def main(seed = 2022):
 main(2022)
 
 import gc
-a =22
+a =20
 
 cv = StratifiedKFold(n_splits = 5, random_state = 66, shuffle=True)
 batch_size = a
@@ -282,7 +282,7 @@ submission["label"] = f_result
 
 submission
 
-submission.to_csv(path + "b3_norm_epoch70_5_2.csv", index = False)
+submission.to_csv(path + "b3_norm_epoch70_4_2.csv", index = False)
 
 batch_size = a
 epochs = 30
@@ -365,4 +365,4 @@ submission["label"] = f_result
 
 submission
 
-submission.to_csv(path + " 0512_01.csv", index = False)
+submission.to_csv(path + " 0512_02.csv", index = False)

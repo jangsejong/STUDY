@@ -30,7 +30,7 @@ model = nn.Linear(1,1)#.to(DEVICE)  #인풋, 아웃풋
 
 
 criterion = nn.MSELoss() # MSELoss : mean squared error
-optimizer = optim.AdamW(model.parameters(), lr=0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 # model.fit(x, y, epochs=100, batch_size=1)
 def train(model, criterion, optimizer, x, y, batch_size=1, epochs=1):
