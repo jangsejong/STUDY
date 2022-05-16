@@ -107,7 +107,7 @@ def train(model, criterion, optimizer, train_loader):
         optimizer.step()
         total_loss += loss.item()
         
-    return total_loss#.item / len(train_loader)
+    return total_loss# / len(train_loader)
 
 EPOCHS = 1000
 for epoch in range (1, EPOCHS+1):
@@ -125,7 +125,7 @@ def evaluate(model, criterion, test_loader):
             predict = model(x_batch)
             loss = criterion(predict, y_batch)
             total_loss += loss.item()
-    return total_loss#.item / len(test_loader)
+    return total_loss #/ len(test_loader)
 
 
 
