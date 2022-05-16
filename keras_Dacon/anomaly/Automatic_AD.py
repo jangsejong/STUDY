@@ -26,14 +26,14 @@ device = torch.device('cuda')
 
 path = "D:\\Study\\_data\\dacon\\anomaly\\"
 
-train_png = sorted(glob(path + 'open/train/*.png'))
-test_png = sorted(glob(path + 'open/test/*.png'))
+train_dir = sorted(glob(path + 'open/train/*.png'))
+test_dir = sorted(glob(path + 'open/test/*.png'))
 
-len(train_png), len(test_png)
+# len(train_png), len(test_png)
 
-train_y = pd.read_csv(path +"open/train_df.csv")
+train_df  = pd.read_csv(path +"open/train_df.csv")
 
-train_labels = train_y["label"]
+train_labels = train_df["label"]
 
 label_unique = sorted(np.unique(train_labels))
 label_unique = {key:value for key,value in zip(label_unique, range(len(label_unique)))}
@@ -45,8 +45,8 @@ def img_load(path):
     img = cv2.resize(img, (384, 384),interpolation = cv2.INTER_AREA)
     return img
 
-train_imgs = [img_load(m) for m in tqdm(train_png)]
-test_imgs = [img_load(n) for n in tqdm(test_png)]
+train_imgs = [img_load(m) for m in tqdm(train_dir)]
+test_imgs = [img_load(n) for n in tqdm(test_dir)]
 
 
 
@@ -143,7 +143,7 @@ def main(seed = 2022):
 main(2022)
 
 import gc
-a =20
+a =22
 
 cv = StratifiedKFold(n_splits = 5, random_state = 66, shuffle=True)
 batch_size = a
@@ -282,7 +282,7 @@ submission["label"] = f_result
 
 submission
 
-submission.to_csv(path + "b3_norm_epoch70_4_2.csv", index = False)
+submission.to_csv(path + "b3_norm_epoch70_5_2.csv", index = False)
 
 batch_size = a
 epochs = 30
@@ -365,4 +365,4 @@ submission["label"] = f_result
 
 submission
 
-submission.to_csv(path + " 0512_03.csv", index = False)
+submission.to_csv(path + " 0513_01.csv", index = False)
