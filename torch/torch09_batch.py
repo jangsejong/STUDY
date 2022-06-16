@@ -109,7 +109,7 @@ def train(model, criterion, optimizer, train_loader):
         
     return total_loss# / len(train_loader)
 
-EPOCHS = 1000
+EPOCHS = 100
 for epoch in range (1, EPOCHS+1):
     loss = train(model, criterion, optimizer, train_loader)
     print('Epoch : {:4d} / {:4d}, Loss : {:.8f}'.format(epoch, EPOCHS, loss))
