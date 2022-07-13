@@ -98,6 +98,20 @@ model.add(Dense(NUM_CLASSES))
 model.add(Activation('softmax'))
 
 
+'''
+def scheduler(epoch, lr):
+   if epoch < 10:
+     return lr
+   else:
+     return lr * tf.math.exp(-0.1)
+
+model = tf.keras.models.Sequential([tf.keras.layers.Dense(10)])
+model.compile(tf.keras.optimizers.SGD(), loss='mse')
+callback = tf.keras.callbacks.LearningRateScheduler(scheduler)
+history = model.fit(np.arange(100).reshape(5, 20), np.zeros(5),
+                    epochs=15, callbacks=[callback], verbose=0)
+'''
+
 def lr_scheduler(epoch, lr, step_decay = 0.1):
                    return float(lr * step_decay) if epoch == 35.000 else lr
 
