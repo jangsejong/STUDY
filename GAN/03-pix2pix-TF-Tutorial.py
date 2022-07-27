@@ -1,8 +1,6 @@
 import tensorflow as tf
-
 import os
 import time
-
 import matplotlib.pyplot as plt
 from IPython import display
 
