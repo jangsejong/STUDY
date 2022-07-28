@@ -22,28 +22,11 @@ x_test_noised = np.clip(x_test_noised, 0, 1)
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Dropout, Input, UpSampling2D
 from tensorflow.keras.models import Sequential, Model
 
-# def autoencoder(hidden_layer_size):
-#     model = Sequential()
-#     model.add(Conv2D (hidden_layer_size, padding = 'same', kernel_size = 3, strides = 1, input_shape = (150, 150, 3), activation = 'relu'))
-#     model.add(MaxPooling2D())
-#     model.add(Conv2D(16, 3, padding = 'same', activation = 'relu'))
-#     model.add(MaxPooling2D())
-#     model.add(Conv2D(10, 3,padding = 'same', activation = 'relu'))
-#     model.add(Conv2D(10, 3,padding = 'same', activation = 'relu'))
-#     model.add(UpSampling2D())
-#     model.add(Conv2D(5, 3,padding = 'same', activation = 'relu'))
-#     model.add(UpSampling2D())
-#     model.add(Conv2D(3, 3,padding = 'same'))
-#     return model
 def autoencoder(hidden_layer_size):
     model = Sequential()
     model.add(Conv2D(filters=hidden_layer_size, input_shape=(150, 150, 3), kernel_size=3, padding='same', strides=1, activation='relu'))
     model.add(MaxPooling2D())
     model.add(Conv2D(128, 3, padding='same', activation='relu'))
-    # model.add(MaxPooling2D())
-    # model.add(Conv2D(256, 3, padding='same', activation='relu'))
-    # model.add(Conv2D(256, 3, padding='same', activation='relu'))
-    # model.add(UpSampling2D())
     model.add(Conv2D(128, 3, padding='same', activation='relu'))
     model.add(UpSampling2D())
     model.add(Conv2D(3, 3, padding='same'))
