@@ -49,17 +49,3 @@ Mape = np.mean(((y_test.tolist()-pred)/pred)*100)
 plt.title("Mean Absolute Percentage Error %f " % Mape)
 plt.legend(loc='lower right')
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
