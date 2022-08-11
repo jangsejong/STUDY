@@ -18,7 +18,6 @@ from sklearn.multioutput import MultiOutputRegressor
 from sklearn.model_selection import GridSearchCV
 
 import matplotlib.pyplot as plt
-
 import xgboost as xgb
 
 def seed_everything(seed):
