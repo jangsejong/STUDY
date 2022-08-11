@@ -4,8 +4,8 @@ import pandas as pd
 import seaborn as sns 
 import matplotlib.pyplot as plt
 
-plt.rcParams['figure.figsize']=(10,10)
-plt.rcParams['font.family']='AppleGothic'
+# plt.rcParams['figure.figsize']=(10,10)
+# plt.rcParams['font.family']='AppleGothic'
 
 import warnings
 warnings.filterwarnings(action='ignore')
