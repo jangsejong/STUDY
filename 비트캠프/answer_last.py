@@ -1,9 +1,9 @@
-'''
+
 a= input(10)
 b= input(20)
 c=a+b
 print(c)
-'''
+
 '''
 a= dict()
 a['name']='python'
