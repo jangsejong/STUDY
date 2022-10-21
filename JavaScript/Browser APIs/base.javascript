@@ -2,7 +2,6 @@
 
 import http from 'http';
 
-
 #http server(req,res을 전달받을 수 있는 곳) 생성
 
 const server = http.createServer((req, res) => {
