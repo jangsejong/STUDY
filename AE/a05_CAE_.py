@@ -28,6 +28,7 @@ x_test = x_test.reshape(10000, 28,28,1).astype('float')/255
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras.layers import Dense, Input, Conv2D, MaxPooling2D, Flatten, Dropout, UpSampling2D
 
+
 def autoencoder(hidden_layer_size):
     model = Sequential()
     model.add(Conv2D(filters=hidden_layer_size, input_shape=(28, 28, 1), kernel_size=3, padding='same', strides=1, activation='relu'))
