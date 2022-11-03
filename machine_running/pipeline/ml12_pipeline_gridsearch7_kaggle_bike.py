@@ -8,7 +8,6 @@ from tensorflow.keras.utils import to_categorical
 # from tensorflow.keras.models import Sequential
 # from tensorflow.keras.layers import Dense
 from tensorflow.python.keras.utils.generic_utils import default
-
 from sklearn.linear_model import Perceptron
 from sklearn.svm import LinearSVC,SVC
 from sklearn.neighbors import KNeighborsClassifier
