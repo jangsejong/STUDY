@@ -59,7 +59,6 @@ def get_data(code, start_date, end_date):
     
     return stock_data
 
-
 def preprocess(df):
     df = df[features]
     df.dropna(how='any', axis=0, inplace=True)
