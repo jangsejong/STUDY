@@ -39,21 +39,6 @@ x_test = torch.FloatTensor(x_test).to(DEVICE)
 print(type(x_train), type(y_train))
 
 #2. 모델구성
-# model = nn.Sequential(
-#     nn.Linear(30, 32),
-#     nn.ReLU(),
-#     nn.Linear(32, 32),
-#     nn.ReLU(),
-#     nn.Linear(32, 16),
-#     nn.ReLU(),
-#     nn.Linear(16, 16),
-#     nn.ReLU(),
-#     nn.Linear(16, 16),
-#     nn.ReLU(),
-#     nn.Linear(16, 1),
-#     nn.Sigmoid(),
-# ).to(DEVICE)
-
 class Model(nn.Module):
     def __init__(self, input_size, output_size):
         super().__init__()
