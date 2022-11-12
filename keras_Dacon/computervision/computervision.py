@@ -4,7 +4,6 @@ tf.config.list_logical_devices()
 import os
 import warnings
 warnings.filterwarnings(action='ignore')
-
 os.environ["CUDA_VISIBLE_DEVICES"]="0" # GPU 할당
 
 #create training dataset
