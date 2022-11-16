@@ -84,7 +84,8 @@ def oc_model(model, x_train_df, x_test_df, y_test_df):
  
  
  
-#우선 Univariate Selection은 그룹내 분산이 작고 그룹간 분산이 클 경우 값이 커지는 F-value를 이용하여 변수를 선택한다. 각 변수마다 F값을 구해 F값이 큰 변수를 기준으로 변수를 선택하는 방법이다.
+#우선 Univariate Selection은 그룹내 분산이 작고 그룹간 분산이 클 경우 값이 커지는 F-value를 이용하여 변수를 선택한다. 
+#각 변수마다 F값을 구해 F값이 큰 변수를 기준으로 변수를 선택하는 방법이다.
 
 from sklearn.feature_selection import SelectKBest, f_classif
 
