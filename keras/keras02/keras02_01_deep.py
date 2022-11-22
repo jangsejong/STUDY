@@ -25,7 +25,6 @@ loss = model.evaluate(x, y)
 print('loss : ', loss)
 result = model.predict([4])
 print('4의 예측값 : ', result)
-
 '''
 loss :  0.08017478883266449  100
 4의 예측값 :  [[3.4170141]]
