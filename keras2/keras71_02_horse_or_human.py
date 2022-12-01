@@ -24,7 +24,6 @@ vgg19 = VGG19(weights = 'imagenet', include_top= False, input_shape= (150, 150, 
 
 model = Sequential()
 model.add(vgg19)
-#model.add(Flatten())
 model.add(GlobalAveragePooling2D())
 model.add(Dense(100, activation = 'relu'))
 model.add(Dense(64))
