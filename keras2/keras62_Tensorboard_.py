@@ -19,7 +19,8 @@ x_test = x_test.reshape(10000, 28, 28, 1)
 
 #print(np.unique(y_train,return_counts=True))   #라벨갯수파악필요, 성능차이가 있다
 
-#평가지표acc (0.98 이상) 이벨류에이트테스트, 발리데이션테스트,메트릭스에큐러시
+#평가지표acc (0.98 이상)
+
 
 x = x_train
 
