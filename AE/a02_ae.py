@@ -12,19 +12,6 @@ x_test = x_test.reshape(10000 , 28, 28, 1).astype('float32') / 255.
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Dropout, Input
 from tensorflow.keras.models import Sequential, Model
 
-# def autoencoder(hidden_layer_size):
-#     input_shape = Input(shape=(784, ))
-#     encoded = Dense(units=hidden_layer_size, activation='relu')(input_shape)    
-#     decoded = Dense(units=784, activation='sigmoid')(encoded)    
-#     autoencoder = Model(input_shape, decoded)    
-#     return autoencoder
-
-# def autoencoder(hidden_layer_size):
-#     model = Sequential()
-#     model.add(Dense(units=hidden_layer_size, activation='relu', input_shape=(784,)))
-#     model.add(Dense(units=784, activation='sigmoid'))
-#     return model
-
 def autoencoder(hidden_layer_size):
     model = Sequential([
     Dense(units=hidden_layer_size, activation='relu', input_shape=(784,)),
