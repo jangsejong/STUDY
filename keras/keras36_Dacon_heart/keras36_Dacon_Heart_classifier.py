@@ -69,5 +69,4 @@ for model in tqdm(model_list, desc = 'Models are training and predicting ... '):
         sheet.writerow(['id', 'target'])
         for idx, p in enumerate(pred):
             sheet.writerow([idx+1, p])
-
     cnt += 1
