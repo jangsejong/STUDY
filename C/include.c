@@ -1,5 +1,4 @@
 #include <cstdio>
-
 int main(void)
 {
 	int N, res = 0;
