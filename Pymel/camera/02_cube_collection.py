@@ -1,5 +1,6 @@
 import maya.cmds as cmds
 import random
+    
          
 for n in range(25):
     cube, cubeShape = cmds.polyCube()
