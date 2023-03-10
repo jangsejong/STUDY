@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from IPython import display
 #_URL = 'https://people.eecs.berkeley.edu/~tinghuiz/projects/pix2pix/datasets/facades.tar.gz'
 
-
 path_to_zip = tf.keras.utils.get_file('facades.tar.gz',
                                       origin=_URL,
                                       extract=True)
