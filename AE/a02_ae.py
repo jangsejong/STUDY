@@ -19,7 +19,6 @@ def autoencoder(hidden_layer_size):
     ])
     return model
 
-
 model = autoencoder(hidden_layer_size=32)
 
 model.compile(optimizer='adam', loss='mse')
