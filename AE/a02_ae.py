@@ -24,7 +24,6 @@ model = autoencoder(hidden_layer_size=32)
 model.compile(optimizer='adam', loss='mse')
 model.fit(x_train, x_train, epochs=20, batch_size=128, shuffle=True, validation_split=0.2)
 
-
 #4. evaluate
 output = model.predict(x_test)
 
