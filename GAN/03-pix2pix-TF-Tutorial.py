@@ -35,6 +35,7 @@ plt.imshow(inp/255.0)
 plt.figure()
 plt.imshow(re/255.0)
 
+
 def resize(input_image, real_image, height, width):
     input_image = tf.image.resize(input_image, [height, width],
                                 method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
