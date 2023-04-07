@@ -13,7 +13,6 @@ model.add(Dense(1, input_dim=1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam') #mne
-
 model.fit(x, y, epochs=1000, batch_size=1)
 
 #4. 평가, 예측
