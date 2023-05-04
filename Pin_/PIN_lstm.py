@@ -145,6 +145,8 @@ class StockPredictor(nn.Module):
 device = torch.device("cuda:0")
 
 num_epochs = 1000
+# num_epochs = 1500
+
 num_workers = 0
 
 batch_size = 256
