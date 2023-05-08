@@ -1,4 +1,4 @@
-pip install qiskit-machine-learning
+# pip install qiskit-machine-learning
 
 from qiskit import BasicAer
 from qiskit.utils import QuantumInstance, algorithm_globals
