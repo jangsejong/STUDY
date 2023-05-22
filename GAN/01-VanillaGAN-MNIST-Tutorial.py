@@ -13,7 +13,6 @@ x_train.min(), x_train.max()
 x_train = x_train.reshape(-1, 784)
 x_train.shape
 
-
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, LeakyReLU, Dropout, Input
 from tensorflow.keras.models import Sequential, Model
