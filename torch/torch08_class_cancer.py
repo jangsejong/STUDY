@@ -114,6 +114,7 @@ print('정확도: ', scores2)
 scores3 = accuracy_score(y_test.cpu().detach().numpy(), y_predict.cpu().detach().numpy())
 print('정확도: ', scores2)
 
+
 '''
 정확도:  0.9824561403508771
 정확도:  0.9824561403508771
