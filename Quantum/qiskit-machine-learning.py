@@ -32,6 +32,6 @@ vqc = VQC(feature_map=feature_map,
                                            seed_transpiler=seed)
           )
 vqc.fit(training_features, training_labels)
-
 score = vqc.score(test_features, test_labels)
+
 print(f"Testing accuracy: {score:0.2f}")
